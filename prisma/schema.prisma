@@ -36,3 +36,14 @@ model Analysis {
   user   User   @relation(fields: [userId], references: [id])
   resume Resume @relation(fields: [resumeId], references: [id])
 }
+model UserResume {
+  id          String   @id @default(cuid())
+  userId      String
+  fileName    String
+  fileUrl     String
+  uploadedAt  DateTime @default(now())
+  atsScore    Int?
+  status      String   @default("Processing")
+
+  @@index([userId])
+}
