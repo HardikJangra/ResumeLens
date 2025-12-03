@@ -1,21 +1,20 @@
-import { createUploadthing, type FileRouter } from "uploadthing/next";
+import { createUploadthing, type FileRouter } from "uploadthing/server";
 import prisma from "@/lib/db";
-import { getAuth } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
 
 const f = createUploadthing();
 
 export const ourFileRouter = {
-  resumeUploader: f({ pdf: { maxFileSize: "4MB" } })
-    .middleware(async ({ req }) => {
-      const { userId } = await getAuth(req);
-
-      if (!userId) {
-        throw new Error("Unauthorized");
-      }
-
+  resumeUploader: f
+    .fileTypes(["pdf"])
+    .maxSize("4MB")
+    .middleware(async () => {
+      const { userId } = await auth();
+      if (!userId) throw new Error("Unauthorized");
       return { userId };
     })
     .onUploadComplete(async ({ metadata, file }) => {
+      // Store in DB
       await prisma.userResume.create({
         data: {
           userId: metadata.userId,
@@ -26,7 +25,14 @@ export const ourFileRouter = {
         },
       });
 
-      return { success: true };
+      // MUST return file info to client
+      return {
+        uploadedFile: {
+          url: file.url,
+          name: file.name,
+          size: file.size,
+        },
+      };
     }),
 } satisfies FileRouter;
 
