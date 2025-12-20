@@ -126,6 +126,7 @@ export default function Home() {
 
         </div>
       </section>
+      
 
       {/* ⭐⭐⭐ FEATURES SECTION ⭐⭐⭐ */}
       <section className="relative z-20 mt-28 px-6 max-w-4xl mx-auto space-y-6">
@@ -243,6 +244,7 @@ export default function Home() {
         </div>
 
       </section>
+      
 
       {/* ⭐⭐⭐ CTA SECTION ⭐⭐⭐ */}
       <section className="relative z-20 mt-32 px-6 max-w-4xl mx-auto text-center">

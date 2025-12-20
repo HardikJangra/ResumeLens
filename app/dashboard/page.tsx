@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
+import React from "react";
+
 import { UploadDropzone } from "@uploadthing/react";
 import type { OurFileRouter } from "@/app/api/uploadthing/core";
 import {
@@ -32,6 +34,7 @@ import {
   Bar,
 } from "recharts";
 
+
 interface Resume {
   id: string;
   fileName: string;
@@ -53,9 +56,19 @@ export default function Dashboard() {
       try {
         const res = await fetch("/api/resumes");
         const data = await res.json();
-        setResumes(data);
+        
+        // ✅ FIX: Ensure data is always an array
+        if (Array.isArray(data)) {
+          setResumes(data);
+        } else if (data && Array.isArray(data.resumes)) {
+          setResumes(data.resumes);
+        } else {
+          console.error("API did not return an array:", data);
+          setResumes([]);
+        }
       } catch (err) {
         console.error("Error fetching resumes:", err);
+        setResumes([]);
       }
       setLoading(false);
     }
@@ -522,3 +535,4 @@ export default function Dashboard() {
     </main>
   );
 }
+
