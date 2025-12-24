@@ -1,32 +1,39 @@
 import { createUploadthing, type FileRouter } from "uploadthing/server";
-import prisma from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
+import prisma from "@/lib/db";
 
 const f = createUploadthing();
 
 export const ourFileRouter = {
-  resumeUploader: f({ 
-    pdf: { maxFileSize: "4MB" }   // ✔ correct key
-  })
+  resumeUploader: f({ pdf: { maxFileSize: "4MB" } })
     .middleware(async () => {
-      const { userId } = await auth();  // ✔ correct for Clerk
-
+      const { userId } = await auth();
       if (!userId) throw new Error("Unauthorized");
-
       return { userId };
     })
     .onUploadComplete(async ({ metadata, file }) => {
-      await prisma.userResume.create({
+      const saved = await prisma.userResume.create({
         data: {
-          userId: metadata.userId, // ✔ typed
-          fileName: file.name,     // ✔ typed
-          fileUrl: file.url,       // ✔ typed
-          atsScore: null,
+          userId: metadata.userId,
+          fileName: file.name,
+          fileUrl: file.url,
+          text: "",
           status: "Processing",
         },
       });
 
-      return { success: true };
+      console.log("🚀 Triggering resume processing:", saved.id);
+
+      await fetch("http://127.0.0.1:3000/api/process-resume", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          resumeId: saved.id,
+          fileUrl: file.url,
+        }),
+      });
+
+      return { resumeId: saved.id };
     }),
 } satisfies FileRouter;
 

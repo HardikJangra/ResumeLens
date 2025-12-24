@@ -345,14 +345,21 @@ export default function Dashboard() {
               </div>
 
               <div className="w-40">
-                <UploadDropzone<OurFileRouter, "resumeUploader">
-                  endpoint="resumeUploader"
-                  appearance={{
-                    container: "w-full border-none text-white h-8",
-                    button:
-                      "bg-gradient-to-r from-purple-600 to-blue-600 text-white px-3 py-1 rounded-md text-xs shadow hover:opacity-90 transition",
-                  }}
-                />
+              <UploadDropzone<OurFileRouter, "resumeUploader">
+  endpoint="resumeUploader"
+  onClientUploadComplete={() => {
+    console.log("✅ Upload complete");
+    window.location.reload(); // SIMPLE + RELIABLE
+  }}
+  onUploadError={(error) => {
+    console.error("❌ Upload error:", error);
+    alert("Upload failed");
+  }}
+  appearance={{
+    container: "border-none p-0",
+    button: "bg-indigo-600 text-white px-4 py-2 rounded-md text-sm",
+  }}
+/>
               </div>
             </div>
 

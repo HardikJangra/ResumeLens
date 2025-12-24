@@ -2,15 +2,23 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 
+function extractJson(text: string) {
+  const match = text.match(/\{[\s\S]*\}/);
+  if (!match) throw new Error("No JSON found in Gemini response");
+  return JSON.parse(match[0]);
+}
+
 export async function analyzeResume(text: string) {
   const model = genAI.getGenerativeModel({
     model: "gemini-1.5-flash",
   });
 
   const prompt = `
-Analyze the resume below and return ONLY valid JSON.
+You are an ATS system.
 
-JSON format:
+Return ONLY valid JSON. Do NOT add explanations, markdown, or text.
+
+JSON schema:
 {
   "atsScore": number,
   "skillsMatched": string[],
@@ -25,8 +33,7 @@ ${text}
 `;
 
   const result = await model.generateContent(prompt);
-  const response = result.response.text();
-  console.log("GEMINI KEY LOADED:", !!process.env.GEMINI_API_KEY);
+  const raw = result.response.text();
 
-  return JSON.parse(response);
+  return extractJson(raw);
 }

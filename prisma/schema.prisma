@@ -38,14 +38,17 @@ model Analysis {
   resume Resume @relation(fields: [resumeId], references: [id])
 }
 
-model UserResume {
-  id          String   @id @default(cuid())
-  userId      String
-  fileName    String
-  fileUrl     String
-  uploadedAt  DateTime @default(now())
-  atsScore    Int?
-  status      String   @default("Processing")
 
-  @@index([userId])
+model UserResume {
+
+  id            String   @id @default(cuid())
+
+  status        String
+
+  extractedText String?  // Added optional field for extracted text
+
+  createdAt     DateTime @default(now())
+
+  updatedAt     DateTime @updatedAt
+
 }
