@@ -514,13 +514,12 @@ export default function Dashboard() {
                         </td>
 
                         <td className="py-3 flex items-center justify-end gap-3">
-                          <a
-                            href={res.fileUrl}
-                            target="_blank"
-                            className="text-blue-400 hover:text-blue-300 transition"
-                          >
-                            <Eye size={18} />
-                          </a>
+                        <Link
+  href={`/dashboard/resume/${res.id}`}
+  className="text-blue-400 hover:text-blue-300 transition"
+>
+  <Eye size={18} />
+</Link>
                           <a
                             href={res.fileUrl}
                             download
