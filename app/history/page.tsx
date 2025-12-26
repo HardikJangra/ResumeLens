@@ -20,33 +20,46 @@ export default function ResumeHistoryPage() {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
 
+  // ✅ FETCH RESUMES (SAFE)
   useEffect(() => {
     async function fetchResumes() {
       try {
         const res = await fetch("/api/resumes");
         const data = await res.json();
-        setResumes(data);
-        setFiltered(data);
+
+        // ✅ FIX: always ensure ARRAY
+        const resumeArray: Resume[] = Array.isArray(data)
+          ? data
+          : Array.isArray(data.resumes)
+          ? data.resumes
+          : [];
+
+        setResumes(resumeArray);
+        setFiltered(resumeArray);
       } catch (err) {
-        console.error(err);
+        console.error("Failed to fetch resumes:", err);
+        setResumes([]);
+        setFiltered([]);
       } finally {
         setLoading(false);
       }
     }
+
     fetchResumes();
   }, []);
 
+  // ✅ FILTER LOGIC (SAFE)
   useEffect(() => {
-    let data = resumes;
+    let data = [...resumes];
 
     if (search) {
-      data = data.filter(r =>
+      data = data.filter((r) =>
         r.fileName.toLowerCase().includes(search.toLowerCase())
       );
     }
 
     if (statusFilter !== "all") {
-      data = data.filter(r => r.status === statusFilter);
+      data = data.filter((r) => r.status === statusFilter);
     }
 
     setFiltered(data);
@@ -86,7 +99,7 @@ export default function ResumeHistoryPage() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="w-full pl-11 pr-4 py-3 rounded-xl bg-black/30 border border-white/10 
-                  focus:outline-none focus:ring-2 focus:ring-purple-500 text-white"
+                focus:outline-none focus:ring-2 focus:ring-purple-500 text-white"
               />
             </div>
 
@@ -95,7 +108,7 @@ export default function ResumeHistoryPage() {
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
               className="w-full md:w-48 py-3 px-4 rounded-xl bg-black/30 border border-white/10 
-                focus:outline-none focus:ring-2 focus:ring-indigo-500 text-white"
+              focus:outline-none focus:ring-2 focus:ring-indigo-500 text-white"
             >
               <option value="all">All Status</option>
               <option value="Processing">Processing</option>
@@ -139,7 +152,7 @@ export default function ResumeHistoryPage() {
 
                     <td className="px-6 py-4">
                       <span className="px-3 py-1 rounded-full text-sm font-semibold 
-                        bg-linear-to-r from-indigo-500 to-purple-500 shadow-[0_0_12px_rgba(120,70,255,0.6)]">
+                      bg-linear-to-r from-indigo-500 to-purple-500 shadow-[0_0_12px_rgba(120,70,255,0.6)]">
                         {res.atsScore ?? "--"}
                       </span>
                     </td>
@@ -171,7 +184,6 @@ export default function ResumeHistoryPage() {
             </table>
           )}
         </div>
-
       </div>
     </main>
   );

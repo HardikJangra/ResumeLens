@@ -50,30 +50,52 @@ export default function Dashboard() {
   const [resumes, setResumes] = useState<Resume[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Fetch resumes
-  useEffect(() => {
-    async function loadResumes() {
-      try {
-        const res = await fetch("/api/resumes");
-        const data = await res.json();
-        
-        // ✅ FIX: Ensure data is always an array
-        if (Array.isArray(data)) {
-          setResumes(data);
-        } else if (data && Array.isArray(data.resumes)) {
-          setResumes(data.resumes);
-        } else {
-          console.error("API did not return an array:", data);
-          setResumes([]);
-        }
-      } catch (err) {
-        console.error("Error fetching resumes:", err);
+ // Fetch resumes ONCE on page load
+useEffect(() => {
+  async function loadResumes() {
+    try {
+      const res = await fetch("/api/resumes");
+      const data = await res.json();
+
+      if (Array.isArray(data)) {
+        setResumes(data);
+      } else if (data && Array.isArray(data.resumes)) {
+        setResumes(data.resumes);
+      } else {
+        console.error("API did not return an array:", data);
         setResumes([]);
       }
-      setLoading(false);
+    } catch (err) {
+      console.error("Error fetching resumes:", err);
+      setResumes([]);
     }
-    loadResumes();
-  }, []);
+
+    setLoading(false);
+  }
+
+  loadResumes();
+}, []);
+
+
+// 🔁 AUTO-REFRESH (SAFE FOR NEON)
+useEffect(() => {
+  const interval = setInterval(async () => {
+    try {
+      const res = await fetch("/api/resumes");
+      const data = await res.json();
+
+      if (Array.isArray(data)) {
+        setResumes(data);
+      } else if (data && Array.isArray(data.resumes)) {
+        setResumes(data.resumes);
+      }
+    } catch (err) {
+      console.error("Auto refresh failed:", err);
+    }
+  }, 10000); // ⬅️ 10 seconds (IMPORTANT)
+
+  return () => clearInterval(interval);
+}, []);
 
   // === Derived stats & chart data ===
   const {
@@ -178,9 +200,9 @@ export default function Dashboard() {
         `}
       >
         <div className="px-6 py-6 border-b border-[#1A1F36]">
-          <h2 className="text-xl font-semibold bg-linear-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
-            ResumeLens AI
-          </h2>
+        <Link href="/" className="text-lg font-semibold hover:text-purple-400 transition">
+  ResumeLens AI
+</Link>
         </div>
 
         <nav className="px-4 py-6 space-y-2 font-medium text-gray-300">
@@ -495,9 +517,19 @@ export default function Dashboard() {
 
                         <td className="py-3">
                           <div className="flex items-center gap-3">
-                            <span className="font-semibold text-purple-400">
-                              {res.atsScore ?? "--"}
-                            </span>
+                          {res.status === "Processing" ? (
+  <div className="flex items-center gap-2">
+    <div className="h-2 w-16 rounded bg-gray-700 overflow-hidden">
+      <div className="h-full w-full animate-pulse bg-linear-to-r from-purple-500 to-blue-500" />
+    </div>
+    <span className="text-xs text-gray-400">Analyzing…</span>
+  </div>
+) : (
+  <span className="font-semibold text-purple-400">
+    {res.atsScore}
+  </span>
+)}
+
                             <div className="w-24 h-2 bg-gray-700 rounded-full overflow-hidden">
                               <div
                                 className="h-full bg-linear-to-r from-purple-500 to-blue-500"
@@ -508,18 +540,32 @@ export default function Dashboard() {
                         </td>
 
                         <td className="py-3">
-                          <span className="px-3 py-1 rounded-full text-[11px] bg-green-900/30 text-green-400 border border-green-700/40">
-                            {res.status}
-                          </span>
+                        <span
+  className={`px-3 py-1 rounded-full text-[11px] border ${
+    res.status === "Completed"
+      ? "bg-green-900/30 text-green-400 border-green-700/40"
+      : "bg-yellow-900/30 text-yellow-400 border-yellow-700/40"
+  }`}
+>
+  {res.status}
+</span>
+
                         </td>
 
                         <td className="py-3 flex items-center justify-end gap-3">
-                        <Link
-  href={`/dashboard/resume/${res.id}`}
-  className="text-blue-400 hover:text-blue-300 transition"
->
-  <Eye size={18} />
-</Link>
+                        {res.status === "Completed" ? (
+  <Link
+    href={`/dashboard/resume/${res.id}`}
+    className="text-blue-400 hover:text-blue-300 transition"
+  >
+    <Eye size={18} />
+  </Link>
+) : (
+  <div className="text-gray-500 cursor-not-allowed">
+    <Eye size={18} />
+  </div>
+)}
+
                           <a
                             href={res.fileUrl}
                             download
