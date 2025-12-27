@@ -557,6 +557,7 @@ useEffect(() => {
     href={`/dashboard/resume/${res.id}`}
     className="text-blue-400 hover:text-blue-300 transition"
   >
+    {res.fileName}
     <Eye size={18} />
   </Link>
 ) : (

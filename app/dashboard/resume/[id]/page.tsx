@@ -22,8 +22,8 @@ type Resume = {
   aiAnalysis?: AIAnalysis;
 };
 
-export default function ResumeAnalysisPage() {
-  const { id } = useParams();
+export default function ResumeDetailPage() {
+  const { id } = useParams<{ id: string }>();
   const [resume, setResume] = useState<Resume | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -32,19 +32,24 @@ export default function ResumeAnalysisPage() {
       try {
         const res = await fetch("/api/resumes");
         const data = await res.json();
-        const found = Array.isArray(data)
-          ? data.find((r: Resume) => r.id === id)
-          : data?.resumes?.find((r: Resume) => r.id === id);
 
+        const list: Resume[] = Array.isArray(data)
+          ? data
+          : data?.resumes ?? [];
+
+        const found = list.find((r) => r.id === id);
         setResume(found || null);
-      } catch (err) {
-        console.error("Failed to load resume:", err);
+      } catch (error) {
+        console.error("Failed to load resume:", error);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     }
 
     loadResume();
   }, [id]);
+
+  /* ---------------- LOADING STATES ---------------- */
 
   if (loading) {
     return (
@@ -57,8 +62,8 @@ export default function ResumeAnalysisPage() {
   if (!resume) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center">
-        <p className="text-red-500">Resume not found</p>
-        <Link href="/dashboard" className="underline mt-4">
+        <p className="text-red-400">Resume not found</p>
+        <Link href="/dashboard" className="mt-4 underline text-sm">
           Back to dashboard
         </Link>
       </div>
@@ -68,7 +73,7 @@ export default function ResumeAnalysisPage() {
   if (resume.status === "Processing") {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center text-gray-400">
-        <div className="h-12 w-12 mb-4 animate-spin rounded-full border-4 border-purple-500 border-t-transparent" />
+        <div className="h-10 w-10 animate-spin rounded-full border-4 border-purple-500 border-t-transparent mb-4" />
         Analyzing your resume…
       </div>
     );
@@ -91,6 +96,8 @@ export default function ResumeAnalysisPage() {
       ? "stroke-yellow-400"
       : "stroke-red-400";
 
+  /* ---------------- UI ---------------- */
+
   return (
     <div className="max-w-6xl mx-auto px-8 py-10">
       {/* Header */}
@@ -101,11 +108,12 @@ export default function ResumeAnalysisPage() {
         >
           ← Back to Dashboard
         </Link>
+
         <h1 className="text-3xl font-bold mt-2">Resume Analysis</h1>
         <p className="text-gray-400 mt-1">{resume.fileName}</p>
       </div>
 
-      {/* ATS Score Card */}
+      {/* ATS SCORE CARD */}
       <div className="bg-[#0D1128] border border-[#1A1F36] rounded-2xl p-8 mb-10 shadow-lg flex flex-col md:flex-row items-center gap-10">
         <div className="relative w-40 h-40">
           <svg className="w-full h-full -rotate-90">
@@ -128,6 +136,7 @@ export default function ResumeAnalysisPage() {
               className={ringColor}
             />
           </svg>
+
           <div
             className={`absolute inset-0 flex items-center justify-center text-4xl font-bold ${scoreColor}`}
           >
@@ -143,68 +152,52 @@ export default function ResumeAnalysisPage() {
             This score estimates how well your resume performs against Applicant
             Tracking Systems.
           </p>
+
           <span className="inline-block mt-4 px-4 py-1 rounded-full text-xs bg-green-900/30 text-green-400 border border-green-700/40">
             {resume.status}
           </span>
         </div>
       </div>
 
-      {/* AI Insights */}
+      {/* AI INSIGHTS */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Strengths */}
         <Section title="Strengths">
-          {analysis?.strengths?.length ? (
-            analysis.strengths.map((item, i) => (
-              <ListItem key={i} icon="✔" color="text-green-400">
-                {item}
-              </ListItem>
-            ))
-          ) : (
-            <Empty />
-          )}
+          <List
+            items={analysis?.strengths}
+            icon="✔"
+            color="text-green-400"
+          />
         </Section>
 
-        {/* Weaknesses */}
         <Section title="Weaknesses">
-          {analysis?.weaknesses?.length ? (
-            analysis.weaknesses.map((item, i) => (
-              <ListItem key={i} icon="✖" color="text-red-400">
-                {item}
-              </ListItem>
-            ))
-          ) : (
-            <Empty />
-          )}
+          <List
+            items={analysis?.weaknesses}
+            icon="✖"
+            color="text-red-400"
+          />
         </Section>
 
-        {/* Skills Matched */}
         <Section title="Skills Matched">
-          <TagList items={analysis?.skillsMatched} color="green" />
+          <Tags items={analysis?.skillsMatched} variant="green" />
         </Section>
 
-        {/* Skills Missing */}
         <Section title="Skills Missing">
-          <TagList items={analysis?.skillsMissing} color="red" />
+          <Tags items={analysis?.skillsMissing} variant="red" />
         </Section>
 
-        {/* Suggestions */}
         <Section title="AI Suggestions" full>
-          {analysis?.suggestions?.length ? (
-            analysis.suggestions.map((item, i) => (
-              <ListItem key={i} icon="➜" color="text-purple-400">
-                {item}
-              </ListItem>
-            ))
-          ) : (
-            <Empty />
-          )}
+          <List
+            items={analysis?.suggestions}
+            icon="➜"
+            color="text-purple-400"
+          />
         </Section>
       </div>
     </div>
   );
 }
 
-/* ---------- Small Reusable Components ---------- */
+/* ---------------- REUSABLE COMPONENTS ---------------- */
 
 function Section({
   title,
@@ -227,31 +220,41 @@ function Section({
   );
 }
 
-function ListItem({
+function List({
+  items,
   icon,
   color,
-  children,
 }: {
+  items?: string[];
   icon: string;
   color: string;
-  children: React.ReactNode;
 }) {
+  if (!items || items.length === 0) {
+    return <p className="text-sm text-gray-500">No data available</p>;
+  }
+
   return (
-    <div className="flex gap-2 text-sm text-gray-300">
-      <span className={color}>{icon}</span>
-      {children}
+    <div className="space-y-2">
+      {items.map((item, i) => (
+        <div key={i} className="flex gap-2 text-sm text-gray-300">
+          <span className={color}>{icon}</span>
+          {item}
+        </div>
+      ))}
     </div>
   );
 }
 
-function TagList({
+function Tags({
   items,
-  color,
+  variant,
 }: {
   items?: string[];
-  color: "green" | "red";
+  variant: "green" | "red";
 }) {
-  if (!items?.length) return <Empty />;
+  if (!items || items.length === 0) {
+    return <p className="text-sm text-gray-500">No data available</p>;
+  }
 
   return (
     <div className="flex flex-wrap gap-2">
@@ -259,7 +262,7 @@ function TagList({
         <span
           key={i}
           className={`px-3 py-1 rounded-full text-xs border ${
-            color === "green"
+            variant === "green"
               ? "bg-green-900/30 text-green-400 border-green-700/40"
               : "bg-red-900/30 text-red-400 border-red-700/40"
           }`}
@@ -269,8 +272,4 @@ function TagList({
       ))}
     </div>
   );
-}
-
-function Empty() {
-  return <p className="text-sm text-gray-500">No data available</p>;
 }
