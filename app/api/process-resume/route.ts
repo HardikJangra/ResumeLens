@@ -1,35 +1,42 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/db";
+import { extractPdfText } from "@/lib/extractPdfText";
+import { analyzeResume } from "@/lib/gemini";
 
 export async function POST(req: Request) {
   try {
-    console.log("🔥 PROCESS RESUME API HIT (PDF PARSING SKIPPED)");
+    console.log("🔥 PROCESS RESUME API HIT");
 
-    const { resumeId } = await req.json();
+    const { resumeId, fileUrl } = await req.json();
 
-    // 🔹 Temporary placeholder resume text
-    const mockResumeText = `
-      Software Engineer with experience in JavaScript, React, Node.js,
-      REST APIs, databases, and cloud deployment.
-    `;
+    // 1️⃣ Fetch PDF
+    const fileRes = await fetch(fileUrl);
+    const buffer = Buffer.from(await fileRes.arrayBuffer());
 
-    // 🔹 Temporary ATS logic (stable)
-    const atsScore = Math.floor(65 + Math.random() * 25); // 65–90
+    // 2️⃣ Extract text
+    const text = await extractPdfText(buffer);
 
+    // 3️⃣ Gemini analysis
+    const analysis = await analyzeResume(text);
+    console.log("✅ Gemini API response received");
+
+    // 4️⃣ SAVE EVERYTHING
     await prisma.userResume.update({
       where: { id: resumeId },
       data: {
-        text: mockResumeText,
-        atsScore,
+        text,
+        atsScore: analysis.atsScore,
+        aiAnalysis: analysis, // ✅ THIS WAS MISSING
         status: "Completed",
       },
     });
 
-    console.log("✅ RESUME PROCESSED (MOCK MODE)");
-
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("❌ PROCESS RESUME FAILED:", error);
-    return NextResponse.json({ error: "Processing failed" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Resume processing failed" },
+      { status: 500 }
+    );
   }
 }

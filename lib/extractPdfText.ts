@@ -1,12 +1,14 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
+
 export async function extractPdfText(buffer: Buffer): Promise<string> {
   try {
-    const pdfParseModule = await import("pdf-parse");
-    const pdfParse = pdfParseModule.default || pdfParseModule;
-    
-    const data = await pdfParse(buffer);
+    // 🔥 IMPORTANT: import the internal parser, not the package root
+    const pdfParse = require("pdf-parse/lib/pdf-parse");
+
+    const data: { text: string } = await pdfParse(buffer);
     return data.text || "";
   } catch (error) {
-    console.error("Error extracting PDF text:", error);
+    console.error("PDF extraction failed:", error);
     throw new Error("Failed to extract text from PDF");
   }
 }

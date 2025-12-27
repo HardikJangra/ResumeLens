@@ -50,13 +50,15 @@ export default function Dashboard() {
   const [resumes, setResumes] = useState<Resume[]>([]);
   const [loading, setLoading] = useState(true);
 
- // Fetch resumes ONCE on page load
+  // Fetch resumes
+  // Fetch resumes once on mount
 useEffect(() => {
   async function loadResumes() {
     try {
       const res = await fetch("/api/resumes");
       const data = await res.json();
 
+      // Ensure returned data is always an array
       if (Array.isArray(data)) {
         setResumes(data);
       } else if (data && Array.isArray(data.resumes)) {
@@ -69,7 +71,6 @@ useEffect(() => {
       console.error("Error fetching resumes:", err);
       setResumes([]);
     }
-
     setLoading(false);
   }
 
@@ -77,22 +78,20 @@ useEffect(() => {
 }, []);
 
 
-// 🔁 AUTO-REFRESH (SAFE FOR NEON)
+// 🔁 Auto-refresh the ATS score every 4 seconds
 useEffect(() => {
-  const interval = setInterval(async () => {
-    try {
-      const res = await fetch("/api/resumes");
-      const data = await res.json();
-
-      if (Array.isArray(data)) {
-        setResumes(data);
-      } else if (data && Array.isArray(data.resumes)) {
-        setResumes(data.resumes);
-      }
-    } catch (err) {
-      console.error("Auto refresh failed:", err);
-    }
-  }, 10000); // ⬅️ 10 seconds (IMPORTANT)
+  const interval = setInterval(() => {
+    fetch("/api/resumes")
+      .then((res) => res.json())
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setResumes(data);
+        } else if (data && Array.isArray(data.resumes)) {
+          setResumes(data.resumes);
+        }
+      })
+      .catch((err) => console.error("Auto-refresh error:", err));
+  }, 4000);
 
   return () => clearInterval(interval);
 }, []);
