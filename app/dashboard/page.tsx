@@ -2,6 +2,8 @@
 
 import { useEffect, useState, useMemo } from "react";
 import React from "react";
+import { Trash2 } from "lucide-react";
+
 
 import { UploadDropzone } from "@uploadthing/react";
 import type { OurFileRouter } from "@/app/api/uploadthing/core";
@@ -76,6 +78,27 @@ useEffect(() => {
 
   loadResumes();
 }, []);
+async function deleteResume(id: string) {
+  const confirmed = confirm("Are you sure you want to delete this resume?");
+  if (!confirmed) return;
+
+  try {
+    const res = await fetch(`/api/resumes/${id}`, {
+      method: "DELETE",
+    });
+
+    if (!res.ok) {
+      alert("Failed to delete resume");
+      return;
+    }
+
+    // Refresh list after delete
+    setResumes((prev) => prev.filter((r) => r.id !== id));
+  } catch (error) {
+    console.error("Delete failed:", error);
+  }
+}
+
 
 
 // 🔁 Auto-refresh the ATS score every 4 seconds
@@ -552,28 +575,33 @@ useEffect(() => {
                         </td>
 
                         <td className="py-3 flex items-center justify-end gap-3">
-                        {res.status === "Completed" ? (
+  {/* 👁️ View AI Insights */}
   <Link
     href={`/dashboard/resume/${res.id}`}
     className="text-blue-400 hover:text-blue-300 transition"
   >
-    {res.fileName}
     <Eye size={18} />
   </Link>
-) : (
-  <div className="text-gray-500 cursor-not-allowed">
-    <Eye size={18} />
-  </div>
-)}
 
-                          <a
-                            href={res.fileUrl}
-                            download
-                            className="text-purple-400 hover:text-purple-300 transition"
-                          >
-                            <Download size={18} />
-                          </a>
-                        </td>
+  {/* ⬇️ Download PDF */}
+  <a
+    href={res.fileUrl}
+    download
+    className="text-purple-400 hover:text-purple-300 transition"
+  >
+    <Download size={18} />
+  </a>
+
+  {/* 🗑️ Delete */}
+  <button
+    onClick={() => deleteResume(res.id)}
+    className="text-red-400 hover:text-red-300 transition"
+  >
+    <Trash2 size={18} />
+  </button>
+</td>
+
+
                       </tr>
                     ))
                   )}
