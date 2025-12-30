@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 
+/* ================= TYPES ================= */
+
 type AIAnalysis = {
   atsScore: number;
   skillsMatched: string[];
@@ -13,6 +15,13 @@ type AIAnalysis = {
   suggestions: string[];
 };
 
+type JobMatch = {
+  matchScore: number;
+  matchedSkills: string[];
+  missingSkills: string[];
+  recommendations: string[];
+};
+
 type Resume = {
   id: string;
   fileName: string;
@@ -20,25 +29,31 @@ type Resume = {
   atsScore: number | null;
   status: string;
   aiAnalysis?: AIAnalysis;
+  jobMatch?: JobMatch;
 };
+
+/* ================= PAGE ================= */
 
 export default function ResumeDetailPage() {
   const { id } = useParams<{ id: string }>();
+
   const [resume, setResume] = useState<Resume | null>(null);
   const [loading, setLoading] = useState(true);
+
+  // Job match states
+  const [jobDescription, setJobDescription] = useState("");
+  const [jobMatch, setJobMatch] = useState<JobMatch | null>(null);
+  const [matching, setMatching] = useState(false);
+
+  /* ================= FETCH RESUME ================= */
 
   useEffect(() => {
     async function loadResume() {
       try {
-        const res = await fetch("/api/resumes");
+        const res = await fetch(`/api/resumes/${id}`);
         const data = await res.json();
-
-        const list: Resume[] = Array.isArray(data)
-          ? data
-          : data?.resumes ?? [];
-
-        const found = list.find((r) => r.id === id);
-        setResume(found || null);
+        setResume(data);
+        setJobMatch(data.jobMatch ?? null);
       } catch (error) {
         console.error("Failed to load resume:", error);
       } finally {
@@ -49,12 +64,38 @@ export default function ResumeDetailPage() {
     loadResume();
   }, [id]);
 
-  /* ---------------- LOADING STATES ---------------- */
+  /* ================= JOB MATCH HANDLER ================= */
+
+  async function handleJobMatch() {
+    if (!jobDescription.trim()) return;
+
+    setMatching(true);
+
+    try {
+      const res = await fetch("/api/job-match", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          resumeId: id,
+          jobDescription,
+        }),
+      });
+
+      const data = await res.json();
+      setJobMatch(data);
+    } catch (err) {
+      console.error("Job match failed:", err);
+    } finally {
+      setMatching(false);
+    }
+  }
+
+  /* ================= LOADING STATES ================= */
 
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center text-gray-400">
-        Loading analysis…
+        Loading resume analysis…
       </div>
     );
   }
@@ -96,7 +137,7 @@ export default function ResumeDetailPage() {
       ? "stroke-yellow-400"
       : "stroke-red-400";
 
-  /* ---------------- UI ---------------- */
+  /* ================= UI ================= */
 
   return (
     <div className="max-w-6xl mx-auto px-8 py-10">
@@ -113,7 +154,7 @@ export default function ResumeDetailPage() {
         <p className="text-gray-400 mt-1">{resume.fileName}</p>
       </div>
 
-      {/* ATS SCORE CARD */}
+      {/* ATS SCORE */}
       <div className="bg-[#0D1128] border border-[#1A1F36] rounded-2xl p-8 mb-10 shadow-lg flex flex-col md:flex-row items-center gap-10">
         <div className="relative w-40 h-40">
           <svg className="w-full h-full -rotate-90">
@@ -149,32 +190,20 @@ export default function ResumeDetailPage() {
             ATS Compatibility Score
           </h2>
           <p className="text-gray-400 max-w-md">
-            This score estimates how well your resume performs against Applicant
-            Tracking Systems.
+            This score estimates how well your resume performs against
+            Applicant Tracking Systems.
           </p>
-
-          <span className="inline-block mt-4 px-4 py-1 rounded-full text-xs bg-green-900/30 text-green-400 border border-green-700/40">
-            {resume.status}
-          </span>
         </div>
       </div>
 
       {/* AI INSIGHTS */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-14">
         <Section title="Strengths">
-          <List
-            items={analysis?.strengths}
-            icon="✔"
-            color="text-green-400"
-          />
+          <List items={analysis?.strengths} />
         </Section>
 
         <Section title="Weaknesses">
-          <List
-            items={analysis?.weaknesses}
-            icon="✖"
-            color="text-red-400"
-          />
+          <List items={analysis?.weaknesses} />
         </Section>
 
         <Section title="Skills Matched">
@@ -186,18 +215,59 @@ export default function ResumeDetailPage() {
         </Section>
 
         <Section title="AI Suggestions" full>
-          <List
-            items={analysis?.suggestions}
-            icon="➜"
-            color="text-purple-400"
-          />
+          <List items={analysis?.suggestions} />
         </Section>
+      </div>
+
+      {/* ================= JOB DESCRIPTION MATCHING ================= */}
+      <div className="bg-[#0D1128] border border-[#1A1F36] rounded-2xl p-8 shadow-lg">
+        <h2 className="text-2xl font-semibold mb-4">
+          Job Description Matching
+        </h2>
+
+        <textarea
+          value={jobDescription}
+          onChange={(e) => setJobDescription(e.target.value)}
+          placeholder="Paste the job description here..."
+          className="w-full h-40 p-4 bg-[#060B27] border border-[#1A1F36] rounded-lg text-sm text-white outline-none"
+        />
+
+        <button
+          onClick={handleJobMatch}
+          disabled={matching}
+          className="mt-4 px-6 py-2 rounded-lg bg-linear-to-r from-purple-500 to-blue-500 hover:opacity-90 transition"
+        >
+          {matching ? "Matching..." : "Match Job"}
+        </button>
+
+        {jobMatch && (
+          <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+            <div>
+              <p className="text-purple-400 font-semibold mb-2">
+                Match Score: {jobMatch.matchScore}%
+              </p>
+
+              <h4 className="font-semibold mb-1">Matched Skills</h4>
+              <Tags items={jobMatch.matchedSkills} variant="green" />
+            </div>
+
+            <div>
+              <h4 className="font-semibold mb-1">Missing Skills</h4>
+              <Tags items={jobMatch.missingSkills} variant="red" />
+            </div>
+
+            <div className="md:col-span-2">
+              <h4 className="font-semibold mb-1">Recommendations</h4>
+              <List items={jobMatch.recommendations} />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
 }
 
-/* ---------------- REUSABLE COMPONENTS ---------------- */
+/* ================= COMPONENTS ================= */
 
 function Section({
   title,
@@ -210,7 +280,7 @@ function Section({
 }) {
   return (
     <div
-      className={`bg-[#0D1128] border border-[#1A1F36] rounded-xl p-6 shadow-sm ${
+      className={`bg-[#0D1128] border border-[#1A1F36] rounded-xl p-6 ${
         full ? "md:col-span-2" : ""
       }`}
     >
@@ -220,28 +290,17 @@ function Section({
   );
 }
 
-function List({
-  items,
-  icon,
-  color,
-}: {
-  items?: string[];
-  icon: string;
-  color: string;
-}) {
+function List({ items }: { items?: string[] }) {
   if (!items || items.length === 0) {
     return <p className="text-sm text-gray-500">No data available</p>;
   }
 
   return (
-    <div className="space-y-2">
+    <ul className="space-y-2 text-gray-300 text-sm">
       {items.map((item, i) => (
-        <div key={i} className="flex gap-2 text-sm text-gray-300">
-          <span className={color}>{icon}</span>
-          {item}
-        </div>
+        <li key={i}>• {item}</li>
       ))}
-    </div>
+    </ul>
   );
 }
 

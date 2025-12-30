@@ -48,8 +48,8 @@ model UserResume {
   uploadedAt DateTime @default(now())
 
   atsScore   Int?
-  aiAnalysis Json?     // ✅ ADD THIS
+  aiAnalysis Json?
+  jobMatch   Json?      // ✅ ADD THIS
   status     String   @default("Processing")
-
-  @@index([userId])
 }
+

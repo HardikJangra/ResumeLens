@@ -45,3 +45,33 @@ ${text}
     throw error;
   }
 }
+export async function matchJobDescription(
+  resumeText: string,
+  jobDescription: string
+) {
+  const model = genAI.getGenerativeModel({
+    model: "gemini-2.5-flash",
+  });
+
+  const prompt = `
+Compare the RESUME with the JOB DESCRIPTION.
+Return ONLY valid JSON (no explanations).
+
+JSON format:
+{
+  "matchScore": number,
+  "matchedSkills": string[],
+  "missingSkills": string[],
+  "recommendations": string[]
+}
+
+RESUME:
+${resumeText}
+
+JOB DESCRIPTION:
+${jobDescription}
+`;
+
+  const result = await model.generateContent(prompt);
+  return result.response.text(); // ⚠️ DO NOT JSON.parse here
+}
