@@ -85,9 +85,16 @@ export default function ResumeDetailPage() {
           jobDescription,
         }),
       });
-
+      
+      if (!res.ok) {
+        const text = await res.text();
+        console.error("Job match API failed:", text);
+        return;
+      }
+      
       const data = await res.json();
       setJobMatch(data);
+      
     } catch (err) {
       console.error("Job match failed:", err);
     } finally {

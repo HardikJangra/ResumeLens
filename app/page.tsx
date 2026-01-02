@@ -22,8 +22,8 @@ export default function Home() {
     <main className="relative min-h-screen overflow-hidden bg-[#060B27] text-white">
 
       {/* === BACKGROUND ORBS === */}
-      <div className="absolute -top-40 -left-40 h-[400px] w-[400px] bg-purple-600 opacity-30 blur-[120px] rounded-full animate-pulse" />
-      <div className="absolute bottom-0 -right-40 h-[400px] w-[400px] bg-indigo-600 opacity-30 blur-[150px] rounded-full animate-pulse delay-700" />
+      <div className="absolute -top-40 -left-40 h-1004w-100purple-600 opacity-30 blur-[120px] rounded-full animate-pulse" />
+      <div className="absolute bottom-0 -right-40 h-100 w-100 bg-indigo-600 opacity-30 blur-[150px] rounded-full animate-pulse delay-700" />
 
       {/* === OVERLAY === */}
       <div className="absolute inset-0 bg-linear-to-b from-transparent via-[#0F1639]/50 to-[#060B27]" />
