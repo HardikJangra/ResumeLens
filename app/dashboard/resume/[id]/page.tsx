@@ -36,21 +36,17 @@ type Resume = {
 
 export default function ResumeDetailPage() {
   const params = useParams();
-  const resumeId = params.id as string; // ✅ FIX: store once
+  const resumeId = params.id as string;
 
   const [resume, setResume] = useState<Resume | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Job match
   const [jobDescription, setJobDescription] = useState("");
   const [jobMatch, setJobMatch] = useState<JobMatch | null>(null);
   const [matching, setMatching] = useState(false);
 
-  // Rewrite
   const [targetRole, setTargetRole] = useState("");
   const [rewritten, setRewritten] = useState("");
-
-  /* ================= FETCH RESUME ================= */
 
   useEffect(() => {
     async function loadResume() {
@@ -69,32 +65,25 @@ export default function ResumeDetailPage() {
     if (resumeId) loadResume();
   }, [resumeId]);
 
-  /* ================= JOB MATCH ================= */
-
   async function handleJobMatch() {
     if (!jobDescription.trim()) return;
 
     setMatching(true);
-
     try {
       const res = await fetch("/api/job-match", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          resumeId,
-          jobDescription,
-        }),
+        body: JSON.stringify({ resumeId, jobDescription }),
       });
-      
+
       if (!res.ok) {
         const text = await res.text();
         console.error("Job match API failed:", text);
         return;
       }
-      
+
       const data = await res.json();
       setJobMatch(data);
-      
     } catch (err) {
       console.error("Job match failed:", err);
     } finally {
@@ -102,25 +91,18 @@ export default function ResumeDetailPage() {
     }
   }
 
-  /* ================= RESUME REWRITE ================= */
-
   async function rewriteResume() {
     setRewritten("");
 
     const res = await fetch("/api/rewrite-resume", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        resumeId, // ✅ FIXED
-        targetRole,
-      }),
+      body: JSON.stringify({ resumeId, targetRole }),
     });
 
     const data = await res.json();
     if (data.rewritten) setRewritten(data.rewritten);
   }
-
-  /* ================= STATES ================= */
 
   if (loading) {
     return (
@@ -134,7 +116,7 @@ export default function ResumeDetailPage() {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center">
         <p className="text-red-400">Resume not found</p>
-        <Link href="/dashboard" className="mt-4 underline text-sm">
+        <Link href="/dashboard" className="mt-4 underline text-sm text-purple-400">
           Back to dashboard
         </Link>
       </div>
@@ -151,62 +133,67 @@ export default function ResumeDetailPage() {
   }
 
   const analysis = resume.aiAnalysis;
-  const score = resume.atsScore ?? 0;
-
-  /* ================= UI ================= */
 
   return (
-    <div className="max-w-6xl mx-auto px-8 py-10">
-      <Link href="/dashboard" className="text-sm text-gray-400 hover:underline">
+    <div className="max-w-6xl mx-auto px-8 py-10 text-gray-200">
+      {/* Top navigation */}
+      <Link
+        href="/dashboard"
+        className="text-sm font-medium text-purple-400 hover:text-purple-300 hover:underline"
+      >
         ← Back to Dashboard
       </Link>
 
-      <h1 className="text-3xl font-bold mt-2">Resume Analysis</h1>
-      <p className="text-gray-400 mb-8">{resume.fileName}</p>
+      {/* Main heading */}
+      <h1 className="text-4xl font-extrabold mt-3 bg-linear-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">
+        Resume Analysis
+      </h1>
 
-      {/* ================= AI INSIGHTS ================= */}
+      <p className="text-gray-400 mb-10">{resume.fileName}</p>
+
+      {/* AI INSIGHTS */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-        <Section title="Strengths">
+        <Section title="Strengths" color="text-green-400">
           <List items={analysis?.strengths} />
         </Section>
 
-        <Section title="Weaknesses">
+        <Section title="Weaknesses" color="text-red-400">
           <List items={analysis?.weaknesses} />
         </Section>
 
-        <Section title="Skills Matched">
+        <Section title="Skills Matched" color="text-emerald-400">
           <Tags items={analysis?.skillsMatched} variant="green" />
         </Section>
 
-        <Section title="Skills Missing">
+        <Section title="Skills Missing" color="text-rose-400">
           <Tags items={analysis?.skillsMissing} variant="red" />
         </Section>
 
-        <Section title="AI Suggestions" full>
+        <Section title="AI Suggestions" color="text-blue-400" full>
           <List items={analysis?.suggestions} />
         </Section>
       </div>
 
-      {/* ================= JOB MATCH ================= */}
-      <Section title="Job Description Matching" full>
+      {/* JOB MATCH */}
+      <Section title="Job Description Matching" color="text-purple-400" full>
         <textarea
           value={jobDescription}
           onChange={(e) => setJobDescription(e.target.value)}
           placeholder="Paste job description here..."
-          className="w-full h-40 p-4 bg-[#060B27] border border-[#1A1F36] rounded-lg text-sm"
+          className="w-full h-40 p-4 bg-[#060B27] border border-[#1A1F36] rounded-lg text-sm text-gray-200 placeholder:text-gray-500"
         />
 
         <button
           onClick={handleJobMatch}
           disabled={matching}
-          className="mt-4 px-6 py-2 rounded-lg bg-purple-600 hover:bg-purple-500 transition"
+          className="mt-4 px-6 py-2 rounded-lg bg-purple-600 hover:bg-purple-500 transition text-white font-semibold"
         >
           {matching ? "Matching..." : "Match Job"}
         </button>
 
         {jobMatch && (
-          <div className="mt-6">
-            <p className="text-purple-400 font-semibold">
+          <div className="mt-6 space-y-3">
+            <p className="text-purple-400 font-bold text-lg">
               Match Score: {jobMatch.matchScore}%
             </p>
             <Tags items={jobMatch.matchedSkills} variant="green" />
@@ -216,25 +203,25 @@ export default function ResumeDetailPage() {
         )}
       </Section>
 
-      {/* ================= RESUME REWRITE ================= */}
-      <Section title="AI Resume Rewrite" full>
+      {/* RESUME REWRITE */}
+      <Section title="AI Resume Rewrite" color="text-yellow-400" full>
         <input
           type="text"
           placeholder="Target role (e.g. Frontend Developer)"
-          className="w-full mb-4 px-4 py-2 bg-[#080C1F] border border-[#1A1F36] rounded-lg text-sm"
+          className="w-full mb-4 px-4 py-2 bg-[#080C1F] border border-[#1A1F36] rounded-lg text-sm text-gray-200 placeholder:text-gray-500"
           value={targetRole}
           onChange={(e) => setTargetRole(e.target.value)}
         />
 
         <button
           onClick={rewriteResume}
-          className="px-5 py-2 rounded-lg bg-purple-600 hover:bg-purple-500 transition"
+          className="px-5 py-2 rounded-lg bg-purple-600 hover:bg-purple-500 transition text-white font-semibold"
         >
           Rewrite Resume
         </button>
 
         {rewritten && (
-          <pre className="mt-6 whitespace-pre-wrap bg-[#080C1F] border border-[#1A1F36] rounded-lg p-4 text-sm">
+          <pre className="mt-6 whitespace-pre-wrap bg-[#080C1F] border border-[#1A1F36] rounded-lg p-4 text-sm text-gray-200">
             {rewritten}
           </pre>
         )}
@@ -249,10 +236,12 @@ function Section({
   title,
   children,
   full,
+  color,
 }: {
   title: string;
   children: React.ReactNode;
   full?: boolean;
+  color: string;
 }) {
   return (
     <div
@@ -260,7 +249,9 @@ function Section({
         full ? "md:col-span-2" : ""
       }`}
     >
-      <h3 className="text-lg font-semibold mb-4">{title}</h3>
+      <h3 className={`text-xl font-bold mb-4 ${color}`}>
+        {title}
+      </h3>
       {children}
     </div>
   );
@@ -268,10 +259,10 @@ function Section({
 
 function List({ items }: { items?: string[] }) {
   if (!items || items.length === 0)
-    return <p className="text-gray-500 text-sm">No data available</p>;
+    return <p className="text-gray-400 text-sm">No data available</p>;
 
   return (
-    <ul className="space-y-2 text-sm">
+    <ul className="space-y-2 text-sm text-gray-300 leading-relaxed">
       {items.map((item, i) => (
         <li key={i}>• {item}</li>
       ))}
@@ -287,17 +278,17 @@ function Tags({
   variant: "green" | "red";
 }) {
   if (!items || items.length === 0)
-    return <p className="text-gray-500 text-sm">No data available</p>;
+    return <p className="text-gray-400 text-sm">No data available</p>;
 
   return (
     <div className="flex flex-wrap gap-2 my-2">
       {items.map((item, i) => (
         <span
           key={i}
-          className={`px-3 py-1 text-xs rounded-full border ${
+          className={`px-3 py-1 text-xs font-semibold rounded-full border ${
             variant === "green"
-              ? "bg-green-900/30 text-green-400 border-green-700/40"
-              : "bg-red-900/30 text-red-400 border-red-700/40"
+              ? "bg-green-900/30 text-green-300 border-green-700/40"
+              : "bg-red-900/30 text-red-300 border-red-700/40"
           }`}
         >
           {item}
