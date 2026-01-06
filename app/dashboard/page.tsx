@@ -3,6 +3,8 @@
 import { useEffect, useState, useMemo } from "react";
 import React from "react";
 import { Trash2 } from "lucide-react";
+import { useClerk, useUser } from "@clerk/nextjs";
+
 
 
 import { UploadDropzone } from "@uploadthing/react";
@@ -51,6 +53,9 @@ export default function Dashboard() {
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const [resumes, setResumes] = useState<Resume[]>([]);
   const [loading, setLoading] = useState(true);
+  const { signOut } = useClerk();
+  const { user } = useUser();
+
 
   // Fetch resumes
   // Fetch resumes once on mount
@@ -256,12 +261,14 @@ useEffect(() => {
             </div>
           </Link>
 
-          <button className="flex items-center gap-3 p-3 rounded-lg 
-            hover:bg-[#1A1F36] hover:shadow-[0_0_15px_rgba(120,50,255,0.4)]
-            transition cursor-pointer"
-          >
-            <LogOut size={20} /> Log Out
-          </button>
+          <button
+  onClick={() => signOut({ redirectUrl: "/" })}
+  className="flex items-center gap-3 p-3 rounded-lg 
+  hover:bg-[#1A1F36] hover:shadow-[0_0_15px_rgba(120,50,255,0.4)]
+  transition cursor-pointer text-red-400"
+>
+  <LogOut size={20} /> Log Out
+</button>
 
         </nav>
       </aside>
@@ -297,7 +304,10 @@ useEffect(() => {
               className="w-9 h-9 rounded-full bg-linear-to-br from-purple-600 to-blue-600 
               flex items-center justify-center shadow-md hover:opacity-90 transition"
             >
-              <span className="text-white font-semibold text-sm">U</span>
+              <span className="text-white font-semibold text-sm">
+  {user?.firstName?.charAt(0) ?? "U"}
+</span>
+
             </button>
 
             {profileMenuOpen && (
@@ -327,10 +337,12 @@ useEffect(() => {
                 <hr className="border-[#1F2A48] my-1" />
 
                 <button
-                  className="w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-[#1A1F36] cursor-pointer transition"
-                >
-                  Logout
-                </button>
+  onClick={() => signOut({ redirectUrl: "/" })}
+  className="w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-[#1A1F36] transition"
+>
+  Logout
+</button>
+
               </div>
             )}
           </div>

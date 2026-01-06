@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import { matchJobDescription } from "@/lib/gemini";
+import { Prisma } from "@prisma/client";
 
 export async function POST(req: Request) {
   try {
@@ -31,30 +32,46 @@ export async function POST(req: Request) {
     );
 
     /**
-     * ✅ SAFETY CLEAN (CRITICAL)
-     * Gemini often wraps JSON in ```json ... ```
+     * ✅ SAFETY CLEAN
+     * Gemini sometimes wraps JSON in ```json ... ```
      */
-    let cleaned = rawResult
+    const cleaned = rawResult
       .replace(/```json/g, "")
       .replace(/```/g, "")
       .trim();
 
-    const parsed = JSON.parse(cleaned);
+    let parsed: unknown;
 
-    // Optional: store result
+    try {
+      parsed = JSON.parse(cleaned);
+    } catch {
+      console.error("❌ Gemini returned invalid JSON:", cleaned);
+
+      return NextResponse.json(
+        {
+          error: "AI response was not valid JSON",
+          raw: cleaned,
+        },
+        { status: 500 }
+      );
+    }
+
+    // ✅ Store result
     await prisma.userResume.update({
       where: { id: resumeId },
       data: {
         aiAnalysis: {
           ...(resume.aiAnalysis as object),
-          jobMatch: parsed,
+          jobMatch: parsed as Prisma.InputJsonValue,
         },
       },
     });
+    
 
     return NextResponse.json(parsed);
   } catch (error) {
     console.error("❌ Job match failed:", error);
+
     return NextResponse.json(
       { error: "Job match failed" },
       { status: 500 }
