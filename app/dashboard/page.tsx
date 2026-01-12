@@ -429,6 +429,7 @@ useEffect(() => {
           </div>
 
           {/* ⭐ CHARTS GRID ⭐ */}
+          
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* ATS Trend Area Chart */}
             <div className="rounded-xl border border-[#1A1F36] bg-[#0D1128] p-4 lg:col-span-2 shadow-[0_0_20px_rgba(80,50,255,0.25)]">
