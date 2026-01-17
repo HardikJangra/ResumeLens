@@ -24,7 +24,7 @@ export const ourFileRouter = {
 
       console.log("🚀 Triggering resume processing:", saved.id);
 
-      await fetch("http://127.0.0.1:3000/api/process-resume", {
+      await fetch("/api/process-resume", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
