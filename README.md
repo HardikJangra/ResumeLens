@@ -54,3 +54,17 @@ AI-powered resume rewriting
 Job description compatibility checker
 
 Clean and responsive UI
+
+## 📸 Screenshots
+
+### Landing Page
+![Landing Page](landing.png)
+
+### ATS Score Dashboard
+![Dashboard Page](dashboard.png)
+
+### Resume Analysis
+![Analysis](analysis.png)
+
+### AI Resume Rewrite
+![AI Rewrite](rewrite.png)
