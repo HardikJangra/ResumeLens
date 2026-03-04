@@ -40,6 +40,7 @@ Node.js
 LLM APIs
 
 Resume parsing & text analysis
+
 ✨ Features
 
 Resume upload and parsing
