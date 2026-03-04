@@ -2,9 +2,11 @@ import { SignIn } from "@clerk/nextjs";
 
 export default function Page() {
   return (
-    <SignIn
-      redirectUrl="/dashboard"
-      afterSignInUrl="/dashboard"
-    />
+    <div className="min-h-screen flex items-center justify-center bg-[#060B27]">
+      <SignIn
+        redirectUrl="/dashboard"
+        afterSignInUrl="/dashboard"
+      />
+    </div>
   );
 }
