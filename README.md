@@ -1,36 +1,55 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+ResumeLens AI 📄🤖
 
-## Getting Started
+ResumeLens AI is an AI-powered resume optimization platform that analyzes resumes, provides ATS compatibility scores, highlights strengths and weaknesses, and helps users rewrite resumes tailored for specific job roles.
 
-First, run the development server:
+🚀 Overview
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+ResumeLens AI helps job seekers improve their resumes by simulating how an Applicant Tracking System (ATS) evaluates them.
+The platform provides detailed resume analysis, AI-powered rewriting suggestions, and job-description compatibility scoring to help candidates maximize their chances of passing recruiter screening systems.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+⚡ Workflow
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1️⃣ User uploads their resume
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+2️⃣ The system analyzes the resume and generates an ATS compatibility score
 
-## Learn More
+3️⃣ The platform highlights resume strengths and weaknesses
 
-To learn more about Next.js, take a look at the following resources:
+4️⃣ Users can rewrite their resume using AI for a specific job role
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+5️⃣ Users can paste a job description to evaluate compatibility
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+6️⃣ The system calculates how well the resume matches the job description
 
-## Deploy on Vercel
+🛠 Tech Stack
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Frontend
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Next.js
+
+React
+
+TypeScript
+
+Tailwind CSS
+
+Backend / AI Integration
+
+Node.js
+
+LLM APIs
+
+Resume parsing & text analysis
+✨ Features
+
+Resume upload and parsing
+
+ATS score evaluation
+
+Strength and weakness analysis
+
+AI-powered resume rewriting
+
+Job description compatibility checker
+
+Clean and responsive UI
