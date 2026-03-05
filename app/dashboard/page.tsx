@@ -140,18 +140,39 @@ export default function Dashboard() {
   // ── Derived data ───────────────────────────────────────────────────────────
   const stats = useMemo(() => {
     const total = resumes.length;
-    const scores = resumes.map(r => r.atsScore).filter((s): s is number => typeof s === "number");
+    const completed = resumes.filter(r =>
+      ["ready", "completed"].includes(r.status.toLowerCase())
+    );
+    
+    const scores = completed
+      .map(r => r.atsScore)
+      .filter((s): s is number => typeof s === "number");
     const avg = scores.length > 0 ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 0;
     const best = scores.length > 0 ? Math.max(...scores) : 0;
-    const last = scores.length > 0 ? scores[scores.length - 1] : 0;
-    const prev = scores.length > 1 ? scores[scores.length - 2] : 0;
+    const sorted = [...completed].sort(
+      (a, b) =>
+        new Date(a.uploadedAt).getTime() -
+        new Date(b.uploadedAt).getTime()
+    );
+    
+    const last = sorted.at(-1)?.atsScore ?? 0;
+    const prev = sorted.at(-2)?.atsScore ?? 0;
+    
     const delta = last - prev;
-    const processed = resumes.filter(r => ["ready","completed"].includes(r.status.toLowerCase())).length;
-    const processedPct = total > 0 ? Math.round((processed / total) * 100) : 0;
+    const passed = completed.filter(r => (r.atsScore ?? 0) >= 60).length;
 
-    const sorted = [...resumes].sort((a, b) => new Date(a.uploadedAt).getTime() - new Date(b.uploadedAt).getTime());
-    const trendData = sorted.length > 0
-      ? sorted.map((r, i) => ({ name: `#${i + 1}`, score: r.atsScore ?? 0, date: new Date(r.uploadedAt).toLocaleDateString("en-US", { month: "short", day: "numeric" }) }))
+const passRate =
+  completed.length > 0
+    ? Math.round((passed / completed.length) * 100)
+    : 0;
+
+    const trendSorted = [...resumes].sort(
+      (a, b) =>
+        new Date(a.uploadedAt).getTime() -
+        new Date(b.uploadedAt).getTime()
+    );
+    const trendData = trendSorted.length > 0
+      ? trendSorted.map((r, i) => ({ name: `#${i + 1}`, score: r.atsScore ?? 0, date: new Date(r.uploadedAt).toLocaleDateString("en-US", { month: "short", day: "numeric" }) }))
       : Array.from({ length: 5 }, (_, i) => ({ name: `#${i+1}`, score: [42,55,61,70,78][i], date: "" }));
 
     // Score distribution for pie
@@ -168,7 +189,7 @@ export default function Dashboard() {
       else insight = `Strong performance — ${avg}/100 average across ${total} resume${total > 1 ? "s" : ""}. Your top score is ${best}. Keep matching keywords to each role to stay competitive.`;
     }
 
-    return { total, avg, best, last, prev, delta, processed, processedPct, trendData, dist, insight };
+    return { total, avg, best, last, prev, delta, passRate, trendData, dist, insight };
   }, [resumes]);
 
   const skillRadarData = [
@@ -795,7 +816,7 @@ export default function Dashboard() {
                     foot: stats.last > 0 ? (stats.last >= 80 ? "Excellent — ready to apply!" : stats.last >= 60 ? "Good — some room to improve" : "Needs work — review tips") : "No uploads yet",
                   },
                   {
-                    lbl: "Pass Rate", val: stats.processedPct, suffix: "%",
+                    lbl: "Pass Rate", val: stats.passRate, suffix: "%",
                     icon: <Shield size={17} />, ibg: "rgba(245,158,11,0.12)", ic: "var(--amber)",
                     badge: null,
                     foot: `${stats.processed} of ${stats.total} completed`,
