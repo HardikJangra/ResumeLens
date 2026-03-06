@@ -819,7 +819,7 @@ const passRate =
                     lbl: "Pass Rate", val: stats.passRate, suffix: "%",
                     icon: <Shield size={17} />, ibg: "rgba(245,158,11,0.12)", ic: "var(--amber)",
                     badge: null,
-                    foot: `${stats.processed} of ${stats.total} completed`,
+                    foot: `${resumes.filter(r => r.status === "Completed").length} of ${stats.total} completed`,
                   },
                 ].map((s, i) => (
                   <div key={i} className="stat-card">
