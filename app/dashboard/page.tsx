@@ -69,12 +69,12 @@ function ScoreRing({ score, size = 88 }: { score: number; size?: number }) {
 
 // ─── Tip card data ───────────────────────────────────────────────────────────
 const TIPS = [
-  { icon: "🎯", title: "Tailor for each role", body: "Customizing your resume for each job description can boost your ATS score by up to 35%." },
-  { icon: "📊", title: "Quantify achievements", body: "Resumes with numbers (e.g. 'increased revenue by 40%') get 3× more recruiter attention." },
-  { icon: "🔑", title: "Mirror job keywords", body: "Use the exact keywords from the job posting — ATS systems do exact-match filtering." },
-  { icon: "📐", title: "Keep it to one page", body: "For under 10 years of experience, one-page resumes perform significantly better." },
-  { icon: "🚫", title: "Avoid tables & graphics", body: "Fancy formatting can confuse ATS parsers. Clean, single-column layouts score higher." },
-  { icon: "⚡", title: "Action verbs first", body: "Start every bullet with a strong action verb: Led, Built, Grew, Reduced, Delivered." },
+  { icon: "01", title: "Tailor for each role", body: "Adjust the summary, skills, and recent bullets to match the job description before you apply." },
+  { icon: "02", title: "Quantify achievements", body: "Numbers make impact easier to scan. Add scope, volume, revenue, time saved, or reliability gains." },
+  { icon: "03", title: "Mirror job keywords", body: "Use the same role language from the posting when it honestly matches your experience." },
+  { icon: "04", title: "Keep the structure plain", body: "Clear sections, consistent headings, and simple ordering help both scanners and recruiters." },
+  { icon: "05", title: "Avoid dense formatting", body: "Tables, heavy graphics, and multi-column layouts can hide important experience from parsers." },
+  { icon: "06", title: "Lead with action", body: "Start bullets with concrete verbs: Led, Built, Grew, Reduced, Delivered, Automated." },
 ];
 
 // ─── Checklist items ─────────────────────────────────────────────────────────
@@ -215,29 +215,29 @@ const passRate =
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap');
         *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
         :root{
-          --bg:#0A0A0F;
-          --s1:#111118;
-          --s2:#16161F;
-          --s3:#1C1C28;
-          --b1:rgba(255,255,255,0.06);
-          --b2:rgba(255,255,255,0.11);
-          --text:#F0F0F5;
-          --muted:#6B6B80;
-          --muted2:#9090A8;
-          --accent:#6366F1;
-          --accent2:#8B5CF6;
-          --green:#22C55E;
-          --amber:#F59E0B;
-          --red:#EF4444;
+          --bg:#F6F1E8;
+          --s1:#FFFBF2;
+          --s2:#F1E8DA;
+          --s3:#E7D9C6;
+          --b1:rgba(45,40,32,0.10);
+          --b2:rgba(45,40,32,0.18);
+          --text:#17201C;
+          --muted:#81786B;
+          --muted2:#5F675F;
+          --accent:#0F766E;
+          --accent2:#B86B4B;
+          --green:#16704F;
+          --amber:#A46118;
+          --red:#A33B32;
           --sw:252px;
         }
         html,body{height:100%;scroll-behavior:smooth}
-        body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+        body{background:var(--bg);color:var(--text);font-family:'Instrument Sans',sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
         a{text-decoration:none;color:inherit}
-        button,input{font-family:'DM Sans',sans-serif}
+        button,input{font-family:'Instrument Sans',sans-serif}
         ::-webkit-scrollbar{width:4px;height:4px}
         ::-webkit-scrollbar-track{background:transparent}
         ::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:2px}
@@ -259,11 +259,11 @@ const passRate =
         }
         .logo-mark{
           width:30px;height:30px;flex-shrink:0;border-radius:7px;
-          background:linear-gradient(135deg,var(--accent),var(--accent2));
-          display:flex;align-items:center;justify-content:center;font-size:14px;
-          box-shadow:0 0 20px rgba(99,102,241,0.35);
+          background:var(--text);
+          display:flex;align-items:center;justify-content:center;font-size:.66rem;
+          box-shadow:none;color:var(--s1);font-weight:700;
         }
-        .logo-name{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:.95rem;letter-spacing:-.02em}
+        .logo-name{font-family:'Instrument Sans',sans-serif;font-weight:700;font-size:.95rem;letter-spacing:0}
         .sb-close{display:none;margin-left:auto;background:none;border:none;color:var(--muted);cursor:pointer;padding:4px;border-radius:4px;line-height:0}
         .sb-nav{padding:10px 10px;flex:1;overflow-y:auto}
         .sb-section{font-size:.58rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);padding:14px 10px 5px}
@@ -273,8 +273,8 @@ const passRate =
           margin-bottom:1px;border:none;background:none;width:100%;text-align:left;
           position:relative;
         }
-        .nb:hover{color:var(--text);background:rgba(255,255,255,0.05)}
-        .nb.active{color:var(--text);background:rgba(99,102,241,0.12);font-weight:500}
+        .nb:hover{color:var(--text);background:rgba(23,32,28,0.05)}
+        .nb.active{color:var(--text);background:rgba(15,118,110,0.10);font-weight:600}
         .nb.active::before{content:'';position:absolute;left:0;top:20%;bottom:20%;width:3px;background:var(--accent);border-radius:0 2px 2px 0}
         .nb.active svg{color:var(--accent)}
         .nb-danger{color:var(--red)!important}
@@ -288,7 +288,7 @@ const passRate =
         .user-pill:hover{border-color:var(--b2)}
         .av{
           width:32px;height:32px;border-radius:50%;flex-shrink:0;
-          background:linear-gradient(135deg,var(--accent),var(--accent2));
+          background:var(--accent);
           display:flex;align-items:center;justify-content:center;
           font-size:.75rem;font-weight:600;color:#fff;
         }
@@ -297,17 +297,17 @@ const passRate =
         .pm{
           position:absolute;bottom:calc(100% + 6px);left:0;right:0;
           background:var(--s2);border:1px solid var(--b2);border-radius:10px;padding:6px;
-          box-shadow:0 -16px 40px rgba(0,0,0,0.5);z-index:300;
+          box-shadow:0 -16px 40px rgba(45,40,32,0.16);z-index:300;
         }
         .pm-item{
           display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:6px;
           font-size:.82rem;color:var(--muted2);cursor:pointer;transition:all .15s;
           border:none;background:none;width:100%;text-align:left;
         }
-        .pm-item:hover{color:var(--text);background:rgba(255,255,255,0.05)}
+        .pm-item:hover{color:var(--text);background:rgba(23,32,28,0.05)}
 
         /* ── OVERLAY ── */
-        .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:199;backdrop-filter:blur(3px)}
+        .overlay{display:none;position:fixed;inset:0;background:rgba(23,32,28,0.45);z-index:199;backdrop-filter:blur(3px)}
 
         /* ── MAIN ── */
         .main{flex:1;margin-left:var(--sw);min-height:100vh;display:flex;flex-direction:column}
@@ -317,14 +317,14 @@ const passRate =
           position:sticky;top:0;z-index:100;height:60px;
           display:flex;align-items:center;justify-content:space-between;
           padding:0 24px;
-          background:rgba(10,10,15,0.9);backdrop-filter:blur(20px);
+          background:rgba(246,241,232,0.88);backdrop-filter:blur(20px);
           border-bottom:1px solid var(--b1);
         }
         .tb-l{display:flex;align-items:center;gap:14px}
         .tb-r{display:flex;align-items:center;gap:10px}
         .mob-btn{display:none;background:none;border:none;color:var(--muted2);cursor:pointer;padding:6px;border-radius:6px;transition:background .15s;align-items:center;justify-content:center}
-        .mob-btn:hover{background:rgba(255,255,255,0.06)}
-        .pg-title{font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:1rem;letter-spacing:-.01em}
+        .mob-btn:hover{background:rgba(23,32,28,0.06)}
+        .pg-title{font-family:'Instrument Sans',sans-serif;font-weight:700;font-size:1rem;letter-spacing:0}
         .crumb{display:flex;align-items:center;gap:4px;font-size:.7rem;color:var(--muted);margin-top:1px}
 
         /* SEARCH */
@@ -336,7 +336,7 @@ const passRate =
           width:200px;outline:none;transition:border-color .2s,width .2s;
         }
         .search-input::placeholder{color:var(--muted)}
-        .search-input:focus{border-color:rgba(99,102,241,0.4);width:240px}
+        .search-input:focus{border-color:rgba(15,118,110,0.36);width:240px}
 
         /* ICON BTNS */
         .icon-btn{
@@ -344,19 +344,19 @@ const passRate =
           background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;
           color:var(--muted2);transition:all .15s;position:relative;
         }
-        .icon-btn:hover{background:rgba(255,255,255,0.06);border-color:var(--b2);color:var(--text)}
+        .icon-btn:hover{background:rgba(23,32,28,0.06);border-color:var(--b2);color:var(--text)}
         .notif-dot{
           position:absolute;top:7px;right:7px;width:6px;height:6px;border-radius:50%;
           background:var(--red);border:1.5px solid var(--bg);
         }
         .tb-av{
           width:34px;height:34px;border-radius:50%;border:none;cursor:pointer;
-          background:linear-gradient(135deg,var(--accent),var(--accent2));
+          background:var(--accent);
           display:flex;align-items:center;justify-content:center;
           font-size:.75rem;font-weight:600;color:#fff;
           box-shadow:0 0 0 2px transparent;transition:box-shadow .2s;
         }
-        .tb-av:hover{box-shadow:0 0 0 2px rgba(99,102,241,0.45)}
+        .tb-av:hover{box-shadow:0 0 0 2px rgba(15,118,110,0.32)}
 
         /* ── TABS ── */
         .tabs{display:flex;align-items:center;gap:2px;padding:0 24px;border-bottom:1px solid var(--b1);background:var(--s1)}
@@ -372,15 +372,15 @@ const passRate =
           background:var(--s3);border:1px solid var(--b1);border-radius:100px;
           padding:1px 7px;font-size:.65rem;color:var(--muted2);
         }
-        .tab.active .tab-count{background:rgba(99,102,241,0.15);border-color:rgba(99,102,241,0.25);color:var(--accent)}
+        .tab.active .tab-count{background:rgba(15,118,110,0.12);border-color:rgba(15,118,110,0.22);color:var(--accent)}
 
         /* ── PAGE BODY ── */
         .page{padding:24px;max-width:1280px;margin:0 auto;width:100%}
 
         /* ── WELCOME BANNER ── */
         .welcome-banner{
-          background:linear-gradient(135deg,rgba(99,102,241,0.12) 0%,rgba(139,92,246,0.08) 50%,rgba(0,0,0,0) 100%);
-          border:1px solid rgba(99,102,241,0.2);border-radius:14px;
+          background:linear-gradient(135deg,rgba(15,118,110,0.10) 0%,rgba(184,107,75,0.08) 100%);
+          border:1px solid rgba(45,40,32,0.12);border-radius:8px;
           padding:24px 28px;margin-bottom:24px;
           display:flex;align-items:center;justify-content:space-between;
           position:relative;overflow:hidden;
@@ -388,36 +388,36 @@ const passRate =
         .welcome-banner::before{
           content:'';position:absolute;top:-40px;right:-40px;
           width:200px;height:200px;border-radius:50%;
-          background:radial-gradient(circle,rgba(99,102,241,0.15) 0%,transparent 70%);
+          background:radial-gradient(circle,rgba(15,118,110,0.12) 0%,transparent 70%);
           pointer-events:none;
         }
-        .wb-title{font-family:'Bricolage Grotesque',sans-serif;font-size:1.2rem;font-weight:700;letter-spacing:-.02em;margin-bottom:4px}
+        .wb-title{font-family:'Source Serif 4',serif;font-size:1.25rem;font-weight:700;letter-spacing:0;margin-bottom:4px}
         .wb-sub{font-size:.85rem;color:var(--muted2);font-weight:300}
         .wb-actions{display:flex;gap:10px;flex-shrink:0}
 
         /* PRIMARY BTN */
         .btn-primary{
           display:inline-flex;align-items:center;gap:7px;
-          background:linear-gradient(135deg,var(--accent),var(--accent2));
+          background:var(--accent);
           color:#fff;border:none;border-radius:8px;
           padding:10px 20px;font-size:.875rem;font-weight:500;cursor:pointer;
-          box-shadow:0 1px 2px rgba(0,0,0,0.4),0 0 0 1px rgba(99,102,241,0.4);
+          box-shadow:0 1px 2px rgba(45,40,32,0.14);
           transition:all .2s;
         }
-        .btn-primary:hover{box-shadow:0 4px 20px rgba(99,102,241,0.45);transform:translateY(-1px)}
+        .btn-primary:hover{box-shadow:0 8px 24px rgba(15,118,110,0.20);transform:translateY(-1px)}
         .btn-ghost{
           display:inline-flex;align-items:center;gap:7px;
-          background:rgba(255,255,255,0.06);color:var(--muted2);
+          background:rgba(23,32,28,0.04);color:var(--muted2);
           border:1px solid var(--b2);border-radius:8px;
           padding:10px 20px;font-size:.875rem;font-weight:400;cursor:pointer;
           transition:all .2s;
         }
-        .btn-ghost:hover{background:rgba(255,255,255,0.1);color:var(--text);border-color:rgba(255,255,255,0.2)}
+        .btn-ghost:hover{background:rgba(23,32,28,0.07);color:var(--text);border-color:rgba(45,40,32,0.22)}
 
         /* ── STAT CARDS ── */
         .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
         .stat-card{
-          background:var(--s1);border:1px solid var(--b1);border-radius:12px;
+          background:var(--s1);border:1px solid var(--b1);border-radius:8px;
           padding:18px 20px;transition:all .2s;position:relative;overflow:hidden;cursor:default;
         }
         .stat-card::after{
@@ -425,7 +425,7 @@ const passRate =
           background:linear-gradient(90deg,var(--accent),var(--accent2));
           opacity:0;transition:opacity .2s;border-radius:12px 12px 0 0;
         }
-        .stat-card:hover{border-color:var(--b2);box-shadow:0 4px 20px rgba(0,0,0,0.3);transform:translateY(-1px)}
+        .stat-card:hover{border-color:var(--b2);box-shadow:0 10px 26px rgba(45,40,32,0.10);transform:translateY(-1px)}
         .stat-card:hover::after{opacity:1}
         .sc-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px}
         .sc-icon{
@@ -437,7 +437,7 @@ const passRate =
           padding:3px 8px;border-radius:100px;
         }
         .sc-lbl{font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:6px}
-        .sc-val{font-family:'Bricolage Grotesque',sans-serif;font-size:2rem;font-weight:700;line-height:1;letter-spacing:-.03em}
+        .sc-val{font-family:'Source Serif 4',serif;font-size:2rem;font-weight:700;line-height:1;letter-spacing:0}
         .sc-foot{font-size:.72rem;color:var(--muted2);margin-top:6px}
 
         /* ── 2-COL GRID ── */
@@ -446,43 +446,43 @@ const passRate =
         .g3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:16px}
 
         /* ── CARD ── */
-        .card{background:var(--s1);border:1px solid var(--b1);border-radius:12px;overflow:hidden;transition:border-color .2s}
+        .card{background:var(--s1);border:1px solid var(--b1);border-radius:8px;overflow:hidden;transition:border-color .2s}
         .card:hover{border-color:var(--b2)}
         .ch{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--b1)}
-        .ct{font-family:'Bricolage Grotesque',sans-serif;font-size:.9rem;font-weight:600;letter-spacing:-.01em}
+        .ct{font-family:'Instrument Sans',sans-serif;font-size:.9rem;font-weight:700;letter-spacing:0}
         .cs{font-size:.7rem;color:var(--muted);margin-top:2px}
         .cb{padding:20px}
         .cb-sm{padding:16px 20px}
 
         /* ── UPLOAD MODAL ── */
         .upload-modal-bg{
-          position:fixed;inset:0;background:rgba(0,0,0,0.65);
+          position:fixed;inset:0;background:rgba(23,32,28,0.50);
           backdrop-filter:blur(6px);z-index:500;
           display:flex;align-items:center;justify-content:center;padding:20px;
         }
         .upload-modal{
-          background:var(--s1);border:1px solid var(--b2);border-radius:16px;
+          background:var(--s1);border:1px solid var(--b2);border-radius:10px;
           width:100%;max-width:520px;overflow:hidden;
-          box-shadow:0 32px 80px rgba(0,0,0,0.6);
+          box-shadow:0 32px 80px rgba(45,40,32,0.24);
           animation:slideUp .25s cubic-bezier(.4,0,.2,1);
         }
         @keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
         .um-header{display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid var(--b1)}
-        .um-title{font-family:'Bricolage Grotesque',sans-serif;font-size:1rem;font-weight:600}
+        .um-title{font-family:'Instrument Sans',sans-serif;font-size:1rem;font-weight:700}
         .um-body{padding:28px 24px}
         .um-close{background:none;border:none;color:var(--muted2);cursor:pointer;padding:4px;border-radius:4px;line-height:0;transition:color .15s}
         .um-close:hover{color:var(--text)}
 
         /* ── INSIGHT STRIP ── */
         .insight-strip{
-          background:linear-gradient(135deg,rgba(99,102,241,0.09),rgba(139,92,246,0.06));
-          border:1px solid rgba(99,102,241,0.18);border-radius:12px;
+          background:linear-gradient(135deg,rgba(15,118,110,0.08),rgba(184,107,75,0.06));
+          border:1px solid rgba(45,40,32,0.12);border-radius:8px;
           padding:18px 22px;display:flex;align-items:flex-start;gap:14px;
           margin-bottom:16px;
         }
         .insight-icon{
           width:38px;height:38px;border-radius:9px;flex-shrink:0;
-          background:rgba(99,102,241,0.15);border:1px solid rgba(99,102,241,0.25);
+          background:rgba(15,118,110,0.10);border:1px solid rgba(15,118,110,0.20);
           display:flex;align-items:center;justify-content:center;
         }
         .ai-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent);animation:pulse 2s infinite;flex-shrink:0;margin-top:4px}
@@ -491,8 +491,8 @@ const passRate =
 
         /* ── TOP RESUME HIGHLIGHT ── */
         .best-card{
-          background:linear-gradient(135deg,rgba(34,197,94,0.08),rgba(99,102,241,0.06));
-          border:1px solid rgba(34,197,94,0.18);border-radius:12px;
+          background:linear-gradient(135deg,rgba(22,112,79,0.08),rgba(15,118,110,0.06));
+          border:1px solid rgba(22,112,79,0.18);border-radius:8px;
           padding:20px;display:flex;align-items:center;gap:16px;
         }
         .best-score-wrap{display:flex;flex-direction:column;align-items:center;position:relative;flex-shrink:0}
@@ -516,11 +516,11 @@ const passRate =
 
         /* ── TIP CARD ── */
         .tip-card{
-          background:var(--s2);border:1px solid var(--b1);border-radius:10px;
+          background:var(--s2);border:1px solid var(--b1);border-radius:8px;
           padding:16px;transition:all .3s;min-height:110px;
         }
-        .tip-emoji{font-size:1.5rem;margin-bottom:8px;display:block}
-        .tip-title{font-family:'Bricolage Grotesque',sans-serif;font-size:.85rem;font-weight:600;margin-bottom:6px}
+        .tip-emoji{font-size:.72rem;margin-bottom:10px;display:inline-flex;align-items:center;justify-content:center;width:26px;height:22px;border-radius:5px;background:rgba(15,118,110,0.10);color:var(--accent);font-weight:700}
+        .tip-title{font-family:'Instrument Sans',sans-serif;font-size:.85rem;font-weight:700;margin-bottom:6px}
         .tip-body{font-size:.78rem;color:var(--muted2);line-height:1.6;font-weight:300}
         .tip-dots{display:flex;gap:5px;margin-top:12px}
         .tip-dot{width:5px;height:5px;border-radius:50%;background:var(--b2);transition:background .3s}
@@ -531,7 +531,7 @@ const passRate =
         .dist-row:last-child{border-bottom:none}
         .dist-label{font-size:.8rem;color:var(--muted2);display:flex;align-items:center;gap:7px}
         .dist-dot{width:8px;height:8px;border-radius:50%}
-        .dist-count{font-family:'Bricolage Grotesque',sans-serif;font-size:.9rem;font-weight:600}
+        .dist-count{font-family:'Instrument Sans',sans-serif;font-size:.9rem;font-weight:700}
 
         /* ── TABLE ── */
         .rtable{width:100%;border-collapse:collapse}
@@ -540,21 +540,21 @@ const passRate =
         .rtable td{padding:11px 8px;border-bottom:1px solid var(--b1);vertical-align:middle;font-size:.85rem}
         .rtable tr:last-child td{border-bottom:none}
         .rtable tbody tr{transition:background .1s}
-        .rtable tbody tr:hover td{background:rgba(255,255,255,0.02)}
+        .rtable tbody tr:hover td{background:rgba(23,32,28,0.025)}
         .fname{font-weight:500;color:var(--text);max-width:190px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
         .fdate{font-size:.75rem;color:var(--muted)}
         .sw{display:flex;align-items:center;gap:8px}
         .sn{font-size:.85rem;font-weight:600;min-width:26px}
-        .bt{width:64px;height:4px;border-radius:2px;background:rgba(255,255,255,.07);overflow:hidden;flex-shrink:0}
+        .bt{width:64px;height:4px;border-radius:2px;background:rgba(23,32,28,.08);overflow:hidden;flex-shrink:0}
         .bf{height:100%;border-radius:2px}
-        .shimbar{height:4px;width:64px;border-radius:2px;background:rgba(255,255,255,.07);overflow:hidden;position:relative}
-        .shimfill{position:absolute;inset:0;background:linear-gradient(90deg,var(--accent),var(--accent2));animation:shim 1.4s ease-in-out infinite}
+        .shimbar{height:4px;width:64px;border-radius:2px;background:rgba(23,32,28,.08);overflow:hidden;position:relative}
+        .shimfill{position:absolute;inset:0;background:var(--accent);animation:shim 1.4s ease-in-out infinite}
         @keyframes shim{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
         .tag{padding:3px 9px;border-radius:100px;font-size:.68rem;font-weight:500;border:1px solid;display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
-        .tag-green{background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.2);color:#4ADE80}
-        .tag-amber{background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.2);color:#FCD34D}
-        .tag-red{background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.2);color:#F87171}
-        .tag-blue{background:rgba(99,102,241,.1);border-color:rgba(99,102,241,.25);color:#818CF8}
+        .tag-green{background:rgba(22,112,79,.10);border-color:rgba(22,112,79,.22);color:var(--green)}
+        .tag-amber{background:rgba(164,97,24,.10);border-color:rgba(164,97,24,.22);color:var(--amber)}
+        .tag-red{background:rgba(163,59,50,.10);border-color:rgba(163,59,50,.22);color:var(--red)}
+        .tag-blue{background:rgba(15,118,110,.10);border-color:rgba(15,118,110,.22);color:var(--accent)}
         .acts{display:flex;align-items:center;justify-content:flex-end;gap:5px}
         .abt{
           width:29px;height:29px;border-radius:6px;border:1px solid var(--b1);
@@ -566,8 +566,8 @@ const passRate =
 
         /* ── EMPTY STATE ── */
         .empty{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:52px 24px;text-align:center}
-        .empty-emoji{font-size:2.8rem;margin-bottom:16px}
-        .empty-t{font-family:'Bricolage Grotesque',sans-serif;font-size:1rem;font-weight:600;margin-bottom:6px}
+        .empty-emoji{font-size:.82rem;margin-bottom:16px;width:42px;height:42px;border-radius:8px;background:var(--s2);border:1px solid var(--b1);display:flex;align-items:center;justify-content:center;color:var(--accent);font-weight:700}
+        .empty-t{font-family:'Instrument Sans',sans-serif;font-size:1rem;font-weight:700;margin-bottom:6px}
         .empty-s{font-size:.85rem;color:var(--muted2);font-weight:300;max-width:260px;line-height:1.6}
 
         /* ── RESUMES TAB TOOLBAR ── */
@@ -577,17 +577,17 @@ const passRate =
           font-size:.8rem;color:var(--muted2);background:var(--s1);border:1px solid var(--b1);
           cursor:pointer;transition:all .15s;
         }
-        .sort-btn:hover,.sort-btn.active{background:rgba(99,102,241,.1);border-color:rgba(99,102,241,.25);color:var(--accent)}
+        .sort-btn:hover,.sort-btn.active{background:rgba(15,118,110,.1);border-color:rgba(15,118,110,.25);color:var(--accent)}
 
         /* ── TIPS TAB ── */
         .tips-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
         .tip-full{
-          background:var(--s1);border:1px solid var(--b1);border-radius:12px;padding:22px;
+          background:var(--s1);border:1px solid var(--b1);border-radius:8px;padding:22px;
           transition:all .2s;
         }
-        .tip-full:hover{border-color:rgba(99,102,241,0.3);box-shadow:0 4px 20px rgba(0,0,0,0.3);transform:translateY(-2px)}
-        .tip-full-icon{font-size:1.8rem;margin-bottom:14px;display:block}
-        .tip-full-title{font-family:'Bricolage Grotesque',sans-serif;font-size:.95rem;font-weight:600;margin-bottom:8px}
+        .tip-full:hover{border-color:rgba(15,118,110,0.26);box-shadow:0 10px 26px rgba(45,40,32,0.10);transform:translateY(-2px)}
+        .tip-full-icon{font-size:.78rem;margin-bottom:14px;display:inline-flex;align-items:center;justify-content:center;width:30px;height:24px;border-radius:5px;background:rgba(15,118,110,0.10);color:var(--accent);font-weight:700}
+        .tip-full-title{font-family:'Instrument Sans',sans-serif;font-size:.95rem;font-weight:700;margin-bottom:8px}
         .tip-full-body{font-size:.85rem;color:var(--muted2);line-height:1.7;font-weight:300}
 
         /* ── SPIN ── */
@@ -637,14 +637,14 @@ const passRate =
                 onClientUploadComplete={() => { setUploadOpen(false); fetchResumes(true); }}
                 onUploadError={(err) => { console.error(err); alert("Upload failed — please try again"); }}
                 appearance={{
-                  container: "!border-dashed !border-[rgba(99,102,241,0.3)] !bg-[rgba(99,102,241,0.05)] !rounded-xl !py-10",
-                  button: "!bg-gradient-to-r from-[#6366F1] to-[#8B5CF6] !text-white !text-sm !font-medium !rounded-lg !px-6 !py-2.5 hover:!opacity-90 !transition !mt-4",
+                  container: "!border-dashed !border-[rgba(15,118,110,0.28)] !bg-[rgba(15,118,110,0.06)] !rounded-lg !py-10",
+                  button: "!bg-[#0F766E] !text-white !text-sm !font-medium !rounded-md !px-6 !py-2.5 hover:!opacity-90 !transition !mt-4",
                   label: "!text-[var(--muted2)] !text-sm",
                   allowedContent: "!text-[var(--muted)] !text-xs",
                 }}
               />
               <div style={{ marginTop: 16, display: "flex", gap: 8, flexWrap: "wrap" }}>
-                {["✓ Instant ATS scoring", "✓ Keyword analysis", "✓ Improvement tips"].map(t => (
+                {["ATS score", "Keyword review", "Priority fixes"].map(t => (
                   <span key={t} style={{ fontSize: ".72rem", color: "var(--muted2)", background: "var(--s2)", border: "1px solid var(--b1)", borderRadius: 100, padding: "3px 10px" }}>{t}</span>
                 ))}
               </div>
@@ -658,7 +658,7 @@ const passRate =
         {/* ── SIDEBAR ── */}
         <aside className={`sidebar${sidebarOpen ? " open" : ""}`}>
           <div className="sb-logo">
-            <div className="logo-mark">📄</div>
+            <div className="logo-mark">RL</div>
             <Link href="/" className="logo-name">ResumeLens</Link>
             <button className="sb-close" onClick={() => setSidebarOpen(false)}><X size={17} /></button>
           </div>
@@ -690,10 +690,10 @@ const passRate =
             <div style={{ background: "rgba(99,102,241,0.08)", border: "1px solid rgba(99,102,241,0.18)", borderRadius: 9, padding: "12px 14px", marginBottom: 10 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 5 }}>
                 <Award size={13} style={{ color: "var(--accent)" }} />
-                <span style={{ fontSize: ".75rem", fontWeight: 600, color: "var(--text)" }}>Upgrade to Pro</span>
+                <span style={{ fontSize: ".75rem", fontWeight: 600, color: "var(--text)" }}>Workspace Pro</span>
               </div>
-              <p style={{ fontSize: ".7rem", color: "var(--muted2)", lineHeight: 1.5, marginBottom: 8 }}>Unlock unlimited uploads, job match scoring &amp; cover letter AI.</p>
-              <button className="btn-primary" style={{ width: "100%", justifyContent: "center", padding: "8px 14px", fontSize: ".78rem" }}>View Plans →</button>
+              <p style={{ fontSize: ".7rem", color: "var(--muted2)", lineHeight: 1.5, marginBottom: 8 }}>Unlock unlimited uploads, job match scoring, and deeper rewrite support.</p>
+              <button className="btn-primary" style={{ width: "100%", justifyContent: "center", padding: "8px 14px", fontSize: ".78rem" }}>View Plans</button>
             </div>
 
             <div className="user-pill" onClick={() => setProfileMenuOpen(!profileMenuOpen)}>

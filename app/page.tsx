@@ -18,45 +18,45 @@ export default function Home() {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap');
 
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         :root {
-          --bg:        #0A0A0F;
-          --surface:   #111118;
-          --surface2:  #16161F;
-          --border:    rgba(255,255,255,0.07);
-          --border-md: rgba(255,255,255,0.12);
-          --text:      #F0F0F5;
-          --muted:     #6B6B80;
-          --muted2:    #9090A8;
-          --accent:    #6366F1;
-          --accent2:   #8B5CF6;
-          --green:     #22C55E;
-          --amber:     #F59E0B;
+          --bg:        #F6F1E8;
+          --surface:   #FFFBF2;
+          --surface2:  #EFE6D7;
+          --border:    rgba(45,40,32,0.10);
+          --border-md: rgba(45,40,32,0.18);
+          --text:      #17201C;
+          --muted:     #81786B;
+          --muted2:    #5F675F;
+          --accent:    #0F766E;
+          --accent2:   #B86B4B;
+          --green:     #16704F;
+          --amber:     #A46118;
         }
 
         html { scroll-behavior: smooth; }
         body {
           background: var(--bg);
           color: var(--text);
-          font-family: 'DM Sans', sans-serif;
+          font-family: 'Instrument Sans', sans-serif;
           -webkit-font-smoothing: antialiased;
           overflow-x: hidden;
         }
         a { text-decoration: none; color: inherit; }
 
         .display {
-          font-family: 'Bricolage Grotesque', sans-serif;
+          font-family: 'Source Serif 4', serif;
           font-weight: 700;
-          letter-spacing: -0.03em;
+          letter-spacing: 0;
           line-height: 1.05;
         }
         .heading {
-          font-family: 'Bricolage Grotesque', sans-serif;
+          font-family: 'Source Serif 4', serif;
           font-weight: 600;
-          letter-spacing: -0.02em;
+          letter-spacing: 0;
         }
         .label {
           font-size: 0.7rem;
@@ -74,7 +74,7 @@ export default function Home() {
           transition: background 0.3s, border-color 0.3s, backdrop-filter 0.3s;
         }
         .navbar.scrolled {
-          background: rgba(10,10,15,0.85);
+          background: rgba(246,241,232,0.88);
           backdrop-filter: blur(16px);
           border-bottom: 1px solid var(--border);
         }
@@ -85,41 +85,43 @@ export default function Home() {
         .logo { display: flex; align-items: center; gap: 10px; }
         .logo-icon {
           width: 32px; height: 32px;
-          background: linear-gradient(135deg, var(--accent), var(--accent2));
-          border-radius: 8px;
+          background: var(--text);
+          border-radius: 6px;
           display: flex; align-items: center; justify-content: center;
-          font-size: 15px;
-          box-shadow: 0 0 20px rgba(99,102,241,0.35);
+          font-size: 0.68rem;
+          box-shadow: none;
+          color: var(--surface);
+          font-weight: 700;
         }
         .logo-text {
-          font-family: 'Bricolage Grotesque', sans-serif;
-          font-weight: 700; font-size: 1.05rem; letter-spacing: -0.02em;
+          font-family: 'Instrument Sans', sans-serif;
+          font-weight: 700; font-size: 1.05rem; letter-spacing: 0;
         }
         .nav-links { display: flex; align-items: center; gap: 4px; }
         .nav-link {
           padding: 7px 14px; font-size: 0.875rem; color: var(--muted2);
-          border-radius: 7px; transition: color 0.2s, background 0.2s; font-weight: 400;
+          border-radius: 6px; transition: color 0.2s, background 0.2s; font-weight: 500;
         }
-        .nav-link:hover { color: var(--text); background: rgba(255,255,255,0.05); }
+        .nav-link:hover { color: var(--text); background: rgba(23,32,28,0.06); }
 
         .btn {
           display: inline-flex; align-items: center; justify-content: center; gap: 6px;
           font-size: 0.875rem; font-weight: 500; border-radius: 8px;
           padding: 9px 20px; cursor: pointer; border: none;
-          transition: all 0.2s; font-family: 'DM Sans', sans-serif;
+          transition: all 0.2s; font-family: 'Instrument Sans', sans-serif;
         }
         .btn-ghost {
           background: transparent; color: var(--muted2);
           border: 1px solid var(--border-md);
         }
-        .btn-ghost:hover { color: var(--text); background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.18); }
+        .btn-ghost:hover { color: var(--text); background: rgba(23,32,28,0.06); border-color: rgba(45,40,32,0.24); }
         .btn-primary {
-          background: linear-gradient(135deg, var(--accent), var(--accent2));
+          background: var(--accent);
           color: white;
-          box-shadow: 0 1px 2px rgba(0,0,0,0.4), 0 0 0 1px rgba(99,102,241,0.5);
+          box-shadow: 0 1px 2px rgba(36,31,24,0.15);
         }
         .btn-primary:hover {
-          box-shadow: 0 4px 24px rgba(99,102,241,0.45), 0 0 0 1px rgba(99,102,241,0.6);
+          box-shadow: 0 8px 22px rgba(15,118,110,0.20);
           transform: translateY(-1px);
         }
         .btn-lg { padding: 13px 28px; font-size: 0.95rem; border-radius: 10px; }
@@ -131,31 +133,31 @@ export default function Home() {
           to   { opacity: 1; transform: translateY(0); }
         }
         .hero {
-          padding: 148px 32px 100px; max-width: 1160px; margin: 0 auto;
+          padding: 126px 32px 88px; max-width: 1160px; margin: 0 auto;
           display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
         }
         .hero-badge {
           display: inline-flex; align-items: center; gap: 8px;
-          background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.25);
-          border-radius: 100px; padding: 5px 14px 5px 8px; margin-bottom: 28px;
+          background: rgba(15,118,110,0.08); border: 1px solid rgba(15,118,110,0.18);
+          border-radius: 100px; padding: 6px 14px; margin-bottom: 28px;
           animation: fadeUp 0.5s ease both;
         }
         .badge-dot {
           width: 20px; height: 20px; border-radius: 50%;
-          background: linear-gradient(135deg, var(--accent), var(--accent2));
+          background: var(--accent);
           display: flex; align-items: center; justify-content: center; font-size: 10px;
         }
-        .badge-text { font-size: 0.78rem; font-weight: 500; color: rgba(165,165,220,0.9); }
+        .badge-text { font-size: 0.78rem; font-weight: 600; color: var(--accent); }
         .hero h1 {
           font-size: clamp(2.6rem, 4.5vw, 3.8rem); margin-bottom: 24px;
           animation: fadeUp 0.5s 0.08s ease both; color: var(--text);
         }
         .hero h1 .gradient-word {
-          background: linear-gradient(135deg, #818CF8, #A78BFA, #C084FC);
+          background: linear-gradient(135deg, var(--accent), var(--accent2));
           -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
         }
         .hero-sub {
-          font-size: 1.05rem; line-height: 1.75; color: var(--muted2);
+          font-size: 1.05rem; line-height: 1.7; color: var(--muted2);
           max-width: 440px; margin-bottom: 40px; font-weight: 300;
           animation: fadeUp 0.5s 0.16s ease both;
         }
@@ -179,13 +181,13 @@ export default function Home() {
         .hero-visual { position: relative; animation: fadeUp 0.6s 0.2s ease both; }
         .dashboard-card {
           background: var(--surface); border: 1px solid var(--border-md);
-          border-radius: 16px; overflow: hidden;
-          box-shadow: 0 32px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04);
+          border-radius: 8px; overflow: hidden;
+          box-shadow: 0 24px 70px rgba(45,40,32,0.18);
           position: relative;
         }
         .dashboard-topbar {
           display: flex; align-items: center; gap: 8px;
-          padding: 14px 18px; border-bottom: 1px solid var(--border); background: var(--surface2);
+          padding: 12px 16px; border-bottom: 1px solid var(--border); background: var(--surface);
         }
         .dot { width: 10px; height: 10px; border-radius: 50%; }
 
@@ -194,9 +196,9 @@ export default function Home() {
           50%       { transform: translateY(-8px); }
         }
         .float-card {
-          position: absolute; background: var(--surface2); border: 1px solid var(--border-md);
-          border-radius: 12px; padding: 14px 18px;
-          box-shadow: 0 16px 40px rgba(0,0,0,0.5); backdrop-filter: blur(12px);
+          position: absolute; background: rgba(255,251,242,0.94); border: 1px solid var(--border-md);
+          border-radius: 8px; padding: 14px 18px;
+          box-shadow: 0 16px 38px rgba(45,40,32,0.16); backdrop-filter: blur(10px);
           animation: floatY 4s ease-in-out infinite;
         }
         .float-card-2 { animation-delay: -2s; animation-duration: 5s; }
@@ -210,7 +212,7 @@ export default function Home() {
         .logo-chip {
           display: flex; align-items: center; gap: 8px;
           color: var(--muted); font-size: 0.85rem; font-weight: 500;
-          letter-spacing: -0.01em; transition: color 0.2s;
+          letter-spacing: 0; transition: color 0.2s;
         }
         .logo-chip:hover { color: var(--muted2); }
 
@@ -224,7 +226,7 @@ export default function Home() {
         .features-grid {
           display: grid; grid-template-columns: repeat(3, 1fr);
           gap: 1px; background: var(--border);
-          border: 1px solid var(--border); border-radius: 16px; overflow: hidden; margin-top: 64px;
+          border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-top: 64px;
         }
         .feature-cell {
           background: var(--bg); padding: 36px 32px;
@@ -232,20 +234,20 @@ export default function Home() {
         }
         .feature-cell::after {
           content: ''; position: absolute; inset: 0;
-          background: radial-gradient(circle at top left, rgba(99,102,241,0.07) 0%, transparent 60%);
+          background: linear-gradient(135deg, rgba(15,118,110,0.06), transparent 58%);
           opacity: 0; transition: opacity 0.3s;
         }
         .feature-cell:hover { background: var(--surface); }
         .feature-cell:hover::after { opacity: 1; }
         .feature-icon {
           width: 44px; height: 44px; border-radius: 10px;
-          background: rgba(99,102,241,0.12); border: 1px solid rgba(99,102,241,0.2);
+          background: rgba(15,118,110,0.10); border: 1px solid rgba(15,118,110,0.16);
           display: flex; align-items: center; justify-content: center;
           margin-bottom: 20px; font-size: 18px;
         }
         .feature-title {
-          font-family: 'Bricolage Grotesque', sans-serif; font-weight: 600;
-          font-size: 1rem; letter-spacing: -0.01em; margin-bottom: 10px; color: var(--text);
+          font-family: 'Instrument Sans', sans-serif; font-weight: 700;
+          font-size: 1rem; letter-spacing: 0; margin-bottom: 10px; color: var(--text);
         }
         .feature-desc { font-size: 0.875rem; color: var(--muted2); line-height: 1.65; font-weight: 300; }
 
@@ -263,7 +265,7 @@ export default function Home() {
         .score-circle-wrap { display: flex; flex-direction: column; align-items: center; margin-bottom: 28px; }
         .score-circle {
           width: 120px; height: 120px; border-radius: 50%;
-          background: conic-gradient(#6366F1 0% 82%, rgba(255,255,255,0.06) 82% 100%);
+          background: conic-gradient(var(--accent) 0% 82%, rgba(23,32,28,0.08) 82% 100%);
           display: flex; align-items: center; justify-content: center;
           position: relative; margin-bottom: 12px;
         }
@@ -271,7 +273,7 @@ export default function Home() {
           width: 90px; height: 90px; border-radius: 50%; background: var(--surface);
           display: flex; flex-direction: column; align-items: center; justify-content: center;
         }
-        .score-num { font-family: 'Bricolage Grotesque', sans-serif; font-size: 1.8rem; font-weight: 700; color: var(--text); line-height: 1; }
+        .score-num { font-family: 'Source Serif 4', serif; font-size: 1.8rem; font-weight: 700; color: var(--text); line-height: 1; }
         .score-sub { font-size: 0.6rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
         .metric-row {
           display: flex; align-items: center; justify-content: space-between;
@@ -279,14 +281,14 @@ export default function Home() {
         }
         .metric-row:last-child { border-bottom: none; }
         .metric-label { font-size: 0.82rem; color: var(--muted2); }
-        .metric-bar-wrap { flex: 1; margin: 0 14px; height: 4px; background: rgba(255,255,255,0.07); border-radius: 2px; overflow: hidden; }
+        .metric-bar-wrap { flex: 1; margin: 0 14px; height: 4px; background: rgba(23,32,28,0.08); border-radius: 2px; overflow: hidden; }
         .metric-bar { height: 100%; border-radius: 2px; }
         .metric-val { font-size: 0.78rem; font-weight: 500; color: var(--text); min-width: 30px; text-align: right; }
         .tag-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
         .tag { padding: 4px 12px; border-radius: 100px; font-size: 0.75rem; font-weight: 500; border: 1px solid; }
         .tag-green { background: rgba(34,197,94,0.1); border-color: rgba(34,197,94,0.25); color: #4ADE80; }
         .tag-amber { background: rgba(245,158,11,0.1); border-color: rgba(245,158,11,0.25); color: #FCD34D; }
-        .tag-blue  { background: rgba(99,102,241,0.1); border-color: rgba(99,102,241,0.3);  color: #818CF8; }
+        .tag-blue  { background: rgba(15,118,110,0.1); border-color: rgba(15,118,110,0.22);  color: var(--accent); }
 
         /* HOW IT WORKS */
         .steps-grid {
@@ -302,14 +304,14 @@ export default function Home() {
           width: 56px; height: 56px; border-radius: 14px; border: 1px solid var(--border-md);
           background: var(--surface); display: flex; align-items: center; justify-content: center;
           margin: 0 auto 20px;
-          font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 1.1rem;
+          font-family: 'Instrument Sans', sans-serif; font-weight: 700; font-size: 1.1rem;
           color: var(--accent); position: relative; z-index: 1; transition: all 0.2s;
         }
         .step-item:hover .step-num {
-          background: rgba(99,102,241,0.12); border-color: rgba(99,102,241,0.35);
-          box-shadow: 0 0 24px rgba(99,102,241,0.2);
+          background: rgba(15,118,110,0.10); border-color: rgba(15,118,110,0.28);
+          box-shadow: 0 10px 22px rgba(45,40,32,0.10);
         }
-        .step-title { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 600; font-size: 1rem; margin-bottom: 10px; }
+        .step-title { font-family: 'Instrument Sans', sans-serif; font-weight: 700; font-size: 1rem; margin-bottom: 10px; }
         .step-desc { font-size: 0.85rem; color: var(--muted2); line-height: 1.65; font-weight: 300; }
 
         /* TESTIMONIALS */
@@ -338,7 +340,7 @@ export default function Home() {
         .cta-banner::before {
           content: ''; position: absolute; top: -60px; left: 50%; transform: translateX(-50%);
           width: 500px; height: 500px;
-          background: radial-gradient(circle, rgba(99,102,241,0.12) 0%, transparent 70%);
+          background: radial-gradient(circle, rgba(15,118,110,0.10) 0%, transparent 70%);
           pointer-events: none;
         }
         .cta-banner h2 { font-size: clamp(2rem, 3.5vw, 2.8rem); margin-bottom: 16px; position: relative; }
@@ -348,7 +350,7 @@ export default function Home() {
         footer { border-top: 1px solid var(--border); padding: 56px 0 40px; }
         .footer-inner { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 56px; margin-bottom: 48px; }
         .footer-brand p { font-size: 0.85rem; color: var(--muted); line-height: 1.7; margin-top: 12px; max-width: 220px; }
-        .footer-col h5 { font-family: 'Bricolage Grotesque', sans-serif; font-size: 0.82rem; font-weight: 600; margin-bottom: 16px; color: var(--text); letter-spacing: -0.01em; }
+        .footer-col h5 { font-family: 'Instrument Sans', sans-serif; font-size: 0.82rem; font-weight: 700; margin-bottom: 16px; color: var(--text); letter-spacing: 0; }
         .footer-col a { display: block; font-size: 0.82rem; color: var(--muted); margin-bottom: 10px; transition: color 0.2s; }
         .footer-col a:hover { color: var(--muted2); }
         .footer-bottom { display: flex; align-items: center; justify-content: space-between; padding-top: 32px; border-top: 1px solid var(--border); }
@@ -363,7 +365,7 @@ export default function Home() {
         <nav className={`navbar${scrolled ? " scrolled" : ""}`}>
           <div className="navbar-inner">
             <Link href="/" className="logo">
-              <div className="logo-icon">📄</div>
+              <div className="logo-icon">RL</div>
               <span className="logo-text">ResumeLens</span>
             </Link>
 
@@ -380,7 +382,7 @@ export default function Home() {
                   <Link href="/sign-up"><button className="btn btn-primary">Get started free</button></Link>
                 </>
               ) : (
-                <Link href="/dashboard"><button className="btn btn-primary">Dashboard →</button></Link>
+                <Link href="/dashboard"><button className="btn btn-primary">Dashboard</button></Link>
               )}
             </div>
           </div>
@@ -391,23 +393,23 @@ export default function Home() {
           <div>
             <div className="hero-badge">
               <div className="badge-dot">✦</div>
-              <span className="badge-text">AI-powered resume analysis</span>
+              <span className="badge-text">Resume reviews with receipts</span>
             </div>
 
             <h1 className="display">
-              Your resume,<br />
-              <span className="gradient-word">optimized</span> for<br />
-              every job.
+              Reviewed clearly<br />
+              for the roles<br />
+              you want.
             </h1>
 
             <p className="hero-sub">
-              Upload your resume and get an instant ATS score, skill gap analysis,
-              and specific improvements that help you land more interviews.
+              Upload a resume, compare it against the work you are targeting,
+              and get specific notes on keywords, structure, and proof of impact.
             </p>
 
             <div className="hero-cta">
               <Link href="/sign-up">
-                <button className="btn btn-primary btn-xl">Analyze my resume →</button>
+                <button className="btn btn-primary btn-xl">Review my resume</button>
               </Link>
               <Link href="/sign-in">
                 <button className="btn btn-ghost btn-lg">Sign in</button>
@@ -417,18 +419,18 @@ export default function Home() {
             <div className="hero-proof">
               <div className="proof-avatars">
                 {[
-                  { i: "AK", g: "linear-gradient(135deg,#6366F1,#8B5CF6)" },
-                  { i: "SR", g: "linear-gradient(135deg,#0EA5E9,#6366F1)" },
-                  { i: "MJ", g: "linear-gradient(135deg,#8B5CF6,#EC4899)" },
-                  { i: "LP", g: "linear-gradient(135deg,#22C55E,#0EA5E9)" },
-                  { i: "TC", g: "linear-gradient(135deg,#F59E0B,#EF4444)" },
+                  { i: "AK", g: "#173F39" },
+                  { i: "SR", g: "#0F766E" },
+                  { i: "MJ", g: "#B86B4B" },
+                  { i: "LP", g: "#6D765D" },
+                  { i: "TC", g: "#9A6A3A" },
                 ].map((a, idx) => (
                   <div key={idx} className="proof-avatar" style={{ background: a.g }}>{a.i}</div>
                 ))}
               </div>
               <p className="proof-text">
-                <strong>50,000+</strong> professionals have improved<br />
-                their resume score with ResumeLens
+                <strong>Built for practical edits</strong><br />
+                before you send another application
               </p>
             </div>
           </div>
@@ -445,7 +447,7 @@ export default function Home() {
                 </span>
               </div>
               <Image
-                src="/landingpage.png"
+                src="/resumelens-workspace.png"
                 alt="ResumeLens Dashboard"
                 width={1000}
                 height={800}
@@ -455,22 +457,21 @@ export default function Home() {
             </div>
 
             {/* ATS Score chip */}
-            <div className="float-card" style={{ top: "14%", right: "-52px", minWidth: "140px" }}>
+            <div className="float-card" style={{ top: "14%", right: "-34px", minWidth: "140px" }}>
               <div style={{ fontSize: "0.65rem", color: "var(--muted)", marginBottom: "6px", textTransform: "uppercase", letterSpacing: "0.08em" }}>ATS Score</div>
-              <div style={{ fontFamily: "'Bricolage Grotesque',sans-serif", fontSize: "2rem", fontWeight: 700, color: "var(--text)", lineHeight: 1 }}>
-                87<span style={{ fontSize: "1rem", color: "var(--muted)", fontWeight: 400 }}>/100</span>
+              <div style={{ fontFamily: "'Source Serif 4',serif", fontSize: "2rem", fontWeight: 700, color: "var(--text)", lineHeight: 1 }}>
+                82<span style={{ fontSize: "1rem", color: "var(--muted)", fontWeight: 400 }}>/100</span>
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: "5px", marginTop: "6px" }}>
-                <span style={{ fontSize: "0.7rem", color: "var(--green)" }}>↑ +24 pts</span>
-                <span style={{ fontSize: "0.7rem", color: "var(--muted)" }}>vs before</span>
+                <span style={{ fontSize: "0.7rem", color: "var(--green)" }}>ready to tailor</span>
               </div>
             </div>
 
             {/* Keywords chip */}
-            <div className="float-card float-card-2" style={{ bottom: "12%", left: "-44px", minWidth: "168px" }}>
+            <div className="float-card float-card-2" style={{ bottom: "10%", left: "-28px", minWidth: "168px" }}>
               <div style={{ fontSize: "0.65rem", color: "var(--muted)", marginBottom: "8px", textTransform: "uppercase", letterSpacing: "0.08em" }}>Keywords matched</div>
               <div style={{ display: "flex", flexWrap: "wrap", gap: "5px" }}>
-                {["React", "TypeScript", "Node.js", "CI/CD"].map(k => (
+                {["React", "TypeScript", "Node.js", "AWS"].map(k => (
                   <span key={k} className="tag tag-blue" style={{ fontSize: "0.68rem", padding: "2px 8px" }}>{k}</span>
                 ))}
               </div>
@@ -482,11 +483,11 @@ export default function Home() {
         <div className="logos-strip">
           <div className="logos-inner">
             <span style={{ fontSize: "0.75rem", color: "var(--muted)", marginRight: 8, whiteSpace: "nowrap" }}>
-              Used by people from
+              Useful for applications to
             </span>
-            {["Google", "Amazon", "Microsoft", "Meta", "Stripe", "Notion", "Linear", "Vercel"].map(name => (
+            {["Product", "Engineering", "Design", "Marketing", "Operations", "Data", "Sales", "Support"].map(name => (
               <div key={name} className="logo-chip">
-                <span style={{ fontFamily: "'Bricolage Grotesque',sans-serif", fontWeight: 600, fontSize: "0.9rem" }}>{name}</span>
+                <span style={{ fontFamily: "'Instrument Sans',sans-serif", fontWeight: 700, fontSize: "0.9rem" }}>{name}</span>
               </div>
             ))}
           </div>
@@ -496,19 +497,19 @@ export default function Home() {
         <section id="features">
           <div className="container">
             <div style={{ maxWidth: 560 }}>
-              <p className="label section-label">Features</p>
-              <h2 className="heading section-title">Everything you need to beat the ATS</h2>
-              <p className="section-desc">ResumeLens runs your resume through the same logic that recruiters&apos; systems use — then tells you exactly what to fix.</p>
+              <p className="label section-label">Workspace</p>
+              <h2 className="heading section-title">A quieter way to improve the document</h2>
+              <p className="section-desc">ResumeLens keeps the score visible, but the real value is the review trail: what changed, why it matters, and what to fix first.</p>
             </div>
 
             <div className="features-grid">
               {[
-                { icon: "📊", title: "ATS Compatibility Score", desc: "Get a 0–100 score showing how well your resume passes automated screening, with a full breakdown by section." },
-                { icon: "🔍", title: "Keyword Extraction", desc: "AI identifies every skill and keyword in your resume and shows what's missing compared to the job description." },
-                { icon: "🎯", title: "Job Match Analysis", desc: "Paste any job posting and instantly see your match percentage. Know where you stand before you apply." },
-                { icon: "✏️", title: "Improvement Suggestions", desc: "Line-by-line suggestions to sharpen bullet points, fix weak verbs, and add quantifiable impact." },
-                { icon: "📐", title: "Format & Structure Check", desc: "Detect font issues, inconsistent formatting, missing sections, and layout problems that confuse ATS parsers." },
-                { icon: "⚡", title: "Instant Results", desc: "Analysis completes in under 10 seconds. No waiting, no email reports — everything is in your browser." },
+                { icon: "01", title: "Compatibility score", desc: "A simple 0-100 readout with the section details that explain the number." },
+                { icon: "02", title: "Keyword coverage", desc: "See the terms already present and the role-specific language worth adding." },
+                { icon: "03", title: "Job comparison", desc: "Paste a posting and compare your resume against the responsibilities and skills listed." },
+                { icon: "04", title: "Bullet review", desc: "Find vague bullets, weak verbs, and places where measurable outcomes would help." },
+                { icon: "05", title: "Format check", desc: "Catch layout choices that make parsing harder before your resume reaches a recruiter." },
+                { icon: "06", title: "Priority fixes", desc: "Work from a short, ordered list instead of digging through a generic report." },
               ].map((f, i) => (
                 <div key={i} className="feature-cell">
                   <div className="feature-icon">{f.icon}</div>
@@ -528,7 +529,7 @@ export default function Home() {
                 <div className="score-panel">
                   <div className="score-panel-header">
                     <div>
-                      <div style={{ fontFamily: "'Bricolage Grotesque',sans-serif", fontWeight: 600, fontSize: "0.95rem" }}>Resume Report</div>
+                      <div style={{ fontFamily: "'Instrument Sans',sans-serif", fontWeight: 700, fontSize: "0.95rem" }}>Resume Report</div>
                       <div style={{ fontSize: "0.75rem", color: "var(--muted)", marginTop: "2px" }}>software-engineer-resume.pdf</div>
                     </div>
                     <span className="tag tag-green">Passed</span>
@@ -545,10 +546,10 @@ export default function Home() {
                   </div>
 
                   {[
-                    { label: "Keywords",   val: 91, color: "#6366F1", text: "91%" },
-                    { label: "Formatting", val: 78, color: "#8B5CF6", text: "78%" },
-                    { label: "Impact",     val: 84, color: "#22C55E", text: "84%" },
-                    { label: "Skills",     val: 95, color: "#0EA5E9", text: "95%" },
+                    { label: "Keywords",   val: 91, color: "#0F766E", text: "91%" },
+                    { label: "Formatting", val: 78, color: "#B86B4B", text: "78%" },
+                    { label: "Impact",     val: 84, color: "#16704F", text: "84%" },
+                    { label: "Skills",     val: 95, color: "#6D765D", text: "95%" },
                   ].map(m => (
                     <div key={m.label} className="metric-row">
                       <span className="metric-label">{m.label}</span>
@@ -604,7 +605,7 @@ export default function Home() {
 
                 <div style={{ marginTop: "40px" }}>
                   <Link href="/sign-up">
-                    <button className="btn btn-primary btn-lg">Try it free →</button>
+                    <button className="btn btn-primary btn-lg">Try it free</button>
                   </Link>
                 </div>
               </div>
@@ -622,7 +623,7 @@ export default function Home() {
             <div className="steps-grid">
               {[
                 { n: "1", title: "Upload your resume", desc: "Drop your PDF or paste the text. We accept all common resume formats." },
-                { n: "2", title: "AI analysis runs",   desc: "Our engine checks your resume across 40+ criteria including keywords, formatting, and impact language." },
+                { n: "2", title: "The review runs",   desc: "The engine checks your resume across 40+ criteria including keywords, formatting, and impact language." },
                 { n: "3", title: "Get your action plan", desc: "Review your score, explore section feedback, and follow prioritized suggestions to improve fast." },
               ].map((s, i) => (
                 <div key={i} className="step-item">
@@ -647,21 +648,21 @@ export default function Home() {
                 {
                   quote: "My ATS score jumped from 45 to 82 in one session. I had three interview requests the following week. Genuinely shocked at how actionable the feedback was.",
                   name: "Sarah Chen", role: "Product Designer · hired at Figma",
-                  grad: "linear-gradient(135deg,#6366F1,#8B5CF6)", init: "SC",
+                  grad: "#173F39", init: "SC",
                 },
                 {
                   quote: "The keyword gap feature alone is worth it. I had no idea I was missing half the terms recruiters were filtering for. Fixed it in 20 minutes.",
                   name: "Marcus Johnson", role: "Full Stack Engineer · hired at Stripe",
-                  grad: "linear-gradient(135deg,#0EA5E9,#6366F1)", init: "MJ",
+                  grad: "#0F766E", init: "MJ",
                 },
                 {
                   quote: "Spent weeks applying with no callbacks. After using ResumeLens I understood exactly why. The recommendations are specific and they actually work.",
                   name: "Emily Rodriguez", role: "Marketing Manager · hired at Notion",
-                  grad: "linear-gradient(135deg,#8B5CF6,#EC4899)", init: "ER",
+                  grad: "#B86B4B", init: "ER",
                 },
               ].map((t, i) => (
                 <div key={i} className="testi-card">
-                  <div className="stars">★★★★★</div>
+                  <div className="stars">Rated helpful</div>
                   <p className="testi-quote">&ldquo;{t.quote}&rdquo;</p>
                   <div className="testi-author">
                     <div className="author-avatar" style={{ background: t.grad }}>{t.init}</div>
@@ -684,10 +685,10 @@ export default function Home() {
               <h2 className="display">Ready to fix your resume?</h2>
               <p>Join 50,000+ professionals who use ResumeLens to get more interviews. Free to start — no credit card needed.</p>
               <Link href="/sign-up">
-                <button className="btn btn-primary btn-xl">Analyze my resume for free →</button>
+                <button className="btn btn-primary btn-xl">Review my resume for free</button>
               </Link>
               <div style={{ marginTop: 20, fontSize: "0.8rem", color: "var(--muted)" }}>
-                ✓ Free tier available &nbsp;·&nbsp; ✓ No credit card &nbsp;·&nbsp; ✓ Results in 10 seconds
+                Free tier available &nbsp;·&nbsp; No credit card &nbsp;·&nbsp; Results in seconds
               </div>
             </div>
           </div>
@@ -699,10 +700,10 @@ export default function Home() {
             <div className="footer-inner">
               <div className="footer-brand">
                 <div className="logo">
-                  <div className="logo-icon">📄</div>
+                  <div className="logo-icon">RL</div>
                   <span className="logo-text">ResumeLens</span>
                 </div>
-                <p>AI-powered resume analysis that helps professionals get more interviews and land better jobs.</p>
+                <p>Resume analysis for clearer edits, stronger targeting, and more confident applications.</p>
               </div>
               {[
                 { title: "Product", links: ["Features", "Pricing", "Changelog", "Roadmap"] },
@@ -716,7 +717,7 @@ export default function Home() {
               ))}
             </div>
             <div className="footer-bottom">
-              <span className="footer-copy">© {new Date().getFullYear()} ResumeLens AI. All rights reserved.</span>
+              <span className="footer-copy">© {new Date().getFullYear()} ResumeLens. All rights reserved.</span>
               <div className="status-pill">
                 <div className="status-dot" />
                 All systems operational
