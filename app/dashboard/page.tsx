@@ -781,11 +781,11 @@ const passRate =
               <div className="welcome-banner">
                 <div>
                   <div className="wb-title">
-                    Good {new Date().getHours() < 12 ? "morning" : new Date().getHours() < 17 ? "afternoon" : "evening"}, {user?.firstName ?? "there"} 👋
+                    Good {new Date().getHours() < 12 ? "morning" : new Date().getHours() < 17 ? "afternoon" : "evening"}, {user?.firstName ?? "there"}
                   </div>
                   <div className="wb-sub">
                     {stats.total === 0
-                      ? "Upload your first resume to get AI-powered ATS insights."
+                      ? "Upload your first resume to get a grounded ATS review."
                       : `You have ${stats.total} resume${stats.total > 1 ? "s" : ""} analyzed. Your best score is ${stats.best}/100.`}
                   </div>
                 </div>
@@ -800,24 +800,24 @@ const passRate =
                 {[
                   {
                     lbl: "Total Resumes", val: stats.total, suffix: "",
-                    icon: <FileText size={17} />, ibg: "rgba(99,102,241,0.15)", ic: "var(--accent)",
+                    icon: <FileText size={17} />, ibg: "rgba(15,118,110,0.12)", ic: "var(--accent)",
                     badge: null, foot: stats.total > 0 ? "Across all uploads" : "Upload to get started",
                   },
                   {
                     lbl: "Avg. ATS Score", val: stats.avg, suffix: "",
-                    icon: <Target size={17} />, ibg: "rgba(34,197,94,0.12)", ic: "var(--green)",
-                    badge: stats.avg > 0 ? { text: stats.avg >= 75 ? "↑ Above avg" : "Below avg", color: stats.avg >= 75 ? "var(--green)" : "var(--amber)", bg: stats.avg >= 75 ? "rgba(34,197,94,.1)" : "rgba(245,158,11,.1)" } : null,
+                    icon: <Target size={17} />, ibg: "rgba(22,112,79,0.12)", ic: "var(--green)",
+                    badge: stats.avg > 0 ? { text: stats.avg >= 75 ? "Above avg" : "Below avg", color: stats.avg >= 75 ? "var(--green)" : "var(--amber)", bg: stats.avg >= 75 ? "rgba(22,112,79,.1)" : "rgba(164,97,24,.1)" } : null,
                     foot: stats.avg > 0 ? `Best: ${stats.best}/100` : "No data yet",
                   },
                   {
                     lbl: "Latest Score", val: stats.last, suffix: "",
-                    icon: <TrendingUp size={17} />, ibg: "rgba(139,92,246,0.15)", ic: "var(--accent2)",
-                    badge: stats.delta !== 0 && stats.last > 0 ? { text: `${stats.delta > 0 ? "+" : ""}${stats.delta} vs prev`, color: stats.delta > 0 ? "var(--green)" : "var(--red)", bg: stats.delta > 0 ? "rgba(34,197,94,.1)" : "rgba(239,68,68,.1)" } : null,
-                    foot: stats.last > 0 ? (stats.last >= 80 ? "Excellent — ready to apply!" : stats.last >= 60 ? "Good — some room to improve" : "Needs work — review tips") : "No uploads yet",
+                    icon: <TrendingUp size={17} />, ibg: "rgba(184,107,75,0.12)", ic: "var(--accent2)",
+                    badge: stats.delta !== 0 && stats.last > 0 ? { text: `${stats.delta > 0 ? "+" : ""}${stats.delta} vs prev`, color: stats.delta > 0 ? "var(--green)" : "var(--red)", bg: stats.delta > 0 ? "rgba(22,112,79,.1)" : "rgba(163,59,50,.1)" } : null,
+                    foot: stats.last > 0 ? (stats.last >= 80 ? "Excellent, ready to apply" : stats.last >= 60 ? "Good, some room to improve" : "Needs work, review tips") : "No uploads yet",
                   },
                   {
                     lbl: "Pass Rate", val: stats.passRate, suffix: "%",
-                    icon: <Shield size={17} />, ibg: "rgba(245,158,11,0.12)", ic: "var(--amber)",
+                    icon: <Shield size={17} />, ibg: "rgba(164,97,24,0.12)", ic: "var(--amber)",
                     badge: null,
                     foot: `${resumes.filter(r => r.status === "Completed").length} of ${stats.total} completed`,
                   },
@@ -840,13 +840,13 @@ const passRate =
                 ))}
               </div>
 
-              {/* AI Insight strip */}
+              {/* Review insight strip */}
               <div className="insight-strip">
                 <div className="insight-icon"><Sparkles size={17} style={{ color: "var(--accent)" }} /></div>
                 <div style={{ flex: 1 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 5 }}>
                     <div className="ai-dot" />
-                    <span style={{ fontSize: ".65rem", fontWeight: 600, letterSpacing: ".1em", textTransform: "uppercase", color: "var(--accent)" }}>AI Analysis</span>
+                    <span style={{ fontSize: ".65rem", fontWeight: 600, letterSpacing: ".1em", textTransform: "uppercase", color: "var(--accent)" }}>Review Note</span>
                   </div>
                   <p className="insight-text">{stats.insight}</p>
                 </div>
@@ -872,19 +872,19 @@ const passRate =
                         <AreaChart data={stats.trendData}>
                           <defs>
                             <linearGradient id="ga" x1="0" y1="0" x2="0" y2="1">
-                              <stop offset="5%" stopColor="#6366F1" stopOpacity={0.3} />
-                              <stop offset="95%" stopColor="#6366F1" stopOpacity={0} />
+                              <stop offset="5%" stopColor="#0F766E" stopOpacity={0.22} />
+                              <stop offset="95%" stopColor="#0F766E" stopOpacity={0} />
                             </linearGradient>
                           </defs>
-                          <CartesianGrid stroke="rgba(255,255,255,.04)" strokeDasharray="4 4" />
+                          <CartesianGrid stroke="rgba(45,40,32,.08)" strokeDasharray="4 4" />
                           <XAxis dataKey="name" stroke="var(--muted)" tick={{ fontSize: 10, fill: "var(--muted)" }} axisLine={false} tickLine={false} />
                           <YAxis domain={[0, 100]} stroke="var(--muted)" tick={{ fontSize: 10, fill: "var(--muted)" }} axisLine={false} tickLine={false} />
                           <Tooltip
                             contentStyle={{ background: "var(--s2)", border: "1px solid var(--b2)", borderRadius: 8, fontSize: 12, color: "var(--text)" }}
-                            cursor={{ stroke: "rgba(99,102,241,.3)" }}
+                            cursor={{ stroke: "rgba(15,118,110,.25)" }}
                             formatter={(v: number) => [`${v}/100`, "ATS Score"]}
                           />
-                          <Area type="monotone" dataKey="score" stroke="#6366F1" strokeWidth={2} fill="url(#ga)" dot={{ fill: "#6366F1", r: 3.5, strokeWidth: 0 }} activeDot={{ r: 5, fill: "#6366F1" }} />
+                          <Area type="monotone" dataKey="score" stroke="#0F766E" strokeWidth={2} fill="url(#ga)" dot={{ fill: "#0F766E", r: 3.5, strokeWidth: 0 }} activeDot={{ r: 5, fill: "#0F766E" }} />
                         </AreaChart>
                       </ResponsiveContainer>
                     </div>
@@ -903,10 +903,10 @@ const passRate =
                     <div style={{ height: 200 }}>
                       <ResponsiveContainer width="100%" height="100%">
                         <RadarChart data={skillRadarData}>
-                          <PolarGrid stroke="rgba(255,255,255,.06)" />
+                          <PolarGrid stroke="rgba(45,40,32,.10)" />
                           <PolarAngleAxis dataKey="skill" tick={{ fill: "var(--muted2)", fontSize: 10 }} />
                           <PolarRadiusAxis domain={[0, 100]} tick={false} axisLine={false} />
-                          <Radar dataKey="value" stroke="#6366F1" fill="#6366F1" fillOpacity={0.15} strokeWidth={2} dot={{ fill: "#6366F1", r: 3, strokeWidth: 0 }} />
+                          <Radar dataKey="value" stroke="#0F766E" fill="#0F766E" fillOpacity={0.12} strokeWidth={2} dot={{ fill: "#0F766E", r: 3, strokeWidth: 0 }} />
                         </RadarChart>
                       </ResponsiveContainer>
                     </div>
@@ -932,7 +932,7 @@ const passRate =
                             </PieChart>
                           </ResponsiveContainer>
                         </div>
-                        {[{ label: "Excellent (80+)", color: "#22C55E" }, { label: "Good (60–79)", color: "#F59E0B" }, { label: "Needs Work (<60)", color: "#EF4444" }].map(row => {
+                        {[{ label: "Excellent (80+)", color: "#16704F" }, { label: "Good (60-79)", color: "#A46118" }, { label: "Needs Work (<60)", color: "#A33B32" }].map(row => {
                           const d = stats.dist.find(x => x.color === row.color);
                           return (
                             <div key={row.label} className="dist-row">
@@ -944,7 +944,7 @@ const passRate =
                       </>
                     ) : (
                       <div className="empty" style={{ padding: "28px 12px" }}>
-                        <div className="empty-emoji">📊</div>
+                        <div className="empty-emoji">00</div>
                         <div className="empty-s">Upload resumes to see your score breakdown</div>
                       </div>
                     )}
@@ -964,10 +964,10 @@ const passRate =
                   </div>
                   <div className="cb">
                     {/* Progress bar */}
-                    <div style={{ height: 4, background: "rgba(255,255,255,.07)", borderRadius: 2, marginBottom: 14, overflow: "hidden" }}>
+                    <div style={{ height: 4, background: "rgba(23,32,28,.08)", borderRadius: 2, marginBottom: 14, overflow: "hidden" }}>
                       <div style={{
                         height: "100%", borderRadius: 2,
-                        background: "linear-gradient(90deg,var(--accent),var(--accent2))",
+                        background: "var(--accent)",
                         width: `${(Object.values(checklist).filter(Boolean).length / CHECKLIST.length) * 100}%`,
                         transition: "width .4s ease",
                       }} />
@@ -1023,12 +1023,12 @@ const passRate =
                     <div style={{ height: 200 }}>
                       <ResponsiveContainer width="100%" height="100%">
                         <BarChart data={[{ category: "Frontend", match: 72 }, { category: "Backend", match: 64 }, { category: "Data", match: 58 }, { category: "DevOps", match: 45 }, { category: "PM", match: 38 }]} barSize={20}>
-                          <CartesianGrid stroke="rgba(255,255,255,.04)" strokeDasharray="4 4" />
+                          <CartesianGrid stroke="rgba(45,40,32,.08)" strokeDasharray="4 4" />
                           <XAxis dataKey="category" stroke="var(--muted)" tick={{ fontSize: 10, fill: "var(--muted)" }} axisLine={false} tickLine={false} />
                           <YAxis domain={[0, 100]} stroke="var(--muted)" tick={{ fontSize: 10, fill: "var(--muted)" }} axisLine={false} tickLine={false} />
                           <Tooltip contentStyle={{ background: "var(--s2)", border: "1px solid var(--b2)", borderRadius: 8, fontSize: 12, color: "var(--text)" }} formatter={(v: number) => [`${v}%`, "Match"]} />
                           <Bar dataKey="match" radius={[4, 4, 0, 0]}>
-                            {[72, 64, 58, 45, 38].map((v, i) => <Cell key={i} fill={v >= 70 ? "#6366F1" : v >= 55 ? "#8B5CF6" : "#4B4E6D"} />)}
+                            {[72, 64, 58, 45, 38].map((v, i) => <Cell key={i} fill={v >= 70 ? "#0F766E" : v >= 55 ? "#B86B4B" : "#6D765D"} />)}
                           </Bar>
                         </BarChart>
                       </ResponsiveContainer>
@@ -1052,14 +1052,14 @@ const passRate =
                       <div className="empty" style={{ padding: "28px 0" }}><div className="spin" /><span style={{ fontSize: ".82rem", color: "var(--muted2)" }}>Loading…</span></div>
                     ) : resumes.length === 0 ? (
                       <div className="empty" style={{ padding: "28px 0" }}>
-                        <div className="empty-emoji">📂</div>
+                        <div className="empty-emoji">CV</div>
                         <div className="empty-t">No resumes yet</div>
                         <button className="btn-primary" style={{ marginTop: 12, fontSize: ".8rem" }} onClick={() => setUploadOpen(true)}><Plus size={13} /> Upload First</button>
                       </div>
                     ) : (
                       [...resumes].sort((a, b) => new Date(b.uploadedAt).getTime() - new Date(a.uploadedAt).getTime()).slice(0, 4).map(res => (
                         <div key={res.id} style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 0", borderBottom: "1px solid var(--b1)" }}>
-                          <div style={{ width: 36, height: 36, borderRadius: 8, background: "var(--s3)", border: "1px solid var(--b1)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, flexShrink: 0 }}>📄</div>
+                          <div style={{ width: 36, height: 36, borderRadius: 8, background: "var(--s3)", border: "1px solid var(--b1)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}><FileText size={15} /></div>
                           <div style={{ flex: 1, minWidth: 0 }}>
                             <div style={{ fontSize: ".82rem", fontWeight: 500, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{res.fileName}</div>
                             <div style={{ fontSize: ".7rem", color: "var(--muted)", marginTop: 2 }}>{new Date(res.uploadedAt).toLocaleDateString("en-US", { month: "short", day: "numeric" })}</div>
@@ -1103,9 +1103,9 @@ const passRate =
               ) : filteredResumes.length === 0 ? (
                 <div className="card">
                   <div className="empty">
-                    <div className="empty-emoji">{searchQuery ? "🔍" : "📂"}</div>
+                    <div className="empty-emoji">{searchQuery ? "SR" : "CV"}</div>
                     <div className="empty-t">{searchQuery ? "No results found" : "No resumes yet"}</div>
-                    <div className="empty-s">{searchQuery ? `No resumes match "${searchQuery}"` : "Upload your first resume to get started with AI analysis"}</div>
+                    <div className="empty-s">{searchQuery ? `No resumes match "${searchQuery}"` : "Upload your first resume to get started with the review"}</div>
                     {!searchQuery && <button className="btn-primary" style={{ marginTop: 16 }} onClick={() => setUploadOpen(true)}><Plus size={14} /> Upload Resume</button>}
                   </div>
                 </div>
@@ -1135,7 +1135,7 @@ const passRate =
                             <tr key={res.id}>
                               <td style={{ paddingLeft: 20 }}>
                                 <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                                  <div style={{ width: 34, height: 34, borderRadius: 7, background: "var(--s3)", border: "1px solid var(--b1)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 15, flexShrink: 0 }}>📄</div>
+                                  <div style={{ width: 34, height: 34, borderRadius: 7, background: "var(--s3)", border: "1px solid var(--b1)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}><FileText size={14} /></div>
                                   <span className="fname">{res.fileName}</span>
                                 </div>
                               </td>
@@ -1197,8 +1197,8 @@ const passRate =
           {activeTab === "tips" && (
             <div className="page">
               <div style={{ marginBottom: 24 }}>
-                <div style={{ fontFamily: "'Bricolage Grotesque',sans-serif", fontSize: "1.4rem", fontWeight: 700, letterSpacing: "-.02em", marginBottom: 6 }}>Resume Improvement Tips</div>
-                <p style={{ fontSize: ".9rem", color: "var(--muted2)", fontWeight: 300 }}>Expert strategies to maximize your ATS score and get more callbacks.</p>
+                <div style={{ fontFamily: "'Source Serif 4',serif", fontSize: "1.4rem", fontWeight: 700, letterSpacing: 0, marginBottom: 6 }}>Resume Improvement Tips</div>
+                <p style={{ fontSize: ".9rem", color: "var(--muted2)", fontWeight: 300 }}>Practical habits for clearer resumes and stronger role matching.</p>
               </div>
 
               <div className="tips-grid">
@@ -1213,7 +1213,7 @@ const passRate =
 
               {/* ATS myth busters */}
               <div style={{ marginTop: 24 }}>
-                <div style={{ fontFamily: "'Bricolage Grotesque',sans-serif", fontSize: "1.1rem", fontWeight: 600, marginBottom: 16, letterSpacing: "-.01em" }}>Common ATS Myths</div>
+                <div style={{ fontFamily: "'Instrument Sans',sans-serif", fontSize: "1.1rem", fontWeight: 700, marginBottom: 16, letterSpacing: 0 }}>Common ATS Myths</div>
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
                   {[
                     { myth: "Adding a photo helps your resume stand out", fact: "Most ATS systems ignore or reject images entirely." },
@@ -1224,13 +1224,13 @@ const passRate =
                     <div key={i} className="card">
                       <div className="cb">
                         <div style={{ display: "flex", alignItems: "flex-start", gap: 10, marginBottom: 10 }}>
-                          <div style={{ width: 22, height: 22, borderRadius: "50%", background: "rgba(239,68,68,.1)", border: "1px solid rgba(239,68,68,.2)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: 1 }}>
+                          <div style={{ width: 22, height: 22, borderRadius: "50%", background: "rgba(163,59,50,.10)", border: "1px solid rgba(163,59,50,.20)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: 1 }}>
                             <X size={11} style={{ color: "var(--red)" }} />
                           </div>
                           <p style={{ fontSize: ".82rem", color: "var(--muted2)", lineHeight: 1.5, fontStyle: "italic" }}>&ldquo;{item.myth}&rdquo;</p>
                         </div>
                         <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
-                          <div style={{ width: 22, height: 22, borderRadius: "50%", background: "rgba(34,197,94,.1)", border: "1px solid rgba(34,197,94,.2)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: 1 }}>
+                          <div style={{ width: 22, height: 22, borderRadius: "50%", background: "rgba(22,112,79,.10)", border: "1px solid rgba(22,112,79,.20)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: 1 }}>
                             <CheckCircle2 size={11} style={{ color: "var(--green)" }} />
                           </div>
                           <p style={{ fontSize: ".82rem", color: "var(--muted2)", lineHeight: 1.5 }}>{item.fact}</p>
