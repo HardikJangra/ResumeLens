@@ -286,8 +286,8 @@ export default function Home() {
         .metric-val { font-size: 0.78rem; font-weight: 500; color: var(--text); min-width: 30px; text-align: right; }
         .tag-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
         .tag { padding: 4px 12px; border-radius: 100px; font-size: 0.75rem; font-weight: 500; border: 1px solid; }
-        .tag-green { background: rgba(34,197,94,0.1); border-color: rgba(34,197,94,0.25); color: #4ADE80; }
-        .tag-amber { background: rgba(245,158,11,0.1); border-color: rgba(245,158,11,0.25); color: #FCD34D; }
+        .tag-green { background: rgba(22,112,79,0.10); border-color: rgba(22,112,79,0.24); color: var(--green); }
+        .tag-amber { background: rgba(164,97,24,0.10); border-color: rgba(164,97,24,0.24); color: var(--amber); }
         .tag-blue  { background: rgba(15,118,110,0.1); border-color: rgba(15,118,110,0.22);  color: var(--accent); }
 
         /* HOW IT WORKS */
@@ -594,7 +594,7 @@ export default function Home() {
                     <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px" }}>
                       <div style={{
                         width: "22px", height: "22px", borderRadius: "50%",
-                        background: "rgba(34,197,94,0.12)", border: "1px solid rgba(34,197,94,0.25)",
+                        background: "rgba(22,112,79,0.10)", border: "1px solid rgba(22,112,79,0.24)",
                         display: "flex", alignItems: "center", justifyContent: "center",
                         fontSize: "0.65rem", color: "var(--green)", flexShrink: 0,
                       }}>✓</div>

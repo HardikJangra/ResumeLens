@@ -55,7 +55,7 @@ function ScoreRing({ score, size = 88 }: { score: number; size?: number }) {
   const color = score >= 80 ? "#22C55E" : score >= 60 ? "#F59E0B" : "#EF4444";
   return (
     <svg width={size} height={size} style={{ transform: "rotate(-90deg)" }}>
-      <circle cx={size/2} cy={size/2} r={r} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth={6} />
+      <circle cx={size/2} cy={size/2} r={r} fill="none" stroke="rgba(23,32,28,0.08)" strokeWidth={6} />
       <circle
         cx={size/2} cy={size/2} r={r} fill="none"
         stroke={color} strokeWidth={6}
@@ -182,7 +182,7 @@ const passRate =
       { name: "Needs Work (<60)", value: scores.filter(s => s < 60).length || 0, color: "#EF4444" },
     ].filter(d => d.value > 0);
 
-    let insight = "Upload your first resume to get AI-powered ATS insights and personalized improvement tips.";
+    let insight = "Upload your first resume to get ATS insights and prioritized improvement tips.";
     if (total > 0) {
       if (avg < 50) insight = `Your average score is ${avg}/100 — below the 60-point ATS threshold most companies use. Focus on adding role-specific keywords and cleaning up formatting.`;
       else if (avg < 75) insight = `You're averaging ${avg}/100. You're making it through some filters, but tailoring each resume to the specific job description could push you over 80.`;
@@ -240,8 +240,8 @@ const passRate =
         button,input{font-family:'Instrument Sans',sans-serif}
         ::-webkit-scrollbar{width:4px;height:4px}
         ::-webkit-scrollbar-track{background:transparent}
-        ::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:2px}
-        ::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,0.18)}
+        ::-webkit-scrollbar-thumb{background:rgba(23,32,28,0.14);border-radius:2px}
+        ::-webkit-scrollbar-thumb:hover{background:rgba(23,32,28,0.22)}
 
         /* ── SHELL ── */
         .shell{display:flex;min-height:100vh}
@@ -278,7 +278,7 @@ const passRate =
         .nb.active::before{content:'';position:absolute;left:0;top:20%;bottom:20%;width:3px;background:var(--accent);border-radius:0 2px 2px 0}
         .nb.active svg{color:var(--accent)}
         .nb-danger{color:var(--red)!important}
-        .nb-danger:hover{background:rgba(239,68,68,0.08)!important;color:var(--red)!important}
+        .nb-danger:hover{background:rgba(163,59,50,0.08)!important;color:var(--red)!important}
         .sb-footer{padding:12px 10px;border-top:1px solid var(--b1)}
         .user-pill{
           display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;
@@ -505,7 +505,7 @@ const passRate =
           transition:background .1s;border-radius:4px;padding:9px 6px;
         }
         .checklist-item:last-child{border-bottom:none}
-        .checklist-item:hover{background:rgba(255,255,255,0.025)}
+        .checklist-item:hover{background:rgba(23,32,28,0.025)}
         .cl-box{
           width:18px;height:18px;border-radius:4px;border:1px solid var(--b2);flex-shrink:0;
           display:flex;align-items:center;justify-content:center;transition:all .2s;
@@ -562,7 +562,7 @@ const passRate =
           background:none;cursor:pointer;color:var(--muted2);transition:all .15s;
         }
         .abt:hover{background:var(--s2);border-color:var(--b2);color:var(--text)}
-        .abt.del:hover{background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.25);color:var(--red)}
+        .abt.del:hover{background:rgba(163,59,50,.10);border-color:rgba(163,59,50,.25);color:var(--red)}
 
         /* ── EMPTY STATE ── */
         .empty{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:52px 24px;text-align:center}
@@ -687,7 +687,7 @@ const passRate =
 
           <div className="sb-footer">
             {/* Upgrade nudge */}
-            <div style={{ background: "rgba(99,102,241,0.08)", border: "1px solid rgba(99,102,241,0.18)", borderRadius: 9, padding: "12px 14px", marginBottom: 10 }}>
+            <div style={{ background: "rgba(15,118,110,0.08)", border: "1px solid rgba(15,118,110,0.18)", borderRadius: 8, padding: "12px 14px", marginBottom: 10 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 5 }}>
                 <Award size={13} style={{ color: "var(--accent)" }} />
                 <span style={{ fontSize: ".75rem", fontWeight: 600, color: "var(--text)" }}>Workspace Pro</span>
@@ -1242,13 +1242,13 @@ const passRate =
               </div>
 
               {/* CTA */}
-              <div style={{ marginTop: 24, background: "linear-gradient(135deg,rgba(99,102,241,.1),rgba(139,92,246,.07))", border: "1px solid rgba(99,102,241,.2)", borderRadius: 14, padding: "28px 32px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 20 }}>
+              <div style={{ marginTop: 24, background: "linear-gradient(135deg,rgba(15,118,110,.08),rgba(184,107,75,.06))", border: "1px solid rgba(45,40,32,.12)", borderRadius: 8, padding: "28px 32px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 20 }}>
                 <div>
-                  <div style={{ fontFamily: "'Bricolage Grotesque',sans-serif", fontSize: "1.1rem", fontWeight: 700, marginBottom: 6 }}>Ready to apply these tips?</div>
+                  <div style={{ fontFamily: "'Instrument Sans',sans-serif", fontSize: "1.1rem", fontWeight: 700, marginBottom: 6 }}>Ready to apply these tips?</div>
                   <p style={{ fontSize: ".875rem", color: "var(--muted2)", fontWeight: 300 }}>Upload your resume now and see exactly where you stand.</p>
                 </div>
                 <button className="btn-primary" style={{ flexShrink: 0 }} onClick={() => { setActiveTab("resumes"); setUploadOpen(true); }}>
-                  <Upload size={15} /> Upload & Analyze
+                  <Upload size={15} /> Upload and analyze
                 </button>
               </div>
             </div>
