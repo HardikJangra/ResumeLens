@@ -19,10 +19,10 @@ function Toggle({ checked, onChange }: { checked: boolean; onChange: (v: boolean
       role="switch" aria-checked={checked}
       style={{
         width: 44, height: 24, borderRadius: 12,
-        background: checked ? "var(--accent)" : "rgba(255,255,255,0.1)",
+        background: checked ? "var(--accent)" : "var(--s3)",
         border: "none", cursor: "pointer", position: "relative",
         transition: "background .2s, box-shadow .2s", flexShrink: 0,
-        boxShadow: checked ? "0 0 14px rgba(99,102,241,0.45)" : "none",
+        boxShadow: checked ? "0 8px 20px rgba(15,118,110,0.22)" : "inset 0 0 0 1px var(--b1)",
       }}
     >
       <span style={{
@@ -30,7 +30,7 @@ function Toggle({ checked, onChange }: { checked: boolean; onChange: (v: boolean
         left: checked ? 23 : 3, width: 18, height: 18,
         borderRadius: "50%", background: "#fff",
         transition: "left .18s cubic-bezier(.4,0,.2,1)",
-        boxShadow: "0 1px 4px rgba(0,0,0,0.35)",
+        boxShadow: "0 1px 4px rgba(45,40,32,0.18)",
       }} />
     </button>
   );
@@ -130,7 +130,7 @@ export default function SettingsPage() {
   const currentPlan = "free";
 
   /* appearance */
-  const [accent, setAccent] = useState("indigo");
+  const [accent, setAccent] = useState("teal");
   const [density,setDensity]= useState<"compact"|"default"|"relaxed">("default");
 
   /* danger */
@@ -164,22 +164,22 @@ export default function SettingsPage() {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap');
         *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
         :root{
-          --bg:#0A0A0F; --s1:#111118; --s2:#16161F; --s3:#1C1C28;
-          --b1:rgba(255,255,255,.06); --b2:rgba(255,255,255,.11);
-          --text:#F0F0F5; --muted:#6B6B80; --m2:#9090A8;
-          --accent:#6366F1; --a2:#8B5CF6;
-          --green:#22C55E; --amber:#F59E0B; --red:#EF4444;
+          --bg:#F6F1E8; --s1:#FFFBF2; --s2:#F1E8DA; --s3:#E7D9C6;
+          --b1:rgba(45,40,32,0.10); --b2:rgba(45,40,32,0.18);
+          --text:#17201C; --muted:#81786B; --m2:#5F675F;
+          --accent:#0F766E; --a2:#B86B4B;
+          --green:#16704F; --amber:#A46118; --red:#A33B32;
         }
         html,body{height:100%;background:var(--bg);color:var(--text);
-          font-family:'DM Sans',sans-serif;-webkit-font-smoothing:antialiased}
+          font-family:'Instrument Sans',sans-serif;-webkit-font-smoothing:antialiased}
         a{text-decoration:none;color:inherit}
-        button,input,select,textarea{font-family:'DM Sans',sans-serif}
+        button,input,select,textarea{font-family:'Instrument Sans',sans-serif}
         ::-webkit-scrollbar{width:4px}
         ::-webkit-scrollbar-track{background:transparent}
-        ::-webkit-scrollbar-thumb{background:rgba(255,255,255,.09);border-radius:2px}
+        ::-webkit-scrollbar-thumb{background:rgba(45,40,32,.18);border-radius:2px}
 
         /* ── shell ── */
         .shell{display:flex;min-height:100vh}
@@ -196,7 +196,7 @@ export default function SettingsPage() {
           font-size:.78rem;color:var(--m2);background:none;border:none;
           cursor:pointer;padding:0;margin-bottom:12px;transition:color .15s}
         .back-link:hover{color:var(--text)}
-        .snav-title{font-family:'Bricolage Grotesque',sans-serif;
+        .snav-title{font-family:'Source Serif 4',serif;
           font-weight:700;font-size:1rem;letter-spacing:-.02em}
         .snav-sub{font-size:.7rem;color:var(--muted);margin-top:2px}
         .snav-body{padding:10px 10px;flex:1}
@@ -210,8 +210,8 @@ export default function SettingsPage() {
           border:none;background:none;width:100%;text-align:left;
           position:relative;
         }
-        .ni:hover{color:var(--text);background:rgba(255,255,255,.05)}
-        .ni.on{color:var(--text);background:rgba(99,102,241,.12);font-weight:500}
+        .ni:hover{color:var(--text);background:rgba(15,118,110,.07)}
+        .ni.on{color:var(--text);background:rgba(15,118,110,.12);font-weight:500}
         .ni.on::before{
           content:'';position:absolute;left:0;top:22%;bottom:22%;
           width:3px;background:var(--accent);border-radius:0 2px 2px 0;
@@ -223,8 +223,8 @@ export default function SettingsPage() {
 
         /* upgrade nudge */
         .nudge{
-          background:rgba(99,102,241,.08);
-          border:1px solid rgba(99,102,241,.18);
+          background:rgba(15,118,110,.08);
+          border:1px solid rgba(15,118,110,.18);
           border-radius:9px;padding:12px 14px;margin-bottom:10px;
         }
         .nudge-row{display:flex;align-items:center;gap:6px;
@@ -256,11 +256,11 @@ export default function SettingsPage() {
           position:sticky;top:0;z-index:50;height:60px;
           display:flex;align-items:center;justify-content:space-between;
           padding:0 32px;
-          background:rgba(10,10,15,.88);backdrop-filter:blur(18px);
+          background:rgba(255,251,242,.88);backdrop-filter:blur(18px);
           border-bottom:1px solid var(--b1);
         }
         .sbar-l{display:flex;align-items:center;gap:0}
-        .sbar-title{font-family:'Bricolage Grotesque',sans-serif;
+        .sbar-title{font-family:'Source Serif 4',serif;
           font-weight:600;font-size:1rem;letter-spacing:-.01em}
         .sbar-crumb{display:flex;align-items:center;gap:4px;
           font-size:.7rem;color:var(--muted);margin-top:2px}
@@ -271,10 +271,10 @@ export default function SettingsPage() {
           background:linear-gradient(135deg,var(--accent),var(--a2));
           color:#fff;border:none;border-radius:8px;
           padding:9px 20px;font-size:.875rem;font-weight:500;cursor:pointer;
-          box-shadow:0 1px 3px rgba(0,0,0,.4),0 0 0 1px rgba(99,102,241,.35);
+          box-shadow:0 8px 20px rgba(15,118,110,.18),0 0 0 1px rgba(15,118,110,.28);
           transition:all .2s;min-width:114px;justify-content:center;
         }
-        .sbtn:hover{box-shadow:0 4px 20px rgba(99,102,241,.45);transform:translateY(-1px)}
+        .sbtn:hover{box-shadow:0 12px 28px rgba(15,118,110,.22);transform:translateY(-1px)}
         .sbtn:disabled{opacity:.55;cursor:not-allowed;transform:none!important;box-shadow:none!important}
         .sbtn.done{background:linear-gradient(135deg,#059669,#10B981)!important;
           box-shadow:0 0 18px rgba(16,185,129,.3)!important}
@@ -282,7 +282,7 @@ export default function SettingsPage() {
         /* ── page content ── */
         .page{padding:32px;max-width:860px}
         .ph{margin-bottom:26px}
-        .ph h2{font-family:'Bricolage Grotesque',sans-serif;
+        .ph h2{font-family:'Source Serif 4',serif;
           font-size:1.25rem;font-weight:700;letter-spacing:-.02em;margin-bottom:5px}
         .ph p{font-size:.875rem;color:var(--m2);font-weight:300;line-height:1.65}
 
@@ -298,7 +298,7 @@ export default function SettingsPage() {
           padding:15px 22px;border-bottom:1px solid var(--b1);
         }
         .card-t{
-          font-family:'Bricolage Grotesque',sans-serif;
+          font-family:'Instrument Sans',sans-serif;
           font-size:.9rem;font-weight:600;letter-spacing:-.01em;
           display:flex;align-items:center;gap:8px;
         }
@@ -317,8 +317,8 @@ export default function SettingsPage() {
           outline:none;transition:border-color .2s,box-shadow .2s;width:100%;
         }
         .inp::placeholder{color:var(--muted)}
-        .inp:focus{border-color:rgba(99,102,241,.4);box-shadow:0 0 0 3px rgba(99,102,241,.09)}
-        .inp:disabled{background:rgba(255,255,255,.025);color:var(--muted);cursor:not-allowed}
+        .inp:focus{border-color:rgba(15,118,110,.38);box-shadow:0 0 0 3px rgba(15,118,110,.10)}
+        .inp:disabled{background:rgba(45,40,32,.035);color:var(--muted);cursor:not-allowed}
         textarea.inp{resize:vertical;min-height:88px;line-height:1.6}
         select.inp{cursor:pointer}
         select.inp option{background:var(--s2)}
@@ -357,11 +357,11 @@ export default function SettingsPage() {
         }
         .btn-p{
           background:linear-gradient(135deg,var(--accent),var(--a2));color:#fff;
-          box-shadow:0 0 0 1px rgba(99,102,241,.3);
+          box-shadow:0 0 0 1px rgba(15,118,110,.28);
         }
-        .btn-p:hover{box-shadow:0 4px 16px rgba(99,102,241,.4);transform:translateY(-1px)}
+        .btn-p:hover{box-shadow:0 10px 22px rgba(15,118,110,.22);transform:translateY(-1px)}
         .btn-g{background:var(--s3);color:var(--m2);border:1px solid var(--b1)}
-        .btn-g:hover{background:rgba(255,255,255,.08);color:var(--text);border-color:var(--b2)}
+        .btn-g:hover{background:rgba(255,251,242,.75);color:var(--text);border-color:var(--b2)}
         .btn-d{background:rgba(239,68,68,.1);color:var(--red);border:1px solid rgba(239,68,68,.2)}
         .btn-d:hover{background:rgba(239,68,68,.18);border-color:rgba(239,68,68,.35)}
         .btn:disabled{opacity:.42;cursor:not-allowed;transform:none!important;box-shadow:none!important}
@@ -379,8 +379,8 @@ export default function SettingsPage() {
         .ibox{
           display:flex;align-items:flex-start;gap:10px;
           padding:12px 14px;
-          background:rgba(99,102,241,.07);
-          border:1px solid rgba(99,102,241,.18);
+          background:rgba(15,118,110,.07);
+          border:1px solid rgba(15,118,110,.18);
           border-radius:8px;margin-bottom:16px;
         }
         .ibox p{font-size:.78rem;color:var(--m2);line-height:1.6}
@@ -391,9 +391,9 @@ export default function SettingsPage() {
           padding:3px 9px;border-radius:100px;
           font-size:.67rem;font-weight:500;border:1px solid;
         }
-        .tag-g{background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.2);color:#4ADE80}
-        .tag-a{background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.2);color:#FCD34D}
-        .tag-b{background:rgba(99,102,241,.1);border-color:rgba(99,102,241,.25);color:#818CF8}
+        .tag-g{background:rgba(22,112,79,.1);border-color:rgba(22,112,79,.2);color:var(--green)}
+        .tag-a{background:rgba(164,97,24,.1);border-color:rgba(164,97,24,.2);color:var(--amber)}
+        .tag-b{background:rgba(15,118,110,.1);border-color:rgba(15,118,110,.25);color:var(--accent)}
 
         /* billing toggle */
         .btog{
@@ -405,10 +405,10 @@ export default function SettingsPage() {
           padding:7px 18px;border-radius:6px;font-size:.82rem;font-weight:500;
           cursor:pointer;transition:all .15s;border:none;background:none;color:var(--m2);
         }
-        .bopt.on{background:var(--s3);color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,.3)}
+        .bopt.on{background:var(--s1);color:var(--text);box-shadow:0 1px 4px rgba(45,40,32,.12)}
         .save-pill{
           display:inline-flex;background:rgba(34,197,94,.12);
-          border:1px solid rgba(34,197,94,.2);color:#4ADE80;
+          border:1px solid rgba(22,112,79,.2);color:var(--green);
           font-size:.6rem;font-weight:600;padding:2px 7px;
           border-radius:100px;margin-left:5px;
         }
@@ -421,12 +421,12 @@ export default function SettingsPage() {
           transition:all .22s;position:relative;overflow:hidden;
         }
         .pc:hover{border-color:var(--b2);transform:translateY(-2px);
-          box-shadow:0 10px 28px rgba(0,0,0,.35)}
-        .pc.cur{border-color:rgba(99,102,241,.4);background:rgba(99,102,241,.06)}
+          box-shadow:0 12px 28px rgba(45,40,32,.12)}
+        .pc.cur{border-color:rgba(15,118,110,.36);background:rgba(15,118,110,.06)}
         .pc.cur::after{
           content:'Current';position:absolute;top:14px;right:14px;
           font-size:.6rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;
-          background:rgba(99,102,241,.16);border:1px solid rgba(99,102,241,.25);
+          background:rgba(15,118,110,.14);border:1px solid rgba(15,118,110,.24);
           color:var(--accent);padding:2px 8px;border-radius:100px;
         }
         .pc-badge{
@@ -436,12 +436,12 @@ export default function SettingsPage() {
           letter-spacing:.05em;text-transform:uppercase;
         }
         .pc-name{
-          font-family:'Bricolage Grotesque',sans-serif;
+          font-family:'Source Serif 4',serif;
           font-size:1.1rem;font-weight:700;margin-bottom:4px;
         }
         .pc-price{display:flex;align-items:baseline;gap:3px;margin-bottom:8px}
         .pc-num{
-          font-family:'Bricolage Grotesque',sans-serif;
+          font-family:'Source Serif 4',serif;
           font-size:1.8rem;font-weight:700;line-height:1;
         }
         .pc-per{font-size:.78rem;color:var(--m2)}
@@ -451,19 +451,19 @@ export default function SettingsPage() {
         .pc-cta{
           margin-top:16px;width:100%;padding:9px;border-radius:8px;
           font-size:.82rem;font-weight:500;cursor:pointer;
-          transition:all .2s;border:none;font-family:'DM Sans',sans-serif;
+          transition:all .2s;border:none;font-family:'Instrument Sans',sans-serif;
         }
 
         /* plan banner */
         .p-banner{
-          background:linear-gradient(135deg,rgba(99,102,241,.1),rgba(139,92,246,.07));
-          border:1px solid rgba(99,102,241,.2);border-radius:12px;
+          background:linear-gradient(135deg,rgba(15,118,110,.10),rgba(184,107,75,.08));
+          border:1px solid rgba(15,118,110,.2);border-radius:12px;
           padding:20px 24px;margin-bottom:20px;
           display:flex;align-items:center;justify-content:space-between;gap:16px;
         }
 
         /* security */
-        .pw-bar{height:4px;background:rgba(255,255,255,.07);border-radius:2px;
+        .pw-bar{height:4px;background:rgba(45,40,32,.08);border-radius:2px;
           margin-top:8px;overflow:hidden}
         .pw-fill{height:100%;border-radius:2px;transition:width .3s,background .3s}
         .sess{
@@ -489,15 +489,15 @@ export default function SettingsPage() {
           width:34px;height:34px;border-radius:8px;cursor:pointer;
           border:2px solid transparent;transition:all .15s;
         }
-        .swatch.on{border-color:#fff;transform:scale(1.12);
-          box-shadow:0 0 12px rgba(255,255,255,.15)}
+        .swatch.on{border-color:var(--text);transform:scale(1.12);
+          box-shadow:0 0 0 3px rgba(255,251,242,.85)}
         .dens-g{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
         .dc{
           padding:14px;border-radius:8px;border:1px solid var(--b1);
           cursor:pointer;text-align:center;transition:all .15s;background:var(--s2);
         }
         .dc:hover{border-color:var(--b2)}
-        .dc.on{border-color:rgba(99,102,241,.4);background:rgba(99,102,241,.08)}
+        .dc.on{border-color:rgba(15,118,110,.36);background:rgba(15,118,110,.08)}
         .dc-lbl{font-size:.82rem;font-weight:500;margin-top:6px}
         .dc-sub{font-size:.65rem;color:var(--muted);margin-top:2px}
 
@@ -512,8 +512,8 @@ export default function SettingsPage() {
           border:1px solid rgba(239,68,68,.28);
         }
         .dz-t{
-          font-family:'Bricolage Grotesque',sans-serif;
-          font-size:.9rem;font-weight:600;color:#F87171;
+          font-family:'Instrument Sans',sans-serif;
+          font-size:.9rem;font-weight:600;color:var(--red);
           margin-bottom:5px;display:flex;align-items:center;gap:7px;
         }
         .dz-d{font-size:.82rem;color:var(--m2);line-height:1.6;
@@ -529,21 +529,21 @@ export default function SettingsPage() {
 
         /* modal */
         .mbg{
-          position:fixed;inset:0;background:rgba(0,0,0,.65);
+          position:fixed;inset:0;background:rgba(23,32,28,.34);
           backdrop-filter:blur(6px);z-index:600;
           display:flex;align-items:center;justify-content:center;padding:20px;
         }
         .modal{
           background:var(--s1);border:1px solid var(--b2);
           border-radius:16px;width:100%;max-width:440px;
-          box-shadow:0 32px 80px rgba(0,0,0,.6);
+          box-shadow:0 32px 80px rgba(45,40,32,.24);
           animation:su .24s cubic-bezier(.4,0,.2,1);
         }
         @keyframes su{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
         .m-h{display:flex;align-items:center;justify-content:space-between;
           padding:20px 24px;border-bottom:1px solid var(--b1)}
-        .m-title{font-family:'Bricolage Grotesque',sans-serif;font-size:1rem;
-          font-weight:600;color:#F87171;display:flex;align-items:center;gap:7px}
+        .m-title{font-family:'Instrument Sans',sans-serif;font-size:1rem;
+          font-weight:600;color:var(--red);display:flex;align-items:center;gap:7px}
         .m-b{padding:24px}
         .m-f{display:flex;justify-content:flex-end;gap:10px;
           padding:16px 24px;border-top:1px solid var(--b1)}
@@ -685,7 +685,7 @@ export default function SettingsPage() {
                   {avatar?<img src={avatar} alt=""/>:(user?.firstName?.charAt(0)??"U")}
                 </div>
                 <div>
-                  <div style={{fontFamily:"'Bricolage Grotesque',sans-serif",fontWeight:600,fontSize:".95rem",marginBottom:3}}>
+                  <div style={{fontFamily:"'Instrument Sans',sans-serif",fontWeight:600,fontSize:".95rem",marginBottom:3}}>
                     {user?.firstName??"User"} {user?.lastName??""}
                   </div>
                   <div style={{fontSize:".75rem",color:"var(--m2)",fontWeight:300,marginBottom:10}}>JPG, PNG or GIF · max 2 MB</div>
@@ -870,7 +870,7 @@ export default function SettingsPage() {
                 <div>
                   <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:4}}>
                     <Crown size={14} style={{color:"var(--accent)"}}/>
-                    <span style={{fontFamily:"'Bricolage Grotesque',sans-serif",fontWeight:600,fontSize:".9rem"}}>
+                    <span style={{fontFamily:"'Instrument Sans',sans-serif",fontWeight:600,fontSize:".9rem"}}>
                       You&apos;re on the Free plan
                     </span>
                     <span className="tag tag-b">Active</span>
@@ -896,9 +896,9 @@ export default function SettingsPage() {
                   <div key={plan.id} className={`pc${plan.id===currentPlan?" cur":""}`}>
                     {plan.badge?(
                       <div className="pc-badge" style={{
-                        background:plan.badgeColor==="accent"?"rgba(99,102,241,.15)":"rgba(245,158,11,.12)",
+                        background:plan.badgeColor==="accent"?"rgba(15,118,110,.12)":"rgba(164,97,24,.12)",
                         color:plan.badgeColor==="accent"?"var(--accent)":"var(--amber)",
-                        border:`1px solid ${plan.badgeColor==="accent"?"rgba(99,102,241,.25)":"rgba(245,158,11,.2)"}`,
+                        border:`1px solid ${plan.badgeColor==="accent"?"rgba(15,118,110,.24)":"rgba(164,97,24,.2)"}`,
                       }}>
                         {plan.badgeColor==="accent"?<Sparkles size={8}/>:<Star size={8}/>}
                         {plan.badge}
@@ -926,15 +926,15 @@ export default function SettingsPage() {
                       ))}
                     </ul>
                     <button className="pc-cta" style={{
-                      background:plan.id===currentPlan?"rgba(255,255,255,.05)":
+                      background:plan.id===currentPlan?"rgba(45,40,32,.05)":
                         plan.ctaStyle==="primary"?"linear-gradient(135deg,var(--accent),var(--a2))":
-                        plan.ctaStyle==="amber"?"rgba(245,158,11,.12)":"rgba(255,255,255,.05)",
+                        plan.ctaStyle==="amber"?"rgba(164,97,24,.12)":"rgba(45,40,32,.05)",
                       color:plan.id===currentPlan?"var(--m2)":
                         plan.ctaStyle==="primary"?"#fff":
                         plan.ctaStyle==="amber"?"var(--amber)":"var(--m2)",
-                      border:plan.ctaStyle==="amber"?"1px solid rgba(245,158,11,.25)":"none",
+                      border:plan.ctaStyle==="amber"?"1px solid rgba(164,97,24,.25)":"none",
                       cursor:plan.id===currentPlan?"default":"pointer",
-                      boxShadow:plan.ctaStyle==="primary"&&plan.id!==currentPlan?"0 4px 16px rgba(99,102,241,.3)":"none",
+                      boxShadow:plan.ctaStyle==="primary"&&plan.id!==currentPlan?"0 8px 18px rgba(15,118,110,.18)":"none",
                     }}>
                       {plan.cta}
                     </button>
@@ -947,7 +947,7 @@ export default function SettingsPage() {
                 <div className="card-h"><div className="card-t"><CreditCard size={14}/>Payment Method</div></div>
                 <div className="cb">
                   <div style={{display:"flex",alignItems:"center",gap:12,padding:"13px 16px",background:"var(--s2)",border:"1px solid var(--b1)",borderRadius:10,marginBottom:14}}>
-                    <div style={{width:40,height:26,background:"linear-gradient(135deg,#1a1f5e,#4b5090)",borderRadius:4,display:"flex",alignItems:"center",justifyContent:"center",fontSize:".52rem",fontWeight:700,color:"rgba(255,255,255,.7)",flexShrink:0,letterSpacing:".05em"}}>
+                    <div style={{width:40,height:26,background:"linear-gradient(135deg,var(--accent),var(--a2))",borderRadius:4,display:"flex",alignItems:"center",justifyContent:"center",fontSize:".52rem",fontWeight:700,color:"rgba(255,255,255,.86)",flexShrink:0,letterSpacing:".05em"}}>
                       VISA
                     </div>
                     <div style={{flex:1}}>
@@ -973,7 +973,7 @@ export default function SettingsPage() {
                 <div className="cb">
                   <div className="mfa-row" style={{border:`1px solid ${mfa?"rgba(34,197,94,.22)":"var(--b1)"}`}}>
                     <div style={{display:"flex",alignItems:"center",gap:12}}>
-                      <div style={{width:38,height:38,borderRadius:9,background:mfa?"rgba(34,197,94,.12)":"rgba(255,255,255,.06)",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,transition:"background .2s"}}>
+                      <div style={{width:38,height:38,borderRadius:9,background:mfa?"rgba(22,112,79,.12)":"rgba(45,40,32,.06)",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,transition:"background .2s"}}>
                         {mfa?<CheckCircle2 size={17} style={{color:"var(--green)"}}/>:<Lock size={17} style={{color:"var(--m2)"}}/>}
                       </div>
                       <div>
@@ -1050,7 +1050,7 @@ export default function SettingsPage() {
                       <div style={{flex:1}}>
                         <div style={{fontSize:".85rem",fontWeight:500,display:"flex",alignItems:"center",gap:6}}>
                           {s.device}
-                          {s.cur&&<span style={{display:"inline-flex",alignItems:"center",gap:3,background:"rgba(34,197,94,.1)",border:"1px solid rgba(34,197,94,.2)",color:"#4ADE80",fontSize:".6rem",padding:"2px 7px",borderRadius:100}}>
+                          {s.cur&&<span style={{display:"inline-flex",alignItems:"center",gap:3,background:"rgba(22,112,79,.1)",border:"1px solid rgba(22,112,79,.2)",color:"var(--green)",fontSize:".6rem",padding:"2px 7px",borderRadius:100}}>
                             <CheckCircle2 size={8}/>This device
                           </span>}
                         </div>
@@ -1077,9 +1077,9 @@ export default function SettingsPage() {
                   </p>
                   <div className="col-g">
                     {[
-                      {id:"indigo",bg:"linear-gradient(135deg,#6366F1,#8B5CF6)"},
-                      {id:"blue",  bg:"linear-gradient(135deg,#3B82F6,#6366F1)"},
-                      {id:"violet",bg:"linear-gradient(135deg,#8B5CF6,#A78BFA)"},
+                      {id:"teal",  bg:"linear-gradient(135deg,#0F766E,#14B8A6)"},
+                      {id:"blue",  bg:"linear-gradient(135deg,#2563EB,#0F766E)"},
+                      {id:"clay",  bg:"linear-gradient(135deg,#B86B4B,#D89B73)"},
                       {id:"rose",  bg:"linear-gradient(135deg,#F43F5E,#EC4899)"},
                       {id:"amber", bg:"linear-gradient(135deg,#F59E0B,#FBBF24)"},
                       {id:"green", bg:"linear-gradient(135deg,#22C55E,#10B981)"},
@@ -1103,7 +1103,7 @@ export default function SettingsPage() {
                     {(["compact","default","relaxed"] as const).map(d=>(
                       <div key={d} className={`dc${density===d?" on":""}`} onClick={()=>setDensity(d)}>
                         <div style={{display:"flex",flexDirection:"column",gap:d==="compact"?3:d==="default"?5:8,alignItems:"center"}}>
-                          {[1,2,3].map(i=><div key={i} style={{height:3,width:`${80-i*10}%`,background:density===d?"var(--accent)":"rgba(255,255,255,.14)",borderRadius:2}}/>)}
+                          {[1,2,3].map(i=><div key={i} style={{height:3,width:`${80-i*10}%`,background:density===d?"var(--accent)":"rgba(45,40,32,.14)",borderRadius:2}}/>)}
                         </div>
                         <div className="dc-lbl" style={{color:density===d?"var(--text)":"var(--m2)"}}>{d.charAt(0).toUpperCase()+d.slice(1)}</div>
                         <div className="dc-sub">{d==="compact"?"More on screen":d==="default"?"Balanced":"More breathing room"}</div>
@@ -1138,7 +1138,7 @@ export default function SettingsPage() {
                 <div className="dz-t"><AlertTriangle size={14}/>Delete Account</div>
                 <p className="dz-d">
                   Permanently delete your ResumeLens account, all uploaded resumes, ATS scores, analysis reports, and billing history.{" "}
-                  <strong style={{color:"#F87171"}}>This is irreversible.</strong>
+                  <strong style={{color:"var(--red)"}}>This is irreversible.</strong>
                 </p>
                 <button className="btn-red" style={{background:"rgba(239,68,68,.14)",borderColor:"rgba(239,68,68,.3)"}}
                   onClick={()=>setDelModal(true)}>
