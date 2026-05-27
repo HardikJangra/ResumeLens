@@ -63,7 +63,7 @@ function Counter({ to, duration = 1100 }: { to: number; duration?: number }) {
 function ScoreRing({ score, size = 148, stroke = 10 }: { score: number; size?: number; stroke?: number }) {
   const r = (size - stroke) / 2;
   const circ = 2 * Math.PI * r;
-  const color = score >= 80 ? "#22C55E" : score >= 60 ? "#F59E0B" : "#EF4444";
+  const color = score >= 80 ? "#16704F" : score >= 60 ? "#A46118" : "#A33B32";
   const [off, setOff] = useState(circ);
   useEffect(() => {
     const t = setTimeout(() => setOff(circ - (score / 100) * circ), 80);
@@ -72,13 +72,13 @@ function ScoreRing({ score, size = 148, stroke = 10 }: { score: number; size?: n
   return (
     <div style={{ position: "relative", width: size, height: size }}>
       <svg width={size} height={size} style={{ transform: "rotate(-90deg)" }}>
-        <circle cx={size/2} cy={size/2} r={r} fill="none" stroke="rgba(255,255,255,.07)" strokeWidth={stroke}/>
+        <circle cx={size/2} cy={size/2} r={r} fill="none" stroke="rgba(45,40,32,.08)" strokeWidth={stroke}/>
         <circle cx={size/2} cy={size/2} r={r} fill="none" stroke={color} strokeWidth={stroke}
           strokeDasharray={circ} strokeDashoffset={off} strokeLinecap="round"
-          style={{ transition: "stroke-dashoffset 1.3s cubic-bezier(.4,0,.2,1)", filter: `drop-shadow(0 0 10px ${color}99)` }}/>
+          style={{ transition: "stroke-dashoffset 1.3s cubic-bezier(.4,0,.2,1)", filter: `drop-shadow(0 0 8px ${color}55)` }}/>
       </svg>
       <div style={{ position:"absolute", inset:0, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center" }}>
-        <span style={{ fontFamily:"'Bricolage Grotesque',sans-serif", fontSize:"2.1rem", fontWeight:800, color, lineHeight:1, letterSpacing:"-.04em" }}>
+        <span style={{ fontFamily:"'Source Serif 4',serif", fontSize:"2.1rem", fontWeight:800, color, lineHeight:1, letterSpacing:"-.04em" }}>
           <Counter to={score}/>
         </span>
         <span style={{ fontSize:".6rem", color:"var(--muted)", textTransform:"uppercase", letterSpacing:".1em", marginTop:2 }}>/ 100</span>
@@ -92,8 +92,8 @@ function Bar2({ value, color, delay = 0 }: { value: number; color: string; delay
   const [w, setW] = useState(0);
   useEffect(() => { const t = setTimeout(() => setW(value), delay + 120); return () => clearTimeout(t); }, [value, delay]);
   return (
-    <div style={{ height:5, background:"rgba(255,255,255,.07)", borderRadius:3, overflow:"hidden" }}>
-      <div style={{ height:"100%", borderRadius:3, width:`${w}%`, background:color, transition:"width 1s cubic-bezier(.4,0,.2,1)", boxShadow:`0 0 8px ${color}55` }}/>
+    <div style={{ height:5, background:"rgba(45,40,32,.08)", borderRadius:3, overflow:"hidden" }}>
+      <div style={{ height:"100%", borderRadius:3, width:`${w}%`, background:color, transition:"width 1s cubic-bezier(.4,0,.2,1)", boxShadow:`0 0 8px ${color}33` }}/>
     </div>
   );
 }
@@ -113,8 +113,8 @@ function CopyBtn({ text, style: s }: { text: string; style?: React.CSSProperties
 function Toggle({ checked, onChange }: { checked: boolean; onChange: (v: boolean) => void }) {
   return (
     <button onClick={() => onChange(!checked)} role="switch" aria-checked={checked}
-      style={{ width:40, height:22, borderRadius:11, background: checked ? "var(--accent)" : "rgba(255,255,255,.1)", border:"none", cursor:"pointer", position:"relative", transition:"background .2s", flexShrink:0, boxShadow: checked ? "0 0 12px rgba(99,102,241,.45)" : "none" }}>
-      <span style={{ position:"absolute", top:2, left: checked ? 20 : 2, width:18, height:18, borderRadius:"50%", background:"#fff", transition:"left .18s cubic-bezier(.4,0,.2,1)", boxShadow:"0 1px 4px rgba(0,0,0,.35)" }}/>
+      style={{ width:40, height:22, borderRadius:11, background: checked ? "var(--accent)" : "var(--s3)", border:"none", cursor:"pointer", position:"relative", transition:"background .2s", flexShrink:0, boxShadow: checked ? "0 8px 18px rgba(15,118,110,.2)" : "inset 0 0 0 1px var(--b1)" }}>
+      <span style={{ position:"absolute", top:2, left: checked ? 20 : 2, width:18, height:18, borderRadius:"50%", background:"#fff", transition:"left .18s cubic-bezier(.4,0,.2,1)", boxShadow:"0 1px 4px rgba(45,40,32,.18)" }}/>
     </button>
   );
 }
@@ -155,11 +155,11 @@ const MOCK_RESUME: Resume = {
 };
 
 const SCORE_BREAKDOWN = [
-  { label:"Keywords",    score:88, color:"#6366F1" },
-  { label:"Formatting",  score:74, color:"#8B5CF6" },
-  { label:"Experience",  score:91, color:"#22C55E" },
-  { label:"Skills",      score:86, color:"#3B82F6" },
-  { label:"Impact",      score:68, color:"#F59E0B" },
+  { label:"Keywords",    score:88, color:"#0F766E" },
+  { label:"Formatting",  score:74, color:"#B86B4B" },
+  { label:"Experience",  score:91, color:"#16704F" },
+  { label:"Skills",      score:86, color:"#2563EB" },
+  { label:"Impact",      score:68, color:"#A46118" },
   { label:"Clarity",     score:79, color:"#14B8A6" },
 ];
 
@@ -304,44 +304,44 @@ export default function ResumeDetailPage() {
   if (loading) return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700&family=DM+Sans:opsz,wght@9..40,400&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap');
         *{box-sizing:border-box;margin:0;padding:0}
-        body{background:#0A0A0F;font-family:'DM Sans',sans-serif;-webkit-font-smoothing:antialiased}
-        .spin{width:36px;height:36px;border-radius:50%;border:3px solid rgba(99,102,241,.25);border-top-color:#6366F1;animation:rot .8s linear infinite}
+        body{background:#F6F1E8;font-family:'Instrument Sans',sans-serif;-webkit-font-smoothing:antialiased}
+        .spin{width:36px;height:36px;border-radius:50%;border:3px solid rgba(15,118,110,.18);border-top-color:#0F766E;animation:rot .8s linear infinite}
         @keyframes rot{to{transform:rotate(360deg)}}
       `}</style>
-      <div style={{ minHeight:"100vh", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", gap:14, background:"#0A0A0F" }}>
+      <div style={{ minHeight:"100vh", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", gap:14, background:"#F6F1E8" }}>
         <div className="spin"/>
-        <p style={{ fontSize:".875rem", color:"#6B6B80", fontFamily:"'DM Sans',sans-serif" }}>Loading resume analysis…</p>
+        <p style={{ fontSize:".875rem", color:"#5F675F", fontFamily:"'Instrument Sans',sans-serif" }}>Loading resume analysis…</p>
       </div>
     </>
   );
 
   if (!resume) return (
-    <div style={{ minHeight:"100vh", background:"#0A0A0F", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", gap:12, color:"#F87171", fontFamily:"sans-serif" }}>
+    <div style={{ minHeight:"100vh", background:"#F6F1E8", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", gap:12, color:"#A33B32", fontFamily:"Instrument Sans, sans-serif" }}>
       <AlertCircle size={32}/>
       <p>Resume not found</p>
-      <Link href="/dashboard"><span style={{ color:"#818CF8", textDecoration:"underline", fontSize:".875rem" }}>← Back to Dashboard</span></Link>
+      <Link href="/dashboard"><span style={{ color:"#0F766E", textDecoration:"underline", fontSize:".875rem" }}>← Back to Dashboard</span></Link>
     </div>
   );
 
   if (resume.status === "Processing") return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap');
         *{box-sizing:border-box;margin:0;padding:0}
-        body{background:#0A0A0F;font-family:'DM Sans',sans-serif;-webkit-font-smoothing:antialiased}
-        .prog{height:3px;background:rgba(99,102,241,.15);border-radius:2px;overflow:hidden;width:220px}
-        .prog-inner{height:100%;background:linear-gradient(90deg,#6366F1,#8B5CF6);border-radius:2px;animation:prog 2s ease-in-out infinite}
+        body{background:#F6F1E8;font-family:'Instrument Sans',sans-serif;-webkit-font-smoothing:antialiased}
+        .prog{height:3px;background:rgba(15,118,110,.14);border-radius:2px;overflow:hidden;width:220px}
+        .prog-inner{height:100%;background:linear-gradient(90deg,#0F766E,#B86B4B);border-radius:2px;animation:prog 2s ease-in-out infinite}
         @keyframes prog{0%{width:0%;margin-left:0}50%{width:60%;margin-left:20%}100%{width:0%;margin-left:100%}}
       `}</style>
-      <div style={{ minHeight:"100vh", background:"#0A0A0F", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", gap:20 }}>
-        <div style={{ width:52, height:52, borderRadius:12, background:"rgba(99,102,241,.12)", border:"1px solid rgba(99,102,241,.25)", display:"flex", alignItems:"center", justifyContent:"center" }}>
-          <Sparkles size={22} style={{ color:"#6366F1" }}/>
+      <div style={{ minHeight:"100vh", background:"#F6F1E8", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", gap:20 }}>
+        <div style={{ width:52, height:52, borderRadius:12, background:"rgba(15,118,110,.10)", border:"1px solid rgba(15,118,110,.22)", display:"flex", alignItems:"center", justifyContent:"center" }}>
+          <Sparkles size={22} style={{ color:"#0F766E" }}/>
         </div>
         <div style={{ textAlign:"center" }}>
-          <div style={{ fontFamily:"'Bricolage Grotesque',sans-serif", fontSize:"1.1rem", fontWeight:700, color:"#F0F0F5", marginBottom:6 }}>Analyzing your resume…</div>
-          <p style={{ fontSize:".82rem", color:"#6B6B80" }}>Our AI is reading every line. This takes ~20 seconds.</p>
+          <div style={{ fontFamily:"'Source Serif 4',serif", fontSize:"1.1rem", fontWeight:700, color:"#17201C", marginBottom:6 }}>Analyzing your resume…</div>
+          <p style={{ fontSize:".82rem", color:"#81786B" }}>Our AI is reading every line. This takes ~20 seconds.</p>
         </div>
         <div className="prog"><div className="prog-inner"/></div>
       </div>
@@ -355,8 +355,8 @@ export default function ResumeDetailPage() {
   const uploadDate = new Date(resume.uploadedAt).toLocaleDateString("en-US", { month:"short", day:"numeric", year:"numeric" });
 
   const pColor = (p: string) => p === "high" ? "var(--red)" : p === "medium" ? "var(--amber)" : "var(--m2)";
-  const pBg    = (p: string) => p === "high" ? "rgba(239,68,68,.07)"  : p === "medium" ? "rgba(245,158,11,.07)" : "rgba(255,255,255,.03)";
-  const pBorder= (p: string) => p === "high" ? "rgba(239,68,68,.2)"   : p === "medium" ? "rgba(245,158,11,.2)"  : "var(--b1)";
+  const pBg    = (p: string) => p === "high" ? "rgba(163,59,50,.07)"  : p === "medium" ? "rgba(164,97,24,.08)" : "rgba(45,40,32,.04)";
+  const pBorder= (p: string) => p === "high" ? "rgba(163,59,50,.2)"   : p === "medium" ? "rgba(164,97,24,.2)"  : "var(--b1)";
 
   const TABS = [
     { id:"overview",   label:"Overview",        icon:BarChart2  },
@@ -369,33 +369,33 @@ export default function ResumeDetailPage() {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap');
         *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
         :root{
-          --bg:#0A0A0F;--s1:#111118;--s2:#16161F;--s3:#1C1C28;
-          --b1:rgba(255,255,255,.06);--b2:rgba(255,255,255,.11);
-          --text:#F0F0F5;--muted:#6B6B80;--m2:#9090A8;
-          --accent:#6366F1;--a2:#8B5CF6;
-          --green:#22C55E;--amber:#F59E0B;--red:#EF4444;
+          --bg:#F6F1E8;--s1:#FFFBF2;--s2:#F1E8DA;--s3:#E7D9C6;
+          --b1:rgba(45,40,32,0.10);--b2:rgba(45,40,32,0.18);
+          --text:#17201C;--muted:#81786B;--m2:#5F675F;
+          --accent:#0F766E;--a2:#B86B4B;
+          --green:#16704F;--amber:#A46118;--red:#A33B32;
         }
-        html,body{min-height:100%;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;-webkit-font-smoothing:antialiased}
+        html,body{min-height:100%;background:var(--bg);color:var(--text);font-family:'Instrument Sans',sans-serif;-webkit-font-smoothing:antialiased}
         a{text-decoration:none;color:inherit}
-        button{font-family:'DM Sans',sans-serif}
+        button{font-family:'Instrument Sans',sans-serif}
         ::-webkit-scrollbar{width:4px}
-        ::-webkit-scrollbar-thumb{background:rgba(255,255,255,.09);border-radius:2px}
+        ::-webkit-scrollbar-thumb{background:rgba(45,40,32,.18);border-radius:2px}
 
         /* TOPBAR */
-        .topbar{position:sticky;top:0;z-index:100;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;background:rgba(10,10,15,.92);backdrop-filter:blur(18px);border-bottom:1px solid var(--b1)}
+        .topbar{position:sticky;top:0;z-index:100;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;background:rgba(255,251,242,.90);backdrop-filter:blur(18px);border-bottom:1px solid var(--b1)}
         .tb-l{display:flex;align-items:center;gap:12px}
         .tb-r{display:flex;align-items:center;gap:8px}
         .back-btn{display:inline-flex;align-items:center;gap:6px;font-size:.82rem;color:var(--m2);background:none;border:1px solid transparent;padding:6px 12px;border-radius:7px;cursor:pointer;transition:all .15s}
-        .back-btn:hover{color:var(--text);background:rgba(255,255,255,.05);border-color:var(--b1)}
+        .back-btn:hover{color:var(--text);background:rgba(15,118,110,.07);border-color:var(--b1)}
         .file-pill{display:flex;align-items:center;gap:7px;padding:5px 12px;background:var(--s2);border:1px solid var(--b1);border-radius:7px;font-size:.78rem;color:var(--m2)}
         .file-pill strong{color:var(--text);font-weight:500}
         .ic-btn{width:34px;height:34px;border-radius:8px;border:1px solid var(--b1);background:none;display:flex;align-items:center;justify-content:center;color:var(--m2);cursor:pointer;transition:all .15s}
-        .ic-btn:hover{background:rgba(255,255,255,.06);border-color:var(--b2);color:var(--text)}
-        .dl-btn{display:inline-flex;align-items:center;gap:7px;background:linear-gradient(135deg,var(--accent),var(--a2));color:#fff;border:none;border-radius:8px;padding:8px 18px;font-size:.82rem;font-weight:500;cursor:pointer;box-shadow:0 0 0 1px rgba(99,102,241,.3);transition:all .2s}
-        .dl-btn:hover{box-shadow:0 4px 18px rgba(99,102,241,.45);transform:translateY(-1px)}
+        .ic-btn:hover{background:rgba(15,118,110,.07);border-color:var(--b2);color:var(--text)}
+        .dl-btn{display:inline-flex;align-items:center;gap:7px;background:linear-gradient(135deg,var(--accent),var(--a2));color:#fff;border:none;border-radius:8px;padding:8px 18px;font-size:.82rem;font-weight:500;cursor:pointer;box-shadow:0 8px 20px rgba(15,118,110,.18);transition:all .2s}
+        .dl-btn:hover{box-shadow:0 12px 28px rgba(15,118,110,.22);transform:translateY(-1px)}
 
         /* TABS */
         .tabs{display:flex;align-items:center;gap:1px;padding:0 28px;background:var(--s1);border-bottom:1px solid var(--b1);overflow-x:auto}
@@ -404,7 +404,7 @@ export default function ResumeDetailPage() {
         .tab:hover{color:var(--text)}
         .tab.on{color:var(--text);font-weight:500}
         .tab.on::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:2px;background:var(--accent);border-radius:2px 2px 0 0}
-        .tab-pro{display:inline-flex;align-items:center;gap:3px;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.2);color:var(--amber);font-size:.55rem;font-weight:700;padding:1px 5px;border-radius:3px;margin-left:4px;letter-spacing:.05em;text-transform:uppercase}
+        .tab-pro{display:inline-flex;align-items:center;gap:3px;background:rgba(164,97,24,.1);border:1px solid rgba(164,97,24,.2);color:var(--amber);font-size:.55rem;font-weight:700;padding:1px 5px;border-radius:3px;margin-left:4px;letter-spacing:.05em;text-transform:uppercase}
 
         /* PAGE */
         .page{padding:28px;max-width:1160px;margin:0 auto}
@@ -413,7 +413,7 @@ export default function ResumeDetailPage() {
         .card{background:var(--s1);border:1px solid var(--b1);border-radius:12px;overflow:hidden;transition:border-color .2s;margin-bottom:16px}
         .card:hover{border-color:var(--b2)}
         .ch{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--b1)}
-        .ct{font-family:'Bricolage Grotesque',sans-serif;font-size:.88rem;font-weight:600;letter-spacing:-.01em;display:flex;align-items:center;gap:7px}
+        .ct{font-family:'Instrument Sans',sans-serif;font-size:.88rem;font-weight:600;letter-spacing:-.01em;display:flex;align-items:center;gap:7px}
         .cb{padding:20px}
 
         /* GRIDS */
@@ -423,19 +423,19 @@ export default function ResumeDetailPage() {
         .g13{display:grid;grid-template-columns:1fr 2fr;gap:16px;margin-bottom:16px}
 
         /* SCORE CARD */
-        .score-card{background:linear-gradient(145deg,var(--s1),rgba(99,102,241,.06));border:1px solid rgba(99,102,241,.2);border-radius:12px;padding:26px 20px;display:flex;flex-direction:column;align-items:center;gap:14px;position:relative;overflow:hidden}
-        .score-card::before{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(99,102,241,.12),transparent 70%);pointer-events:none}
+        .score-card{background:linear-gradient(145deg,var(--s1),rgba(15,118,110,.06));border:1px solid rgba(15,118,110,.2);border-radius:12px;padding:26px 20px;display:flex;flex-direction:column;align-items:center;gap:14px;position:relative;overflow:hidden}
+        .score-card::before{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(15,118,110,.10),transparent 70%);pointer-events:none}
         .score-label{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:100px;font-size:.72rem;font-weight:600;border:1px solid}
         .score-divider{width:100%;height:1px;background:var(--b1)}
         .score-stats{display:flex;gap:0;width:100%}
         .ss-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:0 6px}
         .ss-item+.ss-item{border-left:1px solid var(--b1)}
-        .ss-val{font-family:'Bricolage Grotesque',sans-serif;font-size:1.15rem;font-weight:700;line-height:1}
+        .ss-val{font-family:'Source Serif 4',serif;font-size:1.15rem;font-weight:700;line-height:1}
         .ss-lbl{font-size:.58rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
 
         /* AI SUMMARY */
         .summary-card{background:var(--s1);border:1px solid var(--b1);border-radius:12px;padding:22px;display:flex;flex-direction:column;gap:14px}
-        .ai-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:100px;background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.2);font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent)}
+        .ai-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:100px;background:rgba(15,118,110,.1);border:1px solid rgba(15,118,110,.2);font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent)}
         .ai-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent);animation:blink 2s infinite}
         @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
 
@@ -444,22 +444,22 @@ export default function ResumeDetailPage() {
         .qi{display:flex;align-items:center;gap:10px;padding:10px 16px;background:var(--s1);border:1px solid var(--b1);border-radius:9px;flex:1;min-width:110px;transition:border-color .15s}
         .qi:hover{border-color:var(--b2)}
         .qi-ico{width:32px;height:32px;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px}
-        .qi-val{font-family:'Bricolage Grotesque',sans-serif;font-size:1rem;font-weight:700;line-height:1}
+        .qi-val{font-family:'Source Serif 4',serif;font-size:1rem;font-weight:700;line-height:1}
         .qi-lbl{font-size:.64rem;color:var(--muted);margin-top:2px;text-transform:uppercase;letter-spacing:.05em}
 
         /* BREAKDOWN */
         .br-row{display:flex;align-items:center;gap:10px;margin-bottom:11px}
         .br-row:last-child{margin-bottom:0}
         .br-lbl{font-size:.78rem;color:var(--m2);min-width:82px;font-weight:400}
-        .br-num{font-family:'Bricolage Grotesque',sans-serif;font-size:.82rem;font-weight:600;min-width:24px;text-align:right}
+        .br-num{font-family:'Instrument Sans',sans-serif;font-size:.82rem;font-weight:600;min-width:24px;text-align:right}
 
         /* SKILL TAGS */
         .stag{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;font-size:.78rem;font-weight:500;border:1px solid;cursor:default;transition:all .15s}
         .stag:hover{transform:translateY(-1px)}
-        .stag-g{background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.2);color:#4ADE80}
-        .stag-r{background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.2);color:#F87171}
-        .stag-a{background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.2);color:#FCD34D}
-        .stag-b{background:rgba(99,102,241,.08);border-color:rgba(99,102,241,.22);color:#818CF8}
+        .stag-g{background:rgba(22,112,79,.08);border-color:rgba(22,112,79,.2);color:var(--green)}
+        .stag-r{background:rgba(163,59,50,.08);border-color:rgba(163,59,50,.2);color:var(--red)}
+        .stag-a{background:rgba(164,97,24,.08);border-color:rgba(164,97,24,.2);color:var(--amber)}
+        .stag-b{background:rgba(15,118,110,.08);border-color:rgba(15,118,110,.22);color:var(--accent)}
         .tags-wrap{display:flex;flex-wrap:wrap;gap:8px}
 
         /* S/W ITEMS */
@@ -474,7 +474,7 @@ export default function ResumeDetailPage() {
         .kw-table th{font-size:.62rem;font-weight:500;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);padding:0 10px 12px;border-bottom:1px solid var(--b1);text-align:left}
         .kw-table td{padding:10px 10px;border-bottom:1px solid var(--b1);font-size:.84rem;vertical-align:middle}
         .kw-table tr:last-child td{border-bottom:none}
-        .kw-table tbody tr:hover td{background:rgba(255,255,255,.02)}
+        .kw-table tbody tr:hover td{background:rgba(15,118,110,.04)}
         .kp{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:6px;font-size:.72rem;font-weight:500}
 
         /* SUGGESTION CARDS */
@@ -482,49 +482,49 @@ export default function ResumeDetailPage() {
         .sug:last-child{margin-bottom:0}
         .sug:hover{transform:translateX(3px)}
         .sug-prio{display:inline-flex;align-items:center;gap:4px;font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;padding:2px 8px;border-radius:100px;border:1px solid;margin-bottom:9px}
-        .sug-title{font-family:'Bricolage Grotesque',sans-serif;font-size:.88rem;font-weight:600;margin-bottom:5px}
+        .sug-title{font-family:'Instrument Sans',sans-serif;font-size:.88rem;font-weight:600;margin-bottom:5px}
         .sug-body{font-size:.8rem;color:var(--m2);line-height:1.7;font-weight:300}
-        .sug-tag{display:inline-flex;margin-top:10px;background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.2);color:var(--accent);font-size:.62rem;font-weight:600;padding:2px 8px;border-radius:100px}
+        .sug-tag{display:inline-flex;margin-top:10px;background:rgba(15,118,110,.1);border:1px solid rgba(15,118,110,.2);color:var(--accent);font-size:.62rem;font-weight:600;padding:2px 8px;border-radius:100px}
 
         /* TAGS */
         .tag{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:100px;font-size:.66rem;font-weight:500;border:1px solid}
-        .tg{background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.2);color:#4ADE80}
-        .ta{background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.2);color:#FCD34D}
-        .tb{background:rgba(99,102,241,.1);border-color:rgba(99,102,241,.25);color:#818CF8}
-        .tr2{background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.2);color:#F87171}
+        .tg{background:rgba(22,112,79,.1);border-color:rgba(22,112,79,.2);color:var(--green)}
+        .ta{background:rgba(164,97,24,.1);border-color:rgba(164,97,24,.2);color:var(--amber)}
+        .tb{background:rgba(15,118,110,.1);border-color:rgba(15,118,110,.25);color:var(--accent)}
+        .tr2{background:rgba(163,59,50,.1);border-color:rgba(163,59,50,.2);color:var(--red)}
 
         /* INPUTS */
-        .inp{background:var(--s2);border:1px solid var(--b1);border-radius:8px;padding:10px 14px;font-size:.875rem;color:var(--text);outline:none;transition:border-color .2s,box-shadow .2s;width:100%;font-family:'DM Sans',sans-serif}
+        .inp{background:var(--s2);border:1px solid var(--b1);border-radius:8px;padding:10px 14px;font-size:.875rem;color:var(--text);outline:none;transition:border-color .2s,box-shadow .2s;width:100%;font-family:'Instrument Sans',sans-serif}
         .inp::placeholder{color:var(--muted)}
-        .inp:focus{border-color:rgba(99,102,241,.4);box-shadow:0 0 0 3px rgba(99,102,241,.09)}
+        .inp:focus{border-color:rgba(15,118,110,.38);box-shadow:0 0 0 3px rgba(15,118,110,.10)}
         textarea.inp{resize:vertical;min-height:140px;line-height:1.65}
 
         /* BUTTONS */
-        .btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border-radius:8px;font-size:.855rem;font-weight:500;cursor:pointer;transition:all .15s;border:none;font-family:'DM Sans',sans-serif}
-        .btn-p{background:linear-gradient(135deg,var(--accent),var(--a2));color:#fff;box-shadow:0 0 0 1px rgba(99,102,241,.3)}
-        .btn-p:hover{box-shadow:0 4px 18px rgba(99,102,241,.4);transform:translateY(-1px)}
+        .btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border-radius:8px;font-size:.855rem;font-weight:500;cursor:pointer;transition:all .15s;border:none;font-family:'Instrument Sans',sans-serif}
+        .btn-p{background:linear-gradient(135deg,var(--accent),var(--a2));color:#fff;box-shadow:0 8px 18px rgba(15,118,110,.18)}
+        .btn-p:hover{box-shadow:0 12px 26px rgba(15,118,110,.22);transform:translateY(-1px)}
         .btn-g{background:var(--s3);color:var(--m2);border:1px solid var(--b1)}
-        .btn-g:hover{background:rgba(255,255,255,.08);color:var(--text);border-color:var(--b2)}
+        .btn-g:hover{background:rgba(255,251,242,.75);color:var(--text);border-color:var(--b2)}
         .btn:disabled{opacity:.45;cursor:not-allowed;transform:none!important;box-shadow:none!important}
 
         /* SELECT PILL */
         .sel-g{display:inline-flex;background:var(--s2);border:1px solid var(--b1);border-radius:7px;padding:2px}
         .sel-o{padding:5px 13px;border-radius:5px;font-size:.78rem;font-weight:500;cursor:pointer;transition:all .15s;border:none;background:none;color:var(--m2)}
-        .sel-o.on{background:var(--s3);color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,.3)}
+        .sel-o.on{background:var(--s1);color:var(--text);box-shadow:0 1px 4px rgba(45,40,32,.12)}
 
         /* REWRITE PROGRESS */
         .rw-step{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:8px;background:var(--s2);border:1px solid var(--b1);margin-bottom:8px;font-size:.82rem}
-        .rw-step.done{border-color:rgba(99,102,241,.22);background:rgba(99,102,241,.07)}
+        .rw-step.done{border-color:rgba(15,118,110,.22);background:rgba(15,118,110,.07)}
         .rw-step.done .rw-ico{color:var(--accent)}
 
         /* PRO LOCK */
-        .pro-gate{background:linear-gradient(135deg,rgba(245,158,11,.07),rgba(245,158,11,.03));border:1px solid rgba(245,158,11,.2);border-radius:12px;padding:28px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:12px}
+        .pro-gate{background:linear-gradient(135deg,rgba(164,97,24,.08),rgba(184,107,75,.04));border:1px solid rgba(164,97,24,.2);border-radius:12px;padding:28px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:12px}
 
         /* SCORE HISTORY */
         .hist-tooltip{background:var(--s2);border:1px solid var(--b2);border-radius:8px;padding:8px 12px;font-size:.78rem;color:var(--text)}
 
         /* INFO BOX */
-        .ibox{display:flex;align-items:flex-start;gap:9px;padding:11px 13px;background:rgba(99,102,241,.07);border:1px solid rgba(99,102,241,.18);border-radius:8px;margin-bottom:14px}
+        .ibox{display:flex;align-items:flex-start;gap:9px;padding:11px 13px;background:rgba(15,118,110,.07);border:1px solid rgba(15,118,110,.18);border-radius:8px;margin-bottom:14px}
         .ibox p{font-size:.78rem;color:var(--m2);line-height:1.6}
 
         /* JOB MATCH SCORE RING AREA */
@@ -576,10 +576,10 @@ export default function ResumeDetailPage() {
           {/* quick stats */}
           <div className="qs">
             {[
-              { icon:"📄", val:"1 page",         lbl:"Length",          bg:"rgba(99,102,241,.1)"  },
-              { icon:"📝", val:"487 words",       lbl:"Word Count",      bg:"rgba(139,92,246,.1)"  },
-              { icon:"👁️", val:"91% readable",   lbl:"Readability",     bg:"rgba(34,197,94,.08)"  },
-              { icon:"⏱️", val:"~6 sec",          lbl:"Recruiter Scan",  bg:"rgba(245,158,11,.08)" },
+              { icon:"📄", val:"1 page",         lbl:"Length",          bg:"rgba(15,118,110,.1)"  },
+              { icon:"📝", val:"487 words",       lbl:"Word Count",      bg:"rgba(184,107,75,.1)"  },
+              { icon:"👁️", val:"91% readable",   lbl:"Readability",     bg:"rgba(22,112,79,.08)"  },
+              { icon:"⏱️", val:"~6 sec",          lbl:"Recruiter Scan",  bg:"rgba(164,97,24,.08)" },
               { icon:"🎯", val:`${a.skillsMatched.length}/${a.skillsMatched.length+a.skillsMissing.length}`, lbl:"Skills Matched", bg:"rgba(59,130,246,.08)" },
               { icon:"📅", val:uploadDate,        lbl:"Uploaded",        bg:"rgba(20,184,166,.08)" },
             ].map((s,i) => (
@@ -600,8 +600,8 @@ export default function ResumeDetailPage() {
               </div>
               <ScoreRing score={atsScore} size={148}/>
               <div className="score-label" style={{
-                background: atsScore>=80 ? "rgba(34,197,94,.12)" : atsScore>=60 ? "rgba(245,158,11,.12)" : "rgba(239,68,68,.12)",
-                borderColor: atsScore>=80 ? "rgba(34,197,94,.25)" : atsScore>=60 ? "rgba(245,158,11,.25)" : "rgba(239,68,68,.25)",
+                background: atsScore>=80 ? "rgba(22,112,79,.12)" : atsScore>=60 ? "rgba(164,97,24,.12)" : "rgba(163,59,50,.12)",
+                borderColor: atsScore>=80 ? "rgba(22,112,79,.25)" : atsScore>=60 ? "rgba(164,97,24,.25)" : "rgba(163,59,50,.25)",
                 color: scoreColor,
               }}>
                 {atsScore>=80 ? <CheckCircle2 size={11}/> : <AlertCircle size={11}/>}
@@ -626,7 +626,7 @@ export default function ResumeDetailPage() {
                 <div style={{height:60}}>
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={SCORE_HISTORY}>
-                      <Line type="monotone" dataKey="score" stroke="#6366F1" strokeWidth={2} dot={{fill:"#6366F1",r:3,strokeWidth:0}} activeDot={{r:4}}/>
+                      <Line type="monotone" dataKey="score" stroke="#0F766E" strokeWidth={2} dot={{fill:"#0F766E",r:3,strokeWidth:0}} activeDot={{r:4}}/>
                       <XAxis dataKey="name" tick={{fontSize:8,fill:"var(--muted)"}} axisLine={false} tickLine={false}/>
                       <Tooltip contentStyle={{background:"var(--s2)",border:"1px solid var(--b2)",borderRadius:7,fontSize:11,color:"var(--text)"}} formatter={(v:number)=>[`${v}/100`,"Score"]}/>
                     </LineChart>
@@ -642,7 +642,7 @@ export default function ResumeDetailPage() {
             <div className="summary-card">
               <div>
                 <div className="ai-badge"><div className="ai-dot"/>AI Analysis</div>
-                <div style={{fontFamily:"'Bricolage Grotesque',sans-serif",fontSize:"1.1rem",fontWeight:700,letterSpacing:"-.01em",marginTop:8}}>
+                <div style={{fontFamily:"'Source Serif 4',serif",fontSize:"1.1rem",fontWeight:700,letterSpacing:"-.01em",marginTop:8}}>
                   Resume Report — Senior Frontend Engineer
                 </div>
               </div>
@@ -652,7 +652,7 @@ export default function ResumeDetailPage() {
 
               {/* score breakdown */}
               <div style={{borderTop:"1px solid var(--b1)",paddingTop:14}}>
-                <div style={{fontFamily:"'Bricolage Grotesque',sans-serif",fontSize:".72rem",fontWeight:700,marginBottom:12,color:"var(--m2)",textTransform:"uppercase",letterSpacing:".08em"}}>
+                <div style={{fontFamily:"'Instrument Sans',sans-serif",fontSize:".72rem",fontWeight:700,marginBottom:12,color:"var(--m2)",textTransform:"uppercase",letterSpacing:".08em"}}>
                   Score Breakdown
                 </div>
                 {SCORE_BREAKDOWN.map((s,i) => (
@@ -708,10 +708,10 @@ export default function ResumeDetailPage() {
                 <div style={{height:230}}>
                   <ResponsiveContainer width="100%" height="100%">
                     <RadarChart data={RADAR_DATA}>
-                      <PolarGrid stroke="rgba(255,255,255,.06)"/>
+                      <PolarGrid stroke="rgba(45,40,32,.10)"/>
                       <PolarAngleAxis dataKey="skill" tick={{fill:"var(--m2)",fontSize:10}}/>
                       <PolarRadiusAxis domain={[0,100]} tick={false} axisLine={false}/>
-                      <Radar dataKey="A" stroke="#6366F1" fill="#6366F1" fillOpacity={0.16} strokeWidth={2} dot={{fill:"#6366F1",r:3,strokeWidth:0}}/>
+                      <Radar dataKey="A" stroke="#0F766E" fill="#0F766E" fillOpacity={0.16} strokeWidth={2} dot={{fill:"#0F766E",r:3,strokeWidth:0}}/>
                     </RadarChart>
                   </ResponsiveContainer>
                 </div>
@@ -749,7 +749,7 @@ export default function ResumeDetailPage() {
       {tab==="keywords" && (
         <div className="page">
           <div style={{marginBottom:22}}>
-            <div style={{fontFamily:"'Bricolage Grotesque',sans-serif",fontSize:"1.2rem",fontWeight:700,letterSpacing:"-.02em",marginBottom:4}}>Keyword Analysis</div>
+            <div style={{fontFamily:"'Source Serif 4',serif",fontSize:"1.2rem",fontWeight:700,letterSpacing:"-.02em",marginBottom:4}}>Keyword Analysis</div>
             <p style={{fontSize:".875rem",color:"var(--m2)",fontWeight:300}}>See exactly which job keywords appear in your resume — and which are missing.</p>
           </div>
 
@@ -761,12 +761,12 @@ export default function ResumeDetailPage() {
                 <div style={{height:210}}>
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={CATEGORY_BAR} barSize={20}>
-                      <CartesianGrid stroke="rgba(255,255,255,.04)" strokeDasharray="4 4" vertical={false}/>
+                      <CartesianGrid stroke="rgba(45,40,32,.08)" strokeDasharray="4 4" vertical={false}/>
                       <XAxis dataKey="cat" stroke="var(--muted)" tick={{fontSize:11,fill:"var(--m2)"}} axisLine={false} tickLine={false}/>
                       <YAxis domain={[0,100]} stroke="var(--muted)" tick={{fontSize:10,fill:"var(--muted)"}} axisLine={false} tickLine={false}/>
                       <Tooltip contentStyle={{background:"var(--s2)",border:"1px solid var(--b2)",borderRadius:8,fontSize:12,color:"var(--text)"}} formatter={(v:number)=>[`${v}%`,"Match"]}/>
                       <Bar dataKey="match" radius={[4,4,0,0]}>
-                        {CATEGORY_BAR.map((v,i) => <Cell key={i} fill={v.match>=75?"#6366F1":v.match>=55?"#8B5CF6":"#4B4E72"}/>)}
+                        {CATEGORY_BAR.map((v,i) => <Cell key={i} fill={v.match>=75?"#0F766E":v.match>=55?"#B86B4B":"#81786B"}/>)}
                       </Bar>
                     </BarChart>
                   </ResponsiveContainer>
@@ -785,7 +785,7 @@ export default function ResumeDetailPage() {
                     {l:"Extra",   count:KEYWORD_GAP.filter(k=>k.resume&&!k.job).length,color:"var(--amber)"},
                   ].map(r => (
                     <div key={r.l} style={{flex:1,minWidth:70,padding:"12px 10px",background:"var(--s2)",border:"1px solid var(--b1)",borderRadius:9,textAlign:"center"}}>
-                      <div style={{fontFamily:"'Bricolage Grotesque',sans-serif",fontSize:"1.4rem",fontWeight:700,color:r.color}}>{r.count}</div>
+                      <div style={{fontFamily:"'Source Serif 4',serif",fontSize:"1.4rem",fontWeight:700,color:r.color}}>{r.count}</div>
                       <div style={{fontSize:".62rem",color:"var(--muted)",marginTop:2,textTransform:"uppercase",letterSpacing:".06em"}}>{r.l}</div>
                     </div>
                   ))}
@@ -836,9 +836,9 @@ export default function ResumeDetailPage() {
                         </td>
                         <td style={{paddingRight:20}}>
                           <span className="kp" style={{
-                            background:status==="Matched"?"rgba(34,197,94,.1)":status==="Missing"?"rgba(239,68,68,.1)":status==="Extra"?"rgba(245,158,11,.1)":"rgba(99,102,241,.1)",
-                            border:`1px solid ${status==="Matched"?"rgba(34,197,94,.2)":status==="Missing"?"rgba(239,68,68,.2)":status==="Extra"?"rgba(245,158,11,.2)":"rgba(99,102,241,.2)"}`,
-                            color:status==="Matched"?"#4ADE80":status==="Missing"?"#F87171":status==="Extra"?"#FCD34D":"#818CF8",
+                            background:status==="Matched"?"rgba(22,112,79,.1)":status==="Missing"?"rgba(163,59,50,.1)":status==="Extra"?"rgba(164,97,24,.1)":"rgba(15,118,110,.1)",
+                            border:`1px solid ${status==="Matched"?"rgba(22,112,79,.2)":status==="Missing"?"rgba(163,59,50,.2)":status==="Extra"?"rgba(164,97,24,.2)":"rgba(15,118,110,.2)"}`,
+                            color:status==="Matched"?"var(--green)":status==="Missing"?"var(--red)":status==="Extra"?"var(--amber)":"var(--accent)",
                           }}>{status}</span>
                         </td>
                       </tr>
@@ -855,21 +855,21 @@ export default function ResumeDetailPage() {
       {tab==="suggestions" && (
         <div className="page">
           <div style={{marginBottom:22}}>
-            <div style={{fontFamily:"'Bricolage Grotesque',sans-serif",fontSize:"1.2rem",fontWeight:700,letterSpacing:"-.02em",marginBottom:4}}>AI Recommendations</div>
+            <div style={{fontFamily:"'Source Serif 4',serif",fontSize:"1.2rem",fontWeight:700,letterSpacing:"-.02em",marginBottom:4}}>AI Recommendations</div>
             <p style={{fontSize:".875rem",color:"var(--m2)",fontWeight:300}}>Prioritised action items to improve your ATS score.</p>
           </div>
 
           {/* priority counts */}
           <div className="g3">
             {[
-              {p:"high",   l:"High Priority",   count:SUGGESTIONS_DATA.filter(s=>s.priority==="high").length,   color:"var(--red)",   bg:"rgba(239,68,68,.08)",  border:"rgba(239,68,68,.2)"},
-              {p:"medium", l:"Medium Priority",  count:SUGGESTIONS_DATA.filter(s=>s.priority==="medium").length, color:"var(--amber)", bg:"rgba(245,158,11,.08)", border:"rgba(245,158,11,.2)"},
-              {p:"low",    l:"Low Priority",     count:SUGGESTIONS_DATA.filter(s=>s.priority==="low").length,    color:"var(--m2)",    bg:"rgba(255,255,255,.04)", border:"var(--b1)"},
+              {p:"high",   l:"High Priority",   count:SUGGESTIONS_DATA.filter(s=>s.priority==="high").length,   color:"var(--red)",   bg:"rgba(163,59,50,.08)",  border:"rgba(163,59,50,.2)"},
+              {p:"medium", l:"Medium Priority",  count:SUGGESTIONS_DATA.filter(s=>s.priority==="medium").length, color:"var(--amber)", bg:"rgba(164,97,24,.08)", border:"rgba(164,97,24,.2)"},
+              {p:"low",    l:"Low Priority",     count:SUGGESTIONS_DATA.filter(s=>s.priority==="low").length,    color:"var(--m2)",    bg:"rgba(45,40,32,.04)", border:"var(--b1)"},
             ].map(r => (
               <div key={r.p} style={{display:"flex",alignItems:"center",gap:10,padding:"14px 18px",background:r.bg,border:`1px solid ${r.border}`,borderRadius:10}}>
                 <div style={{width:9,height:9,borderRadius:"50%",background:r.color,flexShrink:0,boxShadow:`0 0 8px ${r.color}`}}/>
                 <div>
-                  <div style={{fontFamily:"'Bricolage Grotesque',sans-serif",fontSize:"1.3rem",fontWeight:700,color:r.color,lineHeight:1}}>{r.count}</div>
+                  <div style={{fontFamily:"'Source Serif 4',serif",fontSize:"1.3rem",fontWeight:700,color:r.color,lineHeight:1}}>{r.count}</div>
                   <div style={{fontSize:".62rem",color:"var(--muted)",textTransform:"uppercase",letterSpacing:".06em",marginTop:3}}>{r.l}</div>
                 </div>
               </div>
@@ -901,7 +901,7 @@ export default function ResumeDetailPage() {
                       </div>
                     </div>
                     <div style={{display:"flex",alignItems:"center",gap:10,flexShrink:0}}>
-                      <div style={{width:26,height:26,borderRadius:"50%",background:pBg(s.priority),border:`1px solid ${pBorder(s.priority)}`,display:"flex",alignItems:"center",justifyContent:"center",fontFamily:"'Bricolage Grotesque',sans-serif",fontWeight:700,fontSize:".75rem",color:pColor(s.priority)}}>{i+1}</div>
+                      <div style={{width:26,height:26,borderRadius:"50%",background:pBg(s.priority),border:`1px solid ${pBorder(s.priority)}`,display:"flex",alignItems:"center",justifyContent:"center",fontFamily:"'Instrument Sans',sans-serif",fontWeight:700,fontSize:".75rem",color:pColor(s.priority)}}>{i+1}</div>
                       {expanded===i ? <ChevronUp size={14} style={{color:"var(--m2)"}}/> : <ChevronDown size={14} style={{color:"var(--m2)"}}/>}
                     </div>
                   </div>
@@ -911,9 +911,9 @@ export default function ResumeDetailPage() {
           </div>
 
           {/* re-upload CTA */}
-          <div style={{background:"linear-gradient(135deg,rgba(99,102,241,.1),rgba(139,92,246,.07))",border:"1px solid rgba(99,102,241,.2)",borderRadius:12,padding:"24px 28px",display:"flex",alignItems:"center",justifyContent:"space-between",gap:20,flexWrap:"wrap"}}>
+          <div style={{background:"linear-gradient(135deg,rgba(15,118,110,.10),rgba(184,107,75,.08))",border:"1px solid rgba(15,118,110,.2)",borderRadius:12,padding:"24px 28px",display:"flex",alignItems:"center",justifyContent:"space-between",gap:20,flexWrap:"wrap"}}>
             <div>
-              <div style={{fontFamily:"'Bricolage Grotesque',sans-serif",fontSize:"1rem",fontWeight:700,marginBottom:4}}>Applied these suggestions?</div>
+              <div style={{fontFamily:"'Source Serif 4',serif",fontSize:"1rem",fontWeight:700,marginBottom:4}}>Applied these suggestions?</div>
               <p style={{fontSize:".875rem",color:"var(--m2)",fontWeight:300}}>Re-upload your updated resume and watch your score climb.</p>
             </div>
             <Link href="/dashboard">
@@ -927,7 +927,7 @@ export default function ResumeDetailPage() {
       {tab==="jobmatch" && (
         <div className="page">
           <div style={{marginBottom:22}}>
-            <div style={{fontFamily:"'Bricolage Grotesque',sans-serif",fontSize:"1.2rem",fontWeight:700,letterSpacing:"-.02em",marginBottom:4}}>Job Description Matching</div>
+            <div style={{fontFamily:"'Source Serif 4',serif",fontSize:"1.2rem",fontWeight:700,letterSpacing:"-.02em",marginBottom:4}}>Job Description Matching</div>
             <p style={{fontSize:".875rem",color:"var(--m2)",fontWeight:300}}>Paste any job description and our AI will score how well your resume matches it.</p>
           </div>
 
@@ -987,10 +987,10 @@ export default function ResumeDetailPage() {
                 </div>
               ) : (
                 <div style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",height:"100%",minHeight:280,background:"var(--s1)",border:"1px solid var(--b1)",borderRadius:12,gap:12,padding:28,textAlign:"center"}}>
-                  <div style={{width:52,height:52,borderRadius:12,background:"rgba(99,102,241,.1)",border:"1px solid rgba(99,102,241,.2)",display:"flex",alignItems:"center",justifyContent:"center"}}>
+                  <div style={{width:52,height:52,borderRadius:12,background:"rgba(15,118,110,.1)",border:"1px solid rgba(15,118,110,.2)",display:"flex",alignItems:"center",justifyContent:"center"}}>
                     <TrendingUp size={22} style={{color:"var(--accent)"}}/>
                   </div>
-                  <div style={{fontFamily:"'Bricolage Grotesque',sans-serif",fontWeight:600,fontSize:".95rem"}}>Results will appear here</div>
+                  <div style={{fontFamily:"'Instrument Sans',sans-serif",fontWeight:600,fontSize:".95rem"}}>Results will appear here</div>
                   <p style={{fontSize:".8rem",color:"var(--m2)",fontWeight:300,maxWidth:220,lineHeight:1.65}}>Paste a job description on the left and click Match Job to see your personalised score.</p>
                 </div>
               )}
@@ -1003,9 +1003,9 @@ export default function ResumeDetailPage() {
       {tab==="rewrite" && (
         <div className="page">
           <div style={{marginBottom:22}}>
-            <div style={{fontFamily:"'Bricolage Grotesque',sans-serif",fontSize:"1.2rem",fontWeight:700,letterSpacing:"-.02em",marginBottom:4,display:"flex",alignItems:"center",gap:10}}>
+            <div style={{fontFamily:"'Source Serif 4',serif",fontSize:"1.2rem",fontWeight:700,letterSpacing:"-.02em",marginBottom:4,display:"flex",alignItems:"center",gap:10}}>
               AI Resume Rewrite
-              <span style={{display:"inline-flex",alignItems:"center",gap:4,background:"rgba(245,158,11,.12)",border:"1px solid rgba(245,158,11,.22)",color:"var(--amber)",fontSize:".62rem",fontWeight:700,padding:"3px 9px",borderRadius:100,letterSpacing:".08em",textTransform:"uppercase"}}>
+              <span style={{display:"inline-flex",alignItems:"center",gap:4,background:"rgba(164,97,24,.12)",border:"1px solid rgba(164,97,24,.22)",color:"var(--amber)",fontSize:".62rem",fontWeight:700,padding:"3px 9px",borderRadius:100,letterSpacing:".08em",textTransform:"uppercase"}}>
                 <Crown size={9}/>Pro Feature
               </span>
             </div>
@@ -1072,7 +1072,7 @@ export default function ResumeDetailPage() {
                       );
                     })}
                     {!rewriting && rwProgress === 100 && (
-                      <div style={{marginTop:10,height:5,background:"rgba(255,255,255,.07)",borderRadius:3,overflow:"hidden"}}>
+                      <div style={{marginTop:10,height:5,background:"rgba(45,40,32,.08)",borderRadius:3,overflow:"hidden"}}>
                         <div style={{height:"100%",width:"100%",background:"linear-gradient(90deg,var(--accent),var(--a2))",borderRadius:3}}/>
                       </div>
                     )}
@@ -1093,17 +1093,17 @@ export default function ResumeDetailPage() {
                     </div>
                   </div>
                   <div className="cb">
-                    <pre style={{whiteSpace:"pre-wrap",fontFamily:"'DM Sans',sans-serif",fontSize:".82rem",lineHeight:1.75,color:"var(--m2)",background:"var(--s2)",border:"1px solid var(--b1)",borderRadius:9,padding:16,maxHeight:500,overflowY:"auto"}}>
+                    <pre style={{whiteSpace:"pre-wrap",fontFamily:"'Instrument Sans',sans-serif",fontSize:".82rem",lineHeight:1.75,color:"var(--m2)",background:"var(--s2)",border:"1px solid var(--b1)",borderRadius:9,padding:16,maxHeight:500,overflowY:"auto"}}>
                       {rewritten}
                     </pre>
                   </div>
                 </div>
               ) : (
                 <div style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",height:"100%",minHeight:360,background:"var(--s1)",border:"1px dashed var(--b2)",borderRadius:12,gap:14,padding:28,textAlign:"center"}}>
-                  <div style={{width:52,height:52,borderRadius:12,background:"rgba(139,92,246,.1)",border:"1px solid rgba(139,92,246,.2)",display:"flex",alignItems:"center",justifyContent:"center"}}>
+                  <div style={{width:52,height:52,borderRadius:12,background:"rgba(184,107,75,.1)",border:"1px solid rgba(184,107,75,.2)",display:"flex",alignItems:"center",justifyContent:"center"}}>
                     <Wand2 size={22} style={{color:"var(--a2)"}}/>
                   </div>
-                  <div style={{fontFamily:"'Bricolage Grotesque',sans-serif",fontWeight:600,fontSize:".95rem"}}>Your rewritten resume</div>
+                  <div style={{fontFamily:"'Instrument Sans',sans-serif",fontWeight:600,fontSize:".95rem"}}>Your rewritten resume</div>
                   <p style={{fontSize:".8rem",color:"var(--m2)",fontWeight:300,maxWidth:220,lineHeight:1.7}}>Configure your settings, enter a target role, and hit Rewrite. The full resume will appear here.</p>
                 </div>
               )}
