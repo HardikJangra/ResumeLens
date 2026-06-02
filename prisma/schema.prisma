@@ -1,6 +1,5 @@
 generator client {
-  provider   = "prisma-client-js"
-  
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -11,9 +10,9 @@ datasource db {
 model User {
   id        String     @id @default(cuid())
   email     String     @unique
-  resumes   Resume[]
-  analyses  Analysis[]
   createdAt DateTime   @default(now())
+  analyses  Analysis[]
+  resumes   Resume[]
 }
 
 model Resume {
@@ -23,8 +22,7 @@ model Resume {
   fileKey  String?
   fileName String?
   analyses Analysis[]
-
-  user User @relation(fields: [userId], references: [id])
+  user     User       @relation(fields: [userId], references: [id])
 }
 
 model Analysis {
@@ -33,23 +31,21 @@ model Analysis {
   resumeId  String
   createdAt DateTime @default(now())
   result    Json
-
-  user   User   @relation(fields: [userId], references: [id])
-  resume Resume @relation(fields: [resumeId], references: [id])
+  resume    Resume   @relation(fields: [resumeId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
 }
-
 
 model UserResume {
   id         String   @id @default(cuid())
   userId     String
   fileName   String
   fileUrl    String
+  fileKey    String?
+  fileHash   String?
   text       String
   uploadedAt DateTime @default(now())
-
   atsScore   Int?
-  aiAnalysis Json?
-  jobMatch   Json?      // ✅ ADD THIS
   status     String   @default("Processing")
+  aiAnalysis Json?
+  jobMatch   Json?
 }
-
