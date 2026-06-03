@@ -9,10 +9,10 @@ import { createHash } from "crypto";
 const DAILY_ANALYSIS_LIMIT = 10;
 
 async function checkAnalysisRateLimit(userId: string) {
-  const redis = await getRedisClient();
+  const redis = getRedisClient();
   const key = `rate_limit:analysis:${userId}:${new Date().toISOString().slice(0, 10)}`;
 
-  const currentCount = await redis.get(key);
+  const currentCount = await redis.get<string>(key);
   if (currentCount && Number(currentCount) >= DAILY_ANALYSIS_LIMIT) {
     console.log("⚠️ Rate limit exceeded", { userId, key, currentCount });
     return {

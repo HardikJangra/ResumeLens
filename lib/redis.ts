@@ -1,35 +1,30 @@
-import { createClient, type RedisClientType } from "redis";
+import { Redis } from "@upstash/redis";
 
 const globalForRedis = globalThis as unknown as {
-  redisClient?: RedisClientType;
+  redisClient?: Redis;
 };
 
 function createRedisClient() {
-  if (!process.env.REDIS_URL) {
-    throw new Error("Missing REDIS_URL environment variable.");
+  const url = process.env.UPSTASH_REDIS_REST_URL;
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+
+  if (!url || !token) {
+    throw new Error(
+      "Missing UPSTASH_REDIS_REST_URL or UPSTASH_REDIS_REST_TOKEN environment variable."
+    );
   }
 
-  const redisClient = createClient({
-    url: process.env.REDIS_URL,
+  return new Redis({
+    url,
+    token,
+    automaticDeserialization: false,
   });
-
-  redisClient.on("error", (error) => {
-    console.error("Redis connection error:", error);
-  });
-
-  return redisClient;
 }
 
-export async function getRedisClient() {
+export function getRedisClient() {
   if (!globalForRedis.redisClient) {
     globalForRedis.redisClient = createRedisClient();
   }
 
-  const client = globalForRedis.redisClient;
-
-  if (!client.isOpen) {
-    await client.connect();
-  }
-
-  return client;
+  return globalForRedis.redisClient;
 }
