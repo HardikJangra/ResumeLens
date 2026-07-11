@@ -665,15 +665,8 @@ export default function Dashboard() {
           </nav>
 
           <div className="sb-footer">
-            {/* Upgrade nudge */}
-            <div style={{ background: "rgba(15,118,110,0.08)", border: "1px solid rgba(15,118,110,0.18)", borderRadius: 8, padding: "12px 14px", marginBottom: 10 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 5 }}>
-                <Award size={13} style={{ color: "var(--accent)" }} />
-                <span style={{ fontSize: ".75rem", fontWeight: 600, color: "var(--text)" }}>Workspace Pro</span>
-              </div>
-              <p style={{ fontSize: ".7rem", color: "var(--muted2)", lineHeight: 1.5, marginBottom: 8 }}>Unlock unlimited uploads, job match scoring, and deeper rewrite support.</p>
-              <button className="btn-primary" style={{ width: "100%", justifyContent: "center", padding: "8px 14px", fontSize: ".78rem" }}>View Plans</button>
-            </div>
+            
+            
 
             <div className="user-pill" onClick={() => setProfileMenuOpen(!profileMenuOpen)}>
               <div className="av">{user?.firstName?.charAt(0) ?? "U"}</div>
