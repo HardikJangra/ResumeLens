@@ -11,11 +11,18 @@ export async function GET() {
       { status: 401 }
     );
   }
-
+  try {
   const resumes = await prisma.userResume.findMany({
     where: { userId },
     orderBy: { uploadedAt: "desc" },
   });
 
   return NextResponse.json(resumes);
+} catch (error) {
+  console.error(error);
+  return NextResponse.json(
+    { error: "Failed to fetch resumes" },
+    { status: 500 }
+  );
+}
 }

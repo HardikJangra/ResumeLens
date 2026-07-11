@@ -57,22 +57,7 @@ export async function POST(req: Request) {
       );
     }
 
-    const rate = await checkAnalysisRateLimit(resume.userId);
-    if (!rate.allowed) {
-      await prisma.userResume.update({
-        where: { id: resumeId },
-        data: { status: "RateLimitExceeded" },
-      });
-
-      return NextResponse.json(
-        {
-          error: "Daily analysis limit reached",
-          limit: DAILY_ANALYSIS_LIMIT,
-          used: rate.current,
-        },
-        { status: 429 }
-      );
-    }
+    
 
     if (!resume.fileUrl) {
       return NextResponse.json(
@@ -96,14 +81,33 @@ export async function POST(req: Request) {
     const text = await extractResumeText(buffer, resume.fileName);
 
     if (cachedAnalysis) {
-      console.log("✅ Redis cache hit for resume analysis", { resumeId, fileHash });
-      analysis = cachedAnalysis as { atsScore?: number };
-    } else {
-      console.log("🚀 Redis cache miss for resume analysis", { resumeId, fileHash });
-      analysis = await analyzeResume(text);
-      await setAnalysisCache(fileHash, analysis);
-      console.log("✅ Cached resume analysis result", { resumeId, fileHash });
+    console.log("✅ Cache hit");
+    analysis = cachedAnalysis;
+} else {
+    // Only now check the limit
+    const rate = await checkAnalysisRateLimit(resume.userId);
+
+    if (!rate.allowed) {
+        await prisma.userResume.update({
+            where: { id: resumeId },
+            data: { status: "RateLimitExceeded" },
+        });
+
+        return NextResponse.json(
+            {
+                error: "Daily Gemini analysis limit reached",
+                limit: DAILY_ANALYSIS_LIMIT,
+                used: rate.current,
+            },
+            { status: 429 }
+        );
     }
+
+    console.log("🚀 Calling Gemini...");
+    analysis = await analyzeResume(text);
+
+    await setAnalysisCache(fileHash, analysis);
+}
 
     await prisma.userResume.update({
       where: { id: resumeId },

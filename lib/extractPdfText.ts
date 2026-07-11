@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
+const pdfParse = require("pdf-parse/lib/pdf-parse");
 
 export async function extractResumeText(
   buffer: Buffer,
@@ -11,8 +12,7 @@ export async function extractResumeText(
       return value || "";
     }
 
-    // 🔥 IMPORTANT: import the internal parser, not the package root
-    const pdfParse = require("pdf-parse/lib/pdf-parse");
+    
     const data: { text: string } = await pdfParse(buffer);
     return data.text || "";
   } catch (error) {

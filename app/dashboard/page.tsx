@@ -1,21 +1,51 @@
 "use client";
 
-import { useEffect, useState, useMemo, useRef } from "react";
 import React from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
-  Trash2, Eye, Download, Menu, Home, FileText, Settings, LogOut,
-  TrendingUp, ChevronRight, X, Upload, Sparkles, Target, Zap,
-  AlertCircle, CheckCircle2, Clock, ArrowUpRight, ArrowDownRight,
-  BarChart3, RefreshCw, Shield, Award, Bell, Search, Plus
+  AlertCircle,
+  Award,
+  BarChart3,
+  Bell,
+  CheckCircle2,
+  ChevronRight,
+  Clock,
+  Download,
+  Eye,
+  FileText,
+  Home,
+  LogOut,
+  Menu,
+  Plus,
+  RefreshCw,
+  Search,
+  Settings,
+  Shield,
+  Sparkles,
+  Target,
+  Trash2,
+  TrendingUp,
+  Upload,
+  X,
+  Zap,
 } from "lucide-react";
 import { useClerk, useUser } from "@clerk/nextjs";
 import { UploadDropzone } from "@uploadthing/react";
 import type { OurFileRouter } from "@/app/api/uploadthing/core";
 import Link from "next/link";
 import {
-  ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip,
-  CartesianGrid, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis,
-  Radar, BarChart, Bar, Cell, PieChart, Pie,
+  Area,
+  AreaChart,
+  CartesianGrid,
+  PolarAngleAxis,
+  PolarGrid,
+  PolarRadiusAxis,
+  Radar,
+  RadarChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
 } from "recharts";
 
 interface Resume {
@@ -77,15 +107,11 @@ const TIPS = [
   { icon: "06", title: "Lead with action", body: "Start bullets with concrete verbs: Led, Built, Grew, Reduced, Delivered, Automated." },
 ];
 
-// ─── Checklist items ─────────────────────────────────────────────────────────
-const CHECKLIST = [
-  { label: "Contact info complete", key: "contact" },
-  { label: "Professional summary included", key: "summary" },
-  { label: "Skills section present", key: "skills" },
-  { label: "Quantified achievements", key: "quant" },
-  { label: "No spelling errors detected", key: "spelling" },
-  { label: "ATS-friendly formatting", key: "format" },
-];
+const isCompleteStatus = (status: string) =>
+  ["ready", "completed"].includes(status.toLowerCase());
+
+const isProcessingStatus = (status: string) =>
+  status.toLowerCase() === "processing";
 
 export default function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -93,8 +119,6 @@ export default function Dashboard() {
   const [resumes, setResumes] = useState<Resume[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<"overview" | "resumes" | "tips">("overview");
-  const [tipIdx, setTipIdx] = useState(0);
-  const [checklist, setChecklist] = useState<Record<string, boolean>>({});
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState<"date" | "score">("date");
   const [refreshing, setRefreshing] = useState(false);
@@ -122,31 +146,28 @@ export default function Dashboard() {
     return () => clearInterval(iv);
   }, []);
 
-  // Rotate tips every 6s
-  useEffect(() => {
-    const iv = setInterval(() => setTipIdx(i => (i + 1) % TIPS.length), 6000);
-    return () => clearInterval(iv);
-  }, []);
-
   async function deleteResume(id: string) {
     if (!confirm("Delete this resume? This cannot be undone.")) return;
+
     try {
       const res = await fetch(`/api/resumes/${id}`, { method: "DELETE" });
       if (res.ok) setResumes(prev => prev.filter(r => r.id !== id));
       else alert("Failed to delete resume");
-    } catch { /* ignore */ }
+    } catch (error) {
+      console.error("Failed to delete resume:", error);
+      alert("Something went wrong. Please try again.");
+    }
   }
 
   // ── Derived data ───────────────────────────────────────────────────────────
   const stats = useMemo(() => {
     const total = resumes.length;
-    const completed = resumes.filter(r =>
-      ["ready", "completed"].includes(r.status.toLowerCase())
-    );
-    
+    const completed = resumes.filter(r => isCompleteStatus(r.status));
+    const completedCount = completed.length;
     const scores = completed
       .map(r => r.atsScore)
       .filter((s): s is number => typeof s === "number");
+
     const avg = scores.length > 0 ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 0;
     const best = scores.length > 0 ? Math.max(...scores) : 0;
     const sorted = [...completed].sort(
@@ -156,15 +177,12 @@ export default function Dashboard() {
     );
     
     const last = sorted.at(-1)?.atsScore ?? 0;
-    const prev = sorted.at(-2)?.atsScore ?? 0;
-    
-    const delta = last - prev;
-    const passed = completed.filter(r => (r.atsScore ?? 0) >= 60).length;
-
-const passRate =
-  completed.length > 0
-    ? Math.round((passed / completed.length) * 100)
-    : 0;
+    const previousScore = sorted.at(-2)?.atsScore ?? 0;
+    const delta = last - previousScore;
+    const passedCount = completed.filter(r => (r.atsScore ?? 0) >= 60).length;
+    const passRate = completedCount > 0
+      ? Math.round((passedCount / completedCount) * 100)
+      : 0;
 
     const trendSorted = [...resumes].sort(
       (a, b) =>
@@ -175,13 +193,6 @@ const passRate =
       ? trendSorted.map((r, i) => ({ name: `#${i + 1}`, score: r.atsScore ?? 0, date: new Date(r.uploadedAt).toLocaleDateString("en-US", { month: "short", day: "numeric" }) }))
       : Array.from({ length: 5 }, (_, i) => ({ name: `#${i+1}`, score: [42,55,61,70,78][i], date: "" }));
 
-    // Score distribution for pie
-    const dist = [
-      { name: "Excellent (80+)", value: scores.filter(s => s >= 80).length || 0, color: "#22C55E" },
-      { name: "Good (60–79)",    value: scores.filter(s => s >= 60 && s < 80).length || 0, color: "#F59E0B" },
-      { name: "Needs Work (<60)", value: scores.filter(s => s < 60).length || 0, color: "#EF4444" },
-    ].filter(d => d.value > 0);
-
     let insight = "Upload your first resume to get ATS insights and prioritized improvement tips.";
     if (total > 0) {
       if (avg < 50) insight = `Your average score is ${avg}/100 — below the 60-point ATS threshold most companies use. Focus on adding role-specific keywords and cleaning up formatting.`;
@@ -189,7 +200,7 @@ const passRate =
       else insight = `Strong performance — ${avg}/100 average across ${total} resume${total > 1 ? "s" : ""}. Your top score is ${best}. Keep matching keywords to each role to stay competitive.`;
     }
 
-    return { total, avg, best, last, prev, delta, passRate, trendData, dist, insight };
+    return { total, completedCount, avg, best, last, delta, passRate, trendData, insight };
   }, [resumes]);
 
   const skillRadarData = [
@@ -208,6 +219,13 @@ const passRate =
     else list.sort((a, b) => new Date(b.uploadedAt).getTime() - new Date(a.uploadedAt).getTime());
     return list;
   }, [resumes, searchQuery, sortBy]);
+
+  const recentResumes = useMemo(
+    () => [...resumes]
+      .sort((a, b) => new Date(b.uploadedAt).getTime() - new Date(a.uploadedAt).getTime())
+      .slice(0, 4),
+    [resumes]
+  );
 
   const scoreColor = (s: number) => s >= 80 ? "#22C55E" : s >= 60 ? "#F59E0B" : "#EF4444";
   const scoreLabel = (s: number) => s >= 80 ? { text: "Excellent", cls: "tag-green" } : s >= 60 ? { text: "Good", cls: "tag-amber" } : { text: "Low", cls: "tag-red" };
@@ -442,8 +460,6 @@ const passRate =
 
         /* ── 2-COL GRID ── */
         .g2{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:16px}
-        .g2r{display:grid;grid-template-columns:1fr 2fr;gap:16px;margin-bottom:16px}
-        .g3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:16px}
 
         /* ── CARD ── */
         .card{background:var(--s1);border:1px solid var(--b1);border-radius:8px;overflow:hidden;transition:border-color .2s}
@@ -497,41 +513,6 @@ const passRate =
         }
         .best-score-wrap{display:flex;flex-direction:column;align-items:center;position:relative;flex-shrink:0}
         .best-score-label{font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-top:4px}
-
-        /* ── CHECKLIST ── */
-        .checklist-item{
-          display:flex;align-items:center;gap:10px;padding:9px 0;
-          border-bottom:1px solid var(--b1);cursor:pointer;
-          transition:background .1s;border-radius:4px;padding:9px 6px;
-        }
-        .checklist-item:last-child{border-bottom:none}
-        .checklist-item:hover{background:rgba(23,32,28,0.025)}
-        .cl-box{
-          width:18px;height:18px;border-radius:4px;border:1px solid var(--b2);flex-shrink:0;
-          display:flex;align-items:center;justify-content:center;transition:all .2s;
-        }
-        .cl-box.checked{background:var(--green);border-color:var(--green)}
-        .cl-label{font-size:.85rem;color:var(--muted2);transition:color .2s;user-select:none}
-        .cl-label.checked{color:var(--text);text-decoration:line-through;color:var(--muted)}
-
-        /* ── TIP CARD ── */
-        .tip-card{
-          background:var(--s2);border:1px solid var(--b1);border-radius:8px;
-          padding:16px;transition:all .3s;min-height:110px;
-        }
-        .tip-emoji{font-size:.72rem;margin-bottom:10px;display:inline-flex;align-items:center;justify-content:center;width:26px;height:22px;border-radius:5px;background:rgba(15,118,110,0.10);color:var(--accent);font-weight:700}
-        .tip-title{font-family:'Instrument Sans',sans-serif;font-size:.85rem;font-weight:700;margin-bottom:6px}
-        .tip-body{font-size:.78rem;color:var(--muted2);line-height:1.6;font-weight:300}
-        .tip-dots{display:flex;gap:5px;margin-top:12px}
-        .tip-dot{width:5px;height:5px;border-radius:50%;background:var(--b2);transition:background .3s}
-        .tip-dot.active{background:var(--accent)}
-
-        /* ── SCORE DISTRIBUTION ── */
-        .dist-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--b1)}
-        .dist-row:last-child{border-bottom:none}
-        .dist-label{font-size:.8rem;color:var(--muted2);display:flex;align-items:center;gap:7px}
-        .dist-dot{width:8px;height:8px;border-radius:50%}
-        .dist-count{font-family:'Instrument Sans',sans-serif;font-size:.9rem;font-weight:700}
 
         /* ── TABLE ── */
         .rtable{width:100%;border-collapse:collapse}
@@ -596,8 +577,7 @@ const passRate =
 
         /* ── RESPONSIVE ── */
         @media(max-width:1024px){
-          .g2,.g2r{grid-template-columns:1fr}
-          .g3{grid-template-columns:1fr 1fr}
+          .g2{grid-template-columns:1fr}
           .stats-grid{grid-template-columns:1fr 1fr}
         }
         @media(max-width:768px){
@@ -608,7 +588,6 @@ const passRate =
           .mob-btn{display:flex!important}
           .sb-close{display:block}
           .stats-grid{grid-template-columns:1fr 1fr}
-          .g3{grid-template-columns:1fr}
           .wb-actions{display:none}
           .search-wrap{display:none}
           .tips-grid{grid-template-columns:1fr 1fr}
@@ -819,7 +798,7 @@ const passRate =
                     lbl: "Pass Rate", val: stats.passRate, suffix: "%",
                     icon: <Shield size={17} />, ibg: "rgba(164,97,24,0.12)", ic: "var(--amber)",
                     badge: null,
-                    foot: `${resumes.filter(r => r.status === "Completed").length} of ${stats.total} completed`,
+                    foot: `${stats.completedCount} of ${stats.total} completed`,
                   },
                 ].map((s, i) => (
                   <div key={i} className="stat-card">
@@ -853,7 +832,7 @@ const passRate =
                 <button className="btn-ghost" style={{ flexShrink: 0 }} onClick={() => setActiveTab("tips")}><Zap size={13} /> View Tips</button>
               </div>
 
-              {/* Best resume + skill radar */}
+              {/* Charts */}
               <div className="g2">
                 {/* ATS Trend chart */}
                 <div className="card">
@@ -914,168 +893,45 @@ const passRate =
                 </div>
               </div>
 
-              {/* Score dist + checklist + tip */}
-              <div className="g3">
-                {/* Score distribution */}
-                <div className="card">
-                  <div className="ch"><div className="ct">Score Distribution</div></div>
-                  <div className="cb">
-                    {stats.dist.length > 0 ? (
-                      <>
-                        <div style={{ height: 120, marginBottom: 12 }}>
-                          <ResponsiveContainer width="100%" height="100%">
-                            <PieChart>
-                              <Pie data={stats.dist} cx="50%" cy="50%" innerRadius={34} outerRadius={52} dataKey="value" paddingAngle={3} strokeWidth={0}>
-                                {stats.dist.map((d, i) => <Cell key={i} fill={d.color} />)}
-                              </Pie>
-                              <Tooltip contentStyle={{ background: "var(--s2)", border: "1px solid var(--b2)", borderRadius: 8, fontSize: 11 }} />
-                            </PieChart>
-                          </ResponsiveContainer>
+              {/* Recent resumes */}
+              <div className="card">
+                <div className="ch">
+                  <div>
+                    <div className="ct">Recent Uploads</div>
+                    <div className="cs">Latest {Math.min(resumes.length, 4)} of {stats.total}</div>
+                  </div>
+                  <button className="sort-btn" onClick={() => setActiveTab("resumes")}>
+                    View all <ChevronRight size={12} />
+                  </button>
+                </div>
+                <div style={{ padding: "0 20px 8px" }}>
+                  {loading ? (
+                    <div className="empty" style={{ padding: "28px 0" }}><div className="spin" /><span style={{ fontSize: ".82rem", color: "var(--muted2)" }}>Loading…</span></div>
+                  ) : resumes.length === 0 ? (
+                    <div className="empty" style={{ padding: "28px 0" }}>
+                      <div className="empty-emoji">CV</div>
+                      <div className="empty-t">No resumes yet</div>
+                      <button className="btn-primary" style={{ marginTop: 12, fontSize: ".8rem" }} onClick={() => setUploadOpen(true)}><Plus size={13} /> Upload First</button>
+                    </div>
+                  ) : (
+                    recentResumes.map(res => (
+                      <div key={res.id} style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 0", borderBottom: "1px solid var(--b1)" }}>
+                        <div style={{ width: 36, height: 36, borderRadius: 8, background: "var(--s3)", border: "1px solid var(--b1)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}><FileText size={15} /></div>
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <div style={{ fontSize: ".82rem", fontWeight: 500, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{res.fileName}</div>
+                          <div style={{ fontSize: ".7rem", color: "var(--muted)", marginTop: 2 }}>{new Date(res.uploadedAt).toLocaleDateString("en-US", { month: "short", day: "numeric" })}</div>
                         </div>
-                        {[{ label: "Excellent (80+)", color: "#16704F" }, { label: "Good (60-79)", color: "#A46118" }, { label: "Needs Work (<60)", color: "#A33B32" }].map(row => {
-                          const d = stats.dist.find(x => x.color === row.color);
-                          return (
-                            <div key={row.label} className="dist-row">
-                              <div className="dist-label"><div className="dist-dot" style={{ background: row.color }} />{row.label}</div>
-                              <div className="dist-count" style={{ color: row.color }}>{d?.value ?? 0}</div>
-                            </div>
-                          );
-                        })}
-                      </>
-                    ) : (
-                      <div className="empty" style={{ padding: "28px 12px" }}>
-                        <div className="empty-emoji">00</div>
-                        <div className="empty-s">Upload resumes to see your score breakdown</div>
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                {/* Resume checklist */}
-                <div className="card">
-                  <div className="ch">
-                    <div>
-                      <div className="ct">Resume Checklist</div>
-                      <div className="cs">{Object.values(checklist).filter(Boolean).length}/{CHECKLIST.length} completed</div>
-                    </div>
-                    <span style={{ fontSize: ".72rem", color: "var(--accent)" }}>
-                      {Math.round((Object.values(checklist).filter(Boolean).length / CHECKLIST.length) * 100)}%
-                    </span>
-                  </div>
-                  <div className="cb">
-                    {/* Progress bar */}
-                    <div style={{ height: 4, background: "rgba(23,32,28,.08)", borderRadius: 2, marginBottom: 14, overflow: "hidden" }}>
-                      <div style={{
-                        height: "100%", borderRadius: 2,
-                        background: "var(--accent)",
-                        width: `${(Object.values(checklist).filter(Boolean).length / CHECKLIST.length) * 100}%`,
-                        transition: "width .4s ease",
-                      }} />
-                    </div>
-                    {CHECKLIST.map(item => (
-                      <div key={item.key} className="checklist-item"
-                        onClick={() => setChecklist(p => ({ ...p, [item.key]: !p[item.key] }))}>
-                        <div className={`cl-box${checklist[item.key] ? " checked" : ""}`}>
-                          {checklist[item.key] && <CheckCircle2 size={12} color="#fff" />}
-                        </div>
-                        <span className={`cl-label${checklist[item.key] ? " checked" : ""}`}>{item.label}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Rotating tip */}
-                <div className="card">
-                  <div className="ch">
-                    <div>
-                      <div className="ct">Pro Tips</div>
-                      <div className="cs">Rotate every 6 seconds</div>
-                    </div>
-                    <Sparkles size={14} style={{ color: "var(--accent)" }} />
-                  </div>
-                  <div className="cb">
-                    <div className="tip-card">
-                      <span className="tip-emoji">{TIPS[tipIdx].icon}</span>
-                      <div className="tip-title">{TIPS[tipIdx].title}</div>
-                      <p className="tip-body">{TIPS[tipIdx].body}</p>
-                    </div>
-                    <div className="tip-dots">
-                      {TIPS.map((_, i) => <div key={i} className={`tip-dot${i === tipIdx ? " active" : ""}`} />)}
-                    </div>
-                    <button className="btn-ghost" style={{ width: "100%", justifyContent: "center", marginTop: 12, fontSize: ".8rem" }} onClick={() => setActiveTab("tips")}>
-                      View all tips <ChevronRight size={13} />
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              {/* Keyword bar + recent resumes */}
-              <div className="g2r">
-                {/* Keyword chart */}
-                <div className="card">
-                  <div className="ch">
-                    <div>
-                      <div className="ct">Keyword Match by Role</div>
-                      <div className="cs">How well your resume matches common roles</div>
-                    </div>
-                  </div>
-                  <div className="cb" style={{ paddingTop: 8 }}>
-                    <div style={{ height: 200 }}>
-                      <ResponsiveContainer width="100%" height="100%">
-                        <BarChart data={[{ category: "Frontend", match: 72 }, { category: "Backend", match: 64 }, { category: "Data", match: 58 }, { category: "DevOps", match: 45 }, { category: "PM", match: 38 }]} barSize={20}>
-                          <CartesianGrid stroke="rgba(45,40,32,.08)" strokeDasharray="4 4" />
-                          <XAxis dataKey="category" stroke="var(--muted)" tick={{ fontSize: 10, fill: "var(--muted)" }} axisLine={false} tickLine={false} />
-                          <YAxis domain={[0, 100]} stroke="var(--muted)" tick={{ fontSize: 10, fill: "var(--muted)" }} axisLine={false} tickLine={false} />
-                          <Tooltip contentStyle={{ background: "var(--s2)", border: "1px solid var(--b2)", borderRadius: 8, fontSize: 12, color: "var(--text)" }} formatter={(v: number) => [`${v}%`, "Match"]} />
-                          <Bar dataKey="match" radius={[4, 4, 0, 0]}>
-                            {[72, 64, 58, 45, 38].map((v, i) => <Cell key={i} fill={v >= 70 ? "#0F766E" : v >= 55 ? "#B86B4B" : "#6D765D"} />)}
-                          </Bar>
-                        </BarChart>
-                      </ResponsiveContainer>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Recent resumes (mini table) */}
-                <div className="card">
-                  <div className="ch">
-                    <div>
-                      <div className="ct">Recent Uploads</div>
-                      <div className="cs">Latest {Math.min(resumes.length, 4)} of {stats.total}</div>
-                    </div>
-                    <button className="sort-btn" onClick={() => setActiveTab("resumes")}>
-                      View all <ChevronRight size={12} />
-                    </button>
-                  </div>
-                  <div style={{ padding: "0 20px 8px" }}>
-                    {loading ? (
-                      <div className="empty" style={{ padding: "28px 0" }}><div className="spin" /><span style={{ fontSize: ".82rem", color: "var(--muted2)" }}>Loading…</span></div>
-                    ) : resumes.length === 0 ? (
-                      <div className="empty" style={{ padding: "28px 0" }}>
-                        <div className="empty-emoji">CV</div>
-                        <div className="empty-t">No resumes yet</div>
-                        <button className="btn-primary" style={{ marginTop: 12, fontSize: ".8rem" }} onClick={() => setUploadOpen(true)}><Plus size={13} /> Upload First</button>
-                      </div>
-                    ) : (
-                      [...resumes].sort((a, b) => new Date(b.uploadedAt).getTime() - new Date(a.uploadedAt).getTime()).slice(0, 4).map(res => (
-                        <div key={res.id} style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 0", borderBottom: "1px solid var(--b1)" }}>
-                          <div style={{ width: 36, height: 36, borderRadius: 8, background: "var(--s3)", border: "1px solid var(--b1)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}><FileText size={15} /></div>
-                          <div style={{ flex: 1, minWidth: 0 }}>
-                            <div style={{ fontSize: ".82rem", fontWeight: 500, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{res.fileName}</div>
-                            <div style={{ fontSize: ".7rem", color: "var(--muted)", marginTop: 2 }}>{new Date(res.uploadedAt).toLocaleDateString("en-US", { month: "short", day: "numeric" })}</div>
+                        {isProcessingStatus(res.status) ? (
+                          <span className="tag tag-amber"><Clock size={9} /> Analyzing</span>
+                        ) : (
+                          <div style={{ display: "flex", alignItems: "center", gap: 6, flexShrink: 0 }}>
+                            <ScoreRing score={res.atsScore ?? 0} size={34} />
+                            <span style={{ fontSize: ".82rem", fontWeight: 600, color: scoreColor(res.atsScore ?? 0) }}>{res.atsScore ?? "--"}</span>
                           </div>
-                          {res.status === "Processing" ? (
-                            <span className="tag tag-amber"><Clock size={9} /> Analyzing</span>
-                          ) : (
-                            <div style={{ display: "flex", alignItems: "center", gap: 6, flexShrink: 0 }}>
-                              <ScoreRing score={res.atsScore ?? 0} size={34} />
-                              <span style={{ fontSize: ".82rem", fontWeight: 600, color: scoreColor(res.atsScore ?? 0) }}>{res.atsScore ?? "--"}</span>
-                            </div>
-                          )}
-                        </div>
-                      ))
-                    )}
-                  </div>
+                        )}
+                      </div>
+                    ))
+                  )}
                 </div>
               </div>
 
@@ -1125,9 +981,9 @@ const passRate =
                       </thead>
                       <tbody>
                         {filteredResumes.map(res => {
-                          const { text: stText, cls: stCls } = ["ready","completed"].includes(res.status.toLowerCase())
+                          const { text: stText, cls: stCls } = isCompleteStatus(res.status)
                             ? { text: "Completed", cls: "tag-green" }
-                            : res.status === "Processing"
+                            : isProcessingStatus(res.status)
                             ? { text: "Analyzing", cls: "tag-amber" }
                             : { text: res.status, cls: "tag-blue" };
                           const grade = (res.atsScore ?? 0) >= 80 ? scoreLabel(res.atsScore ?? 0) : res.atsScore ? scoreLabel(res.atsScore) : null;
@@ -1143,7 +999,7 @@ const passRate =
                                 <div className="fdate">{new Date(res.uploadedAt).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}</div>
                               </td>
                               <td>
-                                {res.status === "Processing" ? (
+                                {isProcessingStatus(res.status) ? (
                                   <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                                     <div className="shimbar"><div className="shimfill" /></div>
                                     <span style={{ fontSize: ".72rem", color: "var(--muted)" }}>Running…</span>
@@ -1159,7 +1015,7 @@ const passRate =
                                 )}
                               </td>
                               <td>
-                                {grade && res.status !== "Processing" && (
+                                {grade && !isProcessingStatus(res.status) && (
                                   <span className={`tag ${grade.cls}`}>{grade.text}</span>
                                 )}
                               </td>
