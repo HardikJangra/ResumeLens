@@ -4,7 +4,6 @@ import React from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   AlertCircle,
-  Award,
   BarChart3,
   Bell,
   CheckCircle2,
@@ -37,11 +36,6 @@ import {
   Area,
   AreaChart,
   CartesianGrid,
-  PolarAngleAxis,
-  PolarGrid,
-  PolarRadiusAxis,
-  Radar,
-  RadarChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -58,11 +52,11 @@ interface Resume {
 }
 
 // ─── Animated number counter ───────────────────────────────────────────────
-function AnimatedNumber({ target, suffix = "" }: { target: number; suffix?: string }) {
+ function AnimatedNumber({ target, suffix = "" }: { target: number; suffix?: string }) {
   const [current, setCurrent] = useState(0);
   const raf = useRef<number>(0);
   useEffect(() => {
-    if (target === 0) { setCurrent(0); return; }
+    if (target === 0){ setCurrent(0); return; }
     const start = performance.now();
     const dur = 900;
     const step = (now: number) => {
@@ -98,14 +92,14 @@ function ScoreRing({ score, size = 88 }: { score: number; size?: number }) {
 }
 
 // ─── Tip card data ───────────────────────────────────────────────────────────
-const TIPS = [
-  { icon: "01", title: "Tailor for each role", body: "Adjust the summary, skills, and recent bullets to match the job description before you apply." },
-  { icon: "02", title: "Quantify achievements", body: "Numbers make impact easier to scan. Add scope, volume, revenue, time saved, or reliability gains." },
-  { icon: "03", title: "Mirror job keywords", body: "Use the same role language from the posting when it honestly matches your experience." },
-  { icon: "04", title: "Keep the structure plain", body: "Clear sections, consistent headings, and simple ordering help both scanners and recruiters." },
-  { icon: "05", title: "Avoid dense formatting", body: "Tables, heavy graphics, and multi-column layouts can hide important experience from parsers." },
-  { icon: "06", title: "Lead with action", body: "Start bullets with concrete verbs: Led, Built, Grew, Reduced, Delivered, Automated." },
-];
+ const TIPS = [
+   { icon: "01", title: "Tailor for each role", body: "Adjust the summary, skills, and recent bullets to match the job description before you apply." },
+   { icon: "02", title: "Quantify achievements", body: "Numbers make impact easier to scan. Add scope, volume, revenue, time saved, or reliability gains." },
+   { icon: "03", title: "Mirror job keywords", body: "Use the same role language from the posting when it honestly matches your experience." },
+   { icon: "04", title: "Keep the structure plain", body: "Clear sections, consistent headings, and simple ordering help both scanners and recruiters." },
+   { icon: "05", title: "Avoid dense formatting", body: "Tables, heavy graphics, and multi-column layouts can hide important experience from parsers." },
+   { icon: "06", title: "Lead with action", body: "Start bullets with concrete verbs: Led, Built, Grew, Reduced, Delivered, Automated." },
+ ];
 
 const isCompleteStatus = (status: string) =>
   ["ready", "completed"].includes(status.toLowerCase());
@@ -203,14 +197,7 @@ export default function Dashboard() {
     return { total, completedCount, avg, best, last, delta, passRate, trendData, insight };
   }, [resumes]);
 
-  const skillRadarData = [
-    { skill: "Keywords",   value: Math.min(Math.max(stats.avg - 3,  10), 100) || 60 },
-    { skill: "Formatting", value: Math.min(Math.max(stats.avg - 12, 10), 100) || 52 },
-    { skill: "Experience", value: Math.min(Math.max(stats.avg - 2,  10), 100) || 68 },
-    { skill: "Skills",     value: Math.min(Math.max(stats.avg + 4,  10), 100) || 74 },
-    { skill: "Impact",     value: Math.min(Math.max(stats.avg - 7,  10), 100) || 62 },
-    { skill: "Clarity",    value: Math.min(Math.max(stats.avg - 5,  10), 100) || 64 },
-  ];
+  
 
   const filteredResumes = useMemo(() => {
     let list = [...resumes];
@@ -459,7 +446,7 @@ export default function Dashboard() {
         .sc-foot{font-size:.72rem;color:var(--muted2);margin-top:6px}
 
         /* ── 2-COL GRID ── */
-        .g2{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:16px}
+        .g2{gap:16px;margin-bottom:16px}
 
         /* ── CARD ── */
         .card{background:var(--s1);border:1px solid var(--b1);border-radius:8px;overflow:hidden;transition:border-color .2s}
@@ -863,27 +850,8 @@ export default function Dashboard() {
                   </div>
                 </div>
 
-                {/* Skill radar */}
-                <div className="card">
-                  <div className="ch">
-                    <div>
-                      <div className="ct">Skill Coverage</div>
-                      <div className="cs">Based on your resume data</div>
-                    </div>
-                  </div>
-                  <div className="cb" style={{ paddingTop: 8 }}>
-                    <div style={{ height: 200 }}>
-                      <ResponsiveContainer width="100%" height="100%">
-                        <RadarChart data={skillRadarData}>
-                          <PolarGrid stroke="rgba(45,40,32,.10)" />
-                          <PolarAngleAxis dataKey="skill" tick={{ fill: "var(--muted2)", fontSize: 10 }} />
-                          <PolarRadiusAxis domain={[0, 100]} tick={false} axisLine={false} />
-                          <Radar dataKey="value" stroke="#0F766E" fill="#0F766E" fillOpacity={0.12} strokeWidth={2} dot={{ fill: "#0F766E", r: 3, strokeWidth: 0 }} />
-                        </RadarChart>
-                      </ResponsiveContainer>
-                    </div>
-                  </div>
-                </div>
+                
+                
               </div>
 
               {/* Recent resumes */}
@@ -1060,46 +1028,9 @@ export default function Dashboard() {
                 ))}
               </div>
 
-              {/* ATS myth busters */}
-              <div style={{ marginTop: 24 }}>
-                <div style={{ fontFamily: "'Instrument Sans',sans-serif", fontSize: "1.1rem", fontWeight: 700, marginBottom: 16, letterSpacing: 0 }}>Common ATS Myths</div>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
-                  {[
-                    { myth: "Adding a photo helps your resume stand out", fact: "Most ATS systems ignore or reject images entirely." },
-                    { myth: "Longer resumes show more experience", fact: "Recruiters spend ~7 seconds per resume. 1–2 pages is optimal." },
-                    { myth: "Creative formatting impresses hiring managers", fact: "Unusual layouts break ATS parsing. Stick to clean columns." },
-                    { myth: "Using synonyms avoids keyword stuffing", fact: "ATS uses exact matching. Use the exact words from the job posting." },
-                  ].map((item, i) => (
-                    <div key={i} className="card">
-                      <div className="cb">
-                        <div style={{ display: "flex", alignItems: "flex-start", gap: 10, marginBottom: 10 }}>
-                          <div style={{ width: 22, height: 22, borderRadius: "50%", background: "rgba(163,59,50,.10)", border: "1px solid rgba(163,59,50,.20)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: 1 }}>
-                            <X size={11} style={{ color: "var(--red)" }} />
-                          </div>
-                          <p style={{ fontSize: ".82rem", color: "var(--muted2)", lineHeight: 1.5, fontStyle: "italic" }}>&ldquo;{item.myth}&rdquo;</p>
-                        </div>
-                        <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
-                          <div style={{ width: 22, height: 22, borderRadius: "50%", background: "rgba(22,112,79,.10)", border: "1px solid rgba(22,112,79,.20)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: 1 }}>
-                            <CheckCircle2 size={11} style={{ color: "var(--green)" }} />
-                          </div>
-                          <p style={{ fontSize: ".82rem", color: "var(--muted2)", lineHeight: 1.5 }}>{item.fact}</p>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              
 
-              {/* CTA */}
-              <div style={{ marginTop: 24, background: "linear-gradient(135deg,rgba(15,118,110,.08),rgba(184,107,75,.06))", border: "1px solid rgba(45,40,32,.12)", borderRadius: 8, padding: "28px 32px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 20 }}>
-                <div>
-                  <div style={{ fontFamily: "'Instrument Sans',sans-serif", fontSize: "1.1rem", fontWeight: 700, marginBottom: 6 }}>Ready to apply these tips?</div>
-                  <p style={{ fontSize: ".875rem", color: "var(--muted2)", fontWeight: 300 }}>Upload your resume now and see exactly where you stand.</p>
-                </div>
-                <button className="btn-primary" style={{ flexShrink: 0 }} onClick={() => { setActiveTab("resumes"); setUploadOpen(true); }}>
-                  <Upload size={15} /> Upload and analyze
-                </button>
-              </div>
+              
             </div>
           )}
 

@@ -1,21 +1,19 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import {
   ArrowLeft, Sparkles, Download, RefreshCw, Share2,
   CheckCircle2, XCircle, AlertCircle, Target, Lightbulb,
-  TrendingUp, Zap, Copy, Check, ChevronRight, FileText,
-  BarChart2, Award, Clock, Eye, BookOpen, Wand2,
-  Play, Loader2, Lock, Star, Crown, ExternalLink,
+  TrendingUp, Zap, Copy, Check, FileText,
+  BarChart2, Eye, Wand2,
+  Play, Loader2, Crown,
   ChevronDown, ChevronUp, Info
 } from "lucide-react";
 import {
-  ResponsiveContainer, RadarChart, Radar,
-  PolarGrid, PolarAngleAxis, PolarRadiusAxis,
   BarChart, Bar, XAxis, YAxis, Tooltip, Cell,
-  CartesianGrid, LineChart, Line, ReferenceLine
+  CartesianGrid, ResponsiveContainer
 } from "recharts";
 
 /* ─────────────────────────────── TYPES ──────────────────────────────── */
@@ -163,12 +161,6 @@ const SCORE_BREAKDOWN = [
   { label:"Clarity",     score:79, color:"#14B8A6" },
 ];
 
-const RADAR_DATA = [
-  { skill:"Keywords",   A:88 },{ skill:"Formatting",A:74 },
-  { skill:"Experience", A:91 },{ skill:"Skills",    A:86 },
-  { skill:"Impact",     A:68 },{ skill:"Clarity",   A:79 },
-];
-
 const KEYWORD_GAP = [
   { kw:"React",       resume:true,  job:true  },
   { kw:"TypeScript",  resume:true,  job:true  },
@@ -189,11 +181,6 @@ const CATEGORY_BAR = [
   { cat:"Technical", match:88 },{ cat:"Tools",    match:71 },
   { cat:"Soft",      match:65 },{ cat:"Domain",   match:58 },
   { cat:"Industry",  match:44 },
-];
-
-const SCORE_HISTORY = [
-  { name:"v1", score:61 },{ name:"v2", score:68 },
-  { name:"v3", score:74 },{ name:"v4 (now)", score:82 },
 ];
 
 const SUGGESTIONS_DATA = [
@@ -385,7 +372,7 @@ export default function ResumeDetailPage() {
         ::-webkit-scrollbar-thumb{background:rgba(45,40,32,.18);border-radius:2px}
 
         /* TOPBAR */
-        .topbar{position:sticky;top:0;z-index:100;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;background:rgba(255,251,242,.90);backdrop-filter:blur(18px);border-bottom:1px solid var(--b1)}
+        .topbar{position:sticky;top:0;z-index:100;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;background:rgba(246,241,232,.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--b1)}
         .tb-l{display:flex;align-items:center;gap:12px}
         .tb-r{display:flex;align-items:center;gap:8px}
         .back-btn{display:inline-flex;align-items:center;gap:6px;font-size:.82rem;color:var(--m2);background:none;border:1px solid transparent;padding:6px 12px;border-radius:7px;cursor:pointer;transition:all .15s}
@@ -394,7 +381,7 @@ export default function ResumeDetailPage() {
         .file-pill strong{color:var(--text);font-weight:500}
         .ic-btn{width:34px;height:34px;border-radius:8px;border:1px solid var(--b1);background:none;display:flex;align-items:center;justify-content:center;color:var(--m2);cursor:pointer;transition:all .15s}
         .ic-btn:hover{background:rgba(15,118,110,.07);border-color:var(--b2);color:var(--text)}
-        .dl-btn{display:inline-flex;align-items:center;gap:7px;background:linear-gradient(135deg,var(--accent),var(--a2));color:#fff;border:none;border-radius:8px;padding:8px 18px;font-size:.82rem;font-weight:500;cursor:pointer;box-shadow:0 8px 20px rgba(15,118,110,.18);transition:all .2s}
+        .dl-btn{display:inline-flex;align-items:center;gap:7px;background:var(--accent);color:#fff;border:none;border-radius:8px;padding:8px 18px;font-size:.82rem;font-weight:500;cursor:pointer;box-shadow:0 1px 2px rgba(45,40,32,.14);transition:all .2s}
         .dl-btn:hover{box-shadow:0 12px 28px rgba(15,118,110,.22);transform:translateY(-1px)}
 
         /* TABS */
@@ -410,7 +397,7 @@ export default function ResumeDetailPage() {
         .page{padding:28px;max-width:1160px;margin:0 auto}
 
         /* CARDS */
-        .card{background:var(--s1);border:1px solid var(--b1);border-radius:12px;overflow:hidden;transition:border-color .2s;margin-bottom:16px}
+        .card{background:var(--s1);border:1px solid var(--b1);border-radius:8px;overflow:hidden;transition:border-color .2s;margin-bottom:16px}
         .card:hover{border-color:var(--b2)}
         .ch{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--b1)}
         .ct{font-family:'Instrument Sans',sans-serif;font-size:.88rem;font-weight:600;letter-spacing:-.01em;display:flex;align-items:center;gap:7px}
@@ -420,11 +407,10 @@ export default function ResumeDetailPage() {
         .g2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
         .g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:16px}
         .g-hero{display:grid;grid-template-columns:280px 1fr;gap:16px;margin-bottom:16px}
-        .g13{display:grid;grid-template-columns:1fr 2fr;gap:16px;margin-bottom:16px}
+        .g13{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
 
         /* SCORE CARD */
-        .score-card{background:linear-gradient(145deg,var(--s1),rgba(15,118,110,.06));border:1px solid rgba(15,118,110,.2);border-radius:12px;padding:26px 20px;display:flex;flex-direction:column;align-items:center;gap:14px;position:relative;overflow:hidden}
-        .score-card::before{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(15,118,110,.10),transparent 70%);pointer-events:none}
+        .score-card{background:linear-gradient(135deg,rgba(15,118,110,.08),rgba(184,107,75,.06));border:1px solid rgba(45,40,32,.12);border-radius:8px;padding:26px 20px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;position:relative;overflow:hidden}
         .score-label{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:100px;font-size:.72rem;font-weight:600;border:1px solid}
         .score-divider{width:100%;height:1px;background:var(--b1)}
         .score-stats{display:flex;gap:0;width:100%}
@@ -434,18 +420,10 @@ export default function ResumeDetailPage() {
         .ss-lbl{font-size:.58rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
 
         /* AI SUMMARY */
-        .summary-card{background:var(--s1);border:1px solid var(--b1);border-radius:12px;padding:22px;display:flex;flex-direction:column;gap:14px}
+        .summary-card{background:var(--s1);border:1px solid var(--b1);border-radius:8px;padding:22px;display:flex;flex-direction:column;gap:14px}
         .ai-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:100px;background:rgba(15,118,110,.1);border:1px solid rgba(15,118,110,.2);font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent)}
         .ai-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent);animation:blink 2s infinite}
         @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
-
-        /* QUICK STATS */
-        .qs{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
-        .qi{display:flex;align-items:center;gap:10px;padding:10px 16px;background:var(--s1);border:1px solid var(--b1);border-radius:9px;flex:1;min-width:110px;transition:border-color .15s}
-        .qi:hover{border-color:var(--b2)}
-        .qi-ico{width:32px;height:32px;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px}
-        .qi-val{font-family:'Source Serif 4',serif;font-size:1rem;font-weight:700;line-height:1}
-        .qi-lbl{font-size:.64rem;color:var(--muted);margin-top:2px;text-transform:uppercase;letter-spacing:.05em}
 
         /* BREAKDOWN */
         .br-row{display:flex;align-items:center;gap:10px;margin-bottom:11px}
@@ -501,7 +479,7 @@ export default function ResumeDetailPage() {
 
         /* BUTTONS */
         .btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border-radius:8px;font-size:.855rem;font-weight:500;cursor:pointer;transition:all .15s;border:none;font-family:'Instrument Sans',sans-serif}
-        .btn-p{background:linear-gradient(135deg,var(--accent),var(--a2));color:#fff;box-shadow:0 8px 18px rgba(15,118,110,.18)}
+        .btn-p{background:var(--accent);color:#fff;box-shadow:0 1px 2px rgba(45,40,32,.14)}
         .btn-p:hover{box-shadow:0 12px 26px rgba(15,118,110,.22);transform:translateY(-1px)}
         .btn-g{background:var(--s3);color:var(--m2);border:1px solid var(--b1)}
         .btn-g:hover{background:rgba(255,251,242,.75);color:var(--text);border-color:var(--b2)}
@@ -520,9 +498,6 @@ export default function ResumeDetailPage() {
         /* PRO LOCK */
         .pro-gate{background:linear-gradient(135deg,rgba(164,97,24,.08),rgba(184,107,75,.04));border:1px solid rgba(164,97,24,.2);border-radius:12px;padding:28px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:12px}
 
-        /* SCORE HISTORY */
-        .hist-tooltip{background:var(--s2);border:1px solid var(--b2);border-radius:8px;padding:8px 12px;font-size:.78rem;color:var(--text)}
-
         /* INFO BOX */
         .ibox{display:flex;align-items:flex-start;gap:9px;padding:11px 13px;background:rgba(15,118,110,.07);border:1px solid rgba(15,118,110,.18);border-radius:8px;margin-bottom:14px}
         .ibox p{font-size:.78rem;color:var(--m2);line-height:1.6}
@@ -535,7 +510,7 @@ export default function ResumeDetailPage() {
         @media(max-width:768px){
           .g2{grid-template-columns:1fr}.g3{grid-template-columns:1fr}
           .page{padding:16px}.topbar{padding:0 14px}.tabs{padding:0 14px}
-          .file-pill{display:none}.qs{flex-direction:column}
+          .file-pill{display:none}
         }
       `}</style>
 
@@ -573,23 +548,6 @@ export default function ResumeDetailPage() {
       {/* ════════ OVERVIEW ════════ */}
       {tab==="overview" && (
         <div className="page">
-          {/* quick stats */}
-          <div className="qs">
-            {[
-              { icon:"📄", val:"1 page",         lbl:"Length",          bg:"rgba(15,118,110,.1)"  },
-              { icon:"📝", val:"487 words",       lbl:"Word Count",      bg:"rgba(184,107,75,.1)"  },
-              { icon:"👁️", val:"91% readable",   lbl:"Readability",     bg:"rgba(22,112,79,.08)"  },
-              { icon:"⏱️", val:"~6 sec",          lbl:"Recruiter Scan",  bg:"rgba(164,97,24,.08)" },
-              { icon:"🎯", val:`${a.skillsMatched.length}/${a.skillsMatched.length+a.skillsMissing.length}`, lbl:"Skills Matched", bg:"rgba(59,130,246,.08)" },
-              { icon:"📅", val:uploadDate,        lbl:"Uploaded",        bg:"rgba(20,184,166,.08)" },
-            ].map((s,i) => (
-              <div key={i} className="qi">
-                <div className="qi-ico" style={{background:s.bg}}>{s.icon}</div>
-                <div><div className="qi-val">{s.val}</div><div className="qi-lbl">{s.lbl}</div></div>
-              </div>
-            ))}
-          </div>
-
           {/* hero */}
           <div className="g-hero">
             {/* score card */}
@@ -619,22 +577,6 @@ export default function ResumeDetailPage() {
                     <div className="ss-lbl">{s.lbl}</div>
                   </div>
                 ))}
-              </div>
-              {/* score history */}
-              <div style={{width:"100%",borderTop:"1px solid var(--b1)",paddingTop:14}}>
-                <div style={{fontSize:".62rem",color:"var(--muted)",textTransform:"uppercase",letterSpacing:".08em",marginBottom:8}}>Score History</div>
-                <div style={{height:60}}>
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={SCORE_HISTORY}>
-                      <Line type="monotone" dataKey="score" stroke="#0F766E" strokeWidth={2} dot={{fill:"#0F766E",r:3,strokeWidth:0}} activeDot={{r:4}}/>
-                      <XAxis dataKey="name" tick={{fontSize:8,fill:"var(--muted)"}} axisLine={false} tickLine={false}/>
-                      <Tooltip contentStyle={{background:"var(--s2)",border:"1px solid var(--b2)",borderRadius:7,fontSize:11,color:"var(--text)"}} formatter={(v:number)=>[`${v}/100`,"Score"]}/>
-                    </LineChart>
-                  </ResponsiveContainer>
-                </div>
-              </div>
-              <div style={{fontSize:".7rem",color:"var(--muted)",textAlign:"center",fontWeight:300,lineHeight:1.5}}>
-                Vs <strong style={{color:"var(--m2)"}}>Senior Frontend Engineer</strong> @ Google
               </div>
             </div>
 
@@ -700,45 +642,28 @@ export default function ResumeDetailPage() {
             </div>
           </div>
 
-          {/* radar + strengths/weaknesses */}
+          {/* strengths/weaknesses */}
           <div className="g13">
             <div className="card" style={{marginBottom:0}}>
-              <div className="ch"><div className="ct"><Award size={13}/>Skill Radar</div></div>
-              <div className="cb" style={{paddingTop:6}}>
-                <div style={{height:230}}>
-                  <ResponsiveContainer width="100%" height="100%">
-                    <RadarChart data={RADAR_DATA}>
-                      <PolarGrid stroke="rgba(45,40,32,.10)"/>
-                      <PolarAngleAxis dataKey="skill" tick={{fill:"var(--m2)",fontSize:10}}/>
-                      <PolarRadiusAxis domain={[0,100]} tick={false} axisLine={false}/>
-                      <Radar dataKey="A" stroke="#0F766E" fill="#0F766E" fillOpacity={0.16} strokeWidth={2} dot={{fill:"#0F766E",r:3,strokeWidth:0}}/>
-                    </RadarChart>
-                  </ResponsiveContainer>
-                </div>
+              <div className="ch"><div className="ct" style={{color:"var(--green)"}}><CheckCircle2 size={13}/>Strengths</div><span className="tag tg">{a.strengths.length} found</span></div>
+              <div className="cb" style={{paddingTop:12}}>
+                {a.strengths.map((s,i) => (
+                  <div key={i} className="sw">
+                    <span className="sw-ico">{["💪","📋","📅","🚀","✅"][i]||"✨"}</span>
+                    <span className="sw-txt">{s}</span>
+                  </div>
+                ))}
               </div>
             </div>
-            <div style={{display:"flex",flexDirection:"column",gap:16}}>
-              <div className="card" style={{marginBottom:0}}>
-                <div className="ch"><div className="ct" style={{color:"var(--green)"}}><CheckCircle2 size={13}/>Strengths</div><span className="tag tg">{a.strengths.length} found</span></div>
-                <div className="cb" style={{paddingTop:12}}>
-                  {a.strengths.map((s,i) => (
-                    <div key={i} className="sw">
-                      <span className="sw-ico">{["💪","📋","📅","🚀","✅"][i]||"✨"}</span>
-                      <span className="sw-txt">{s}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div className="card" style={{marginBottom:0}}>
-                <div className="ch"><div className="ct" style={{color:"var(--red)"}}><XCircle size={13}/>Areas to Improve</div><span className="tag tr2">{a.weaknesses.length} found</span></div>
-                <div className="cb" style={{paddingTop:12}}>
-                  {a.weaknesses.map((w,i) => (
-                    <div key={i} className="sw">
-                      <span className="sw-ico">{["📊","📝","⚠️","🔧"][i]||"💡"}</span>
-                      <span className="sw-txt">{w}</span>
-                    </div>
-                  ))}
-                </div>
+            <div className="card" style={{marginBottom:0}}>
+              <div className="ch"><div className="ct" style={{color:"var(--red)"}}><XCircle size={13}/>Areas to Improve</div><span className="tag tr2">{a.weaknesses.length} found</span></div>
+              <div className="cb" style={{paddingTop:12}}>
+                {a.weaknesses.map((w,i) => (
+                  <div key={i} className="sw">
+                    <span className="sw-ico">{["📊","📝","⚠️","🔧"][i]||"💡"}</span>
+                    <span className="sw-txt">{w}</span>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
